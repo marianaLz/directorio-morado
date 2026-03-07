@@ -1,14 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import EmergencyBanner from "../components/EmergencyBanner.astro";
-import AnonymousNote from "../components/AnonymousNote.astro";
-import ShareButtons from "../components/ShareButtons.astro";
 import Hero from "../components/landing/Hero.astro";
-import TrustSection from "../components/landing/TrustSection.astro";
 import HowToUse from "../components/landing/HowToUse.astro";
 import ResourceCategories from "../components/landing/ResourceCategories.astro";
 import AbortionSupport from "../components/landing/AbortionSupport.astro";
-import CrisisHotline from "../components/landing/CrisisHotline.astro";
 import GovernmentResources from "../components/landing/GovernmentResources.astro";
 import FAQ from "../components/landing/FAQ.astro";
 import CtaSection from "../components/landing/CtaSection.astro";
@@ -28,11 +24,8 @@ const faqSchema = buildFAQPageSchema(
 >
   <EmergencyBanner slot="emergency" />
   <Hero />
-  <!-- <TrustSection /> -->
-  <HowToUse />
   <ResourceCategories />
   <AbortionSupport />
-  <!-- <CrisisHotline /> -->
   <GovernmentResources />
   <FAQ limit={3} />
   <CtaSection />

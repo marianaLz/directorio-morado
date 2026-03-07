@@ -1,7 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import Fuse from 'fuse.js';
 import type { DirectoryEntry } from '../../types/directory';
-import DirectoryCard from './DirectoryCard';
 
 const SUPPORT_TYPES = [
   'abortion accompaniment',
@@ -56,8 +55,8 @@ const COST_LABELS: Record<string, string> = {
 
 interface Props {
   entries: DirectoryEntry[];
-  /** When set, cards are rendered as static HTML and this component only toggles visibility. */
-  staticEntriesContainerId?: string;
+  /** Id of the section that contains the static card list. This component only toggles visibility. */
+  staticEntriesContainerId: string;
 }
 
 const FUSE_OPTIONS: Fuse.IFuseOptions<DirectoryEntry> = {
@@ -126,6 +125,7 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
 
   const filteredIds = useMemo(() => new Set(filtered.map((e) => e.id)), [filtered]);
 
+
   useEffect(() => {
     if (!staticEntriesContainerId) return;
     const container = document.getElementById(staticEntriesContainerId);
@@ -158,7 +158,7 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
 
   return (
     <div className="space-y-6">
-      <div className="rounded-[12px] border border-[var(--card-border)] bg-[var(--card-bg)] p-4 shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+      <div className="rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] p-4 shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
         <label htmlFor="directory-search" className="sr-only">
           Buscar por nombre, ciudad o tipo de apoyo
         </label>
@@ -168,7 +168,7 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
           placeholder="Buscar apoyo, ciudad o organización..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full min-h-[48px] rounded-[10px] border border-[var(--card-border)] bg-white px-4 py-3 text-base text-[var(--card-text)] placeholder-[var(--card-text-muted)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2"
+          className="w-full min-h-[48px] rounded-xl border border-[var(--card-border)] bg-white px-4 py-3 text-base text-[var(--card-text)] placeholder-[var(--card-text-muted)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2"
           aria-describedby="search-hint"
           autoComplete="off"
         />
@@ -177,8 +177,8 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
         </p>
       </div>
 
-      <details className="rounded-[12px] border border-[var(--card-border)] bg-[var(--card-bg)] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
-        <summary className="list-none cursor-pointer px-4 py-3 text-base font-semibold text-[var(--card-text)] hover:bg-gray-50 rounded-[10px] select-none min-h-[48px] flex items-center">
+      <details className="rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+        <summary className="list-none cursor-pointer px-4 py-3 text-base font-semibold text-[var(--card-text)] hover:bg-gray-50 rounded-xl select-none min-h-[48px] flex items-center">
           Más filtros (ubicación, tipo, costo)
         </summary>
         <div className="px-4 pb-4 pt-2 border-t border-[var(--card-border)]">
@@ -195,7 +195,7 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
                 setState('');
                 setCity('');
               }}
-              className="mt-1 w-full min-h-[48px] rounded-[10px] border border-[var(--card-border)] bg-white px-3 py-2 text-base text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
+              className="mt-1 w-full min-h-[48px] rounded-xl border border-[var(--card-border)] bg-white px-3 py-2 text-base text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
             >
               <option value="">Todos</option>
               {countries.map((c) => (
@@ -216,7 +216,7 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
                 setState(e.target.value);
                 setCity('');
               }}
-              className="mt-1 w-full min-h-[48px] rounded-[10px] border border-[var(--card-border)] bg-white px-3 py-2 text-base text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
+              className="mt-1 w-full min-h-[48px] rounded-xl border border-[var(--card-border)] bg-white px-3 py-2 text-base text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
             >
               <option value="">Todos</option>
               {states.map((s) => (
@@ -232,7 +232,7 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
               id="filter-city"
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              className="mt-1 w-full min-h-[48px] rounded-[10px] border border-[var(--card-border)] bg-white px-3 py-2 text-base text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
+              className="mt-1 w-full min-h-[48px] rounded-xl border border-[var(--card-border)] bg-white px-3 py-2 text-base text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
             >
               <option value="">Todas</option>
               {cities.map((c) => (
@@ -245,7 +245,7 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
             <select
               value={online}
               onChange={(e) => setOnline(e.target.value)}
-              className="w-full min-h-[48px] rounded-[10px] border border-[var(--card-border)] bg-white px-3 py-2 text-base text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
+              className="w-full min-h-[48px] rounded-xl border border-[var(--card-border)] bg-white px-3 py-2 text-base text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
               aria-label="En línea o presencial"
             >
               <option value="">Todas</option>
@@ -261,7 +261,7 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
               id="filter-cost"
               value={cost}
               onChange={(e) => setCost(e.target.value)}
-              className="mt-1 w-full min-h-[48px] rounded-[10px] border border-[var(--card-border)] bg-white px-3 py-2 text-base text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
+              className="mt-1 w-full min-h-[48px] rounded-xl border border-[var(--card-border)] bg-white px-3 py-2 text-base text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
             >
               <option value="">Cualquiera</option>
               {COST_OPTIONS.map((c) => (
@@ -275,7 +275,7 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
           <span className="block text-xs font-medium text-[var(--card-text-muted)] mb-2">Tipo de apoyo</span>
           <div className="flex flex-wrap gap-2">
             {SUPPORT_TYPES.map((t) => (
-              <label key={t} className="inline-flex items-center gap-2 cursor-pointer min-h-[44px] px-2 py-1 rounded-[10px] hover:bg-gray-50">
+              <label key={t} className="inline-flex items-center gap-2 cursor-pointer min-h-[44px] px-2 py-1 rounded-xl hover:bg-gray-50">
                 <input
                   type="checkbox"
                   checked={types.includes(t)}
@@ -292,7 +292,7 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
           <span className="block text-xs font-medium text-[var(--card-text-muted)] mb-2">Población</span>
           <div className="flex flex-wrap gap-2">
             {POPULATION_OPTIONS.map((p) => (
-              <label key={p} className="inline-flex items-center gap-2 cursor-pointer min-h-[44px] px-2 py-1 rounded-[10px] hover:bg-gray-50">
+              <label key={p} className="inline-flex items-center gap-2 cursor-pointer min-h-[44px] px-2 py-1 rounded-xl hover:bg-gray-50">
                 <input
                   type="checkbox"
                   checked={population.includes(p)}
@@ -308,7 +308,7 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
         <button
           type="button"
           onClick={clearFilters}
-          className="mt-4 min-h-[48px] px-4 py-2 rounded-[10px] text-base font-medium text-[var(--card-text)] hover:bg-gray-100 border border-[var(--card-border)]"
+          className="mt-4 min-h-[48px] px-4 py-2 rounded-xl text-base font-medium text-[var(--card-text)] hover:bg-gray-100 border border-[var(--card-border)]"
         >
           Limpiar filtros
         </button>
@@ -319,24 +319,10 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
         className="space-y-4"
         aria-label="Resultados del directorio"
       >
-        {staticEntriesContainerId ? (
-          filtered.length === 0 && (
-            <p className="rounded-[12px] border border-[var(--card-border)] bg-[var(--card-bg)] p-8 text-center text-base text-[var(--card-text-muted)]" role="status">
-              No encontramos resultados, intenta buscar por ciudad o tipo de apoyo.
-            </p>
-          )
-        ) : filtered.length === 0 ? (
-          <p className="rounded-[12px] border border-[var(--card-border)] bg-[var(--card-bg)] p-8 text-center text-base text-[var(--card-text-muted)]">
+        {filtered.length === 0 && (
+          <p className="rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] p-8 text-center text-base text-[var(--card-text-muted)]" role="status">
             No encontramos resultados, intenta buscar por ciudad o tipo de apoyo.
           </p>
-        ) : (
-          <ul className="space-y-4 list-none p-0 m-0">
-            {filtered.map((entry) => (
-              <li key={entry.id}>
-                <DirectoryCard entry={entry} />
-              </li>
-            ))}
-          </ul>
         )}
       </section>
     </div>

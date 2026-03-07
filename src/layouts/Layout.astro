@@ -52,7 +52,7 @@ const allStructuredData = [...defaultStructuredData, ...pageStructuredData];
   <slot name="emergency" />
   <header class="border-b border-white/10 bg-[var(--color-bg-top)] shadow-sm">
     <nav
-      class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:py-4 sm:px-6"
+      class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:py-4 sm:px-6"
       aria-label="Navegación"
     >
       <a
@@ -64,7 +64,7 @@ const allStructuredData = [...defaultStructuredData, ...pageStructuredData];
       </a>
       <a
         href="/directorio"
-        class="rounded-full bg-[var(--color-accent)] px-5 py-3 text-base font-medium text-[var(--color-highlight)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-brand-title min-h-[48px] min-w-[140px] flex items-center justify-center transition-colors"
+        class="rounded-xl bg-[var(--color-accent)] px-5 py-3 text-base font-medium text-[var(--color-highlight)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-brand-title min-h-[48px] min-w-[140px] flex items-center justify-center transition-colors"
       >
         Ver directorio
       </a>
@@ -76,57 +76,49 @@ const allStructuredData = [...defaultStructuredData, ...pageStructuredData];
   <footer
     class="py-12 sm:py-20 bg-[var(--color-bg-top)] border-t border-white/10"
   >
-    <div class="mx-auto max-w-4xl px-4 sm:px-6 space-y-6">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 space-y-6">
       <AnonymousNote />
       <div>
-        <p class="text-sm font-medium text-[var(--color-highlight)]/90 mb-2">
-          Comparte este directorio
-        </p>
-        <ShareButtons title="Directorio Morado — Red de apoyo · MX" />
+        <nav
+          class="pt-4 border-t border-white/10"
+          aria-label="Enlaces internos"
+        >
+          <a
+            href="/directorio"
+            class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
+          >
+            Ver directorio completo
+          </a>
+          <span class="text-white/50 mx-2" aria-hidden="true">·</span>
+          <a
+            href="/#recursos-gubernamentales"
+            class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
+          >
+            Recursos gubernamentales
+          </a>
+          <span class="text-white/50 mx-2" aria-hidden="true">·</span>
+          <a
+            href="/preguntas-frecuentes"
+            class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
+          >
+            Preguntas frecuentes
+          </a>
+          <span class="text-white/50 mx-2" aria-hidden="true">·</span>
+          <a
+            href="/sobre-directorio-morado"
+            class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
+          >
+            Sobre Directorio Morado
+          </a>
+          <span class="text-white/50 mx-2" aria-hidden="true">·</span>
+          <a
+            href="/#categorias"
+            class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
+          >
+            Tipos de recursos
+          </a>
+        </nav>
       </div>
-      <nav class="pt-4 border-t border-white/10" aria-label="Enlaces internos">
-        <a
-          href="/directorio"
-          class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
-        >
-          Ver directorio completo
-        </a>
-        <span class="text-white/50 mx-2" aria-hidden="true">·</span>
-        <a
-          href="/#linea-de-crisis"
-          class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
-        >
-          Línea de crisis 24h
-        </a>
-        <span class="text-white/50 mx-2" aria-hidden="true">·</span>
-        <a
-          href="/#recursos-gubernamentales"
-          class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
-        >
-          Recursos gubernamentales
-        </a>
-        <span class="text-white/50 mx-2" aria-hidden="true">·</span>
-        <a
-          href="/preguntas-frecuentes"
-          class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
-        >
-          Preguntas frecuentes
-        </a>
-        <span class="text-white/50 mx-2" aria-hidden="true">·</span>
-        <a
-          href="/sobre-directorio-morado"
-          class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
-        >
-          Sobre Directorio Morado
-        </a>
-        <span class="text-white/50 mx-2" aria-hidden="true">·</span>
-        <a
-          href="/#categorias"
-          class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
-        >
-          Tipos de recursos
-        </a>
-      </nav>
     </div>
   </footer>
 </SEOLayout>

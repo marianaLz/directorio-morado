@@ -32,7 +32,7 @@ const stripColor = getCardStripColor(entry);
 <article
   data-entry-id={entry.id}
   class:list={[
-    "directory-card relative overflow-hidden rounded-[12px] border border-[var(--card-border)] bg-[var(--card-bg)] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-shadow hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)]",
+    "directory-card relative overflow-hidden rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-shadow hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)]",
   ]}
   aria-labelledby={`entry-name-${entry.id}`}
 >
@@ -47,7 +47,7 @@ const stripColor = getCardStripColor(entry);
       {
         isEmergency && (
           <span
-            class="inline-flex items-center rounded-full bg-[var(--tag-crisis-bg)] px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--tag-crisis-text)]"
+            class="inline-flex items-center rounded-xl bg-[var(--tag-crisis-bg)] px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--tag-crisis-text)]"
             aria-label="Recurso de emergencia"
           >
             📞 Emergencia
@@ -57,7 +57,7 @@ const stripColor = getCardStripColor(entry);
       {
         isOfficial && !isEmergency && (
           <span
-            class="inline-flex items-center rounded-full bg-[var(--tag-government-bg)] px-2.5 py-1 text-xs font-semibold text-[var(--tag-government-text)]"
+            class="inline-flex items-center rounded-xl bg-[var(--tag-government-bg)] px-2.5 py-1 text-xs font-semibold text-[var(--tag-government-text)]"
             aria-label="Recurso oficial"
           >
             🏛 Oficial
@@ -79,7 +79,7 @@ const stripColor = getCardStripColor(entry);
             const config = TYPE_TAG_CONFIG[t];
             return (
               <span
-                class={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ${config.bgClass} ${config.textClass}`}
+                class={`inline-flex items-center gap-1 rounded-xl px-2.5 py-1 text-xs font-medium ${config.bgClass} ${config.textClass}`}
               >
                 <span aria-hidden>{config.icon}</span>
                 {config.label}
@@ -88,13 +88,13 @@ const stripColor = getCardStripColor(entry);
           })
       }
       <span
-        class="inline-flex items-center rounded-full bg-[var(--tag-government-bg)] px-2.5 py-1 text-xs font-medium text-[var(--tag-government-text)]"
+        class="inline-flex items-center rounded-xl bg-[var(--tag-government-bg)] px-2.5 py-1 text-xs font-medium text-[var(--tag-government-text)]"
       >
         {COST_LABELS[entry.cost] ?? entry.cost}
       </span>
       {
         entry.online && (
-          <span class="inline-flex items-center rounded-full bg-[var(--tag-general-bg)] px-2.5 py-1 text-xs font-medium text-[var(--tag-general-text)]">
+          <span class="inline-flex items-center rounded-xl bg-[var(--tag-general-bg)] px-2.5 py-1 text-xs font-medium text-[var(--tag-general-text)]">
             En línea
           </span>
         )
@@ -123,7 +123,10 @@ const stripColor = getCardStripColor(entry);
         entry.phone && telPhone && (
           <a
             href={`tel:${telPhone}`}
-            class="inline-flex min-h-[48px] items-center justify-center rounded-[10px] bg-[var(--emergency-red)] px-5 py-3 text-base font-medium text-white transition-colors hover:bg-[var(--emergency-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--emergency-red)] focus:ring-offset-2"
+            class={`inline-flex items-center justify-center min-h-[48px] rounded-xl px-4 py-3 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-[rgba(0,0,0,0.12)] focus:ring-offset-2 ${isEmergency ? "" : "border border-[rgba(0,0,0,0.12)] text-[#1a1a1a] hover:bg-[#fafafa]"}`}
+            style={
+              isEmergency ? "background-color: #b71c1c; color: white;" : ""
+            }
             aria-label={`Llamar a ${entry.name}: ${entry.phone}`}
           >
             Llamar {entry.phone}
@@ -136,7 +139,7 @@ const stripColor = getCardStripColor(entry);
             href={entry.website}
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex min-h-[48px] items-center justify-center rounded-[10px] bg-[var(--brand-purple-accent)] px-5 py-3 text-base font-medium text-white transition-colors hover:bg-[var(--brand-purple-accent-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2"
+            class="inline-flex items-center justify-center min-h-[48px] rounded-xl border border-[rgba(0,0,0,0.12)] px-4 py-3 text-sm font-semibold text-[#1a1a1a] transition-colors hover:bg-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[rgba(0,0,0,0.12)] focus:ring-offset-2"
             aria-label={`Ver sitio web de ${entry.name}`}
           >
             Ver sitio web
@@ -149,7 +152,7 @@ const stripColor = getCardStripColor(entry);
             href={instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex min-h-[48px] items-center justify-center rounded-[10px] border border-[var(--card-border)] bg-[var(--card-bg)] px-5 py-3 text-base font-medium text-[var(--card-text)] transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2"
+            class="inline-flex items-center justify-center min-h-[48px] rounded-xl border border-[rgba(0,0,0,0.12)] px-4 py-3 text-sm font-semibold text-[#1a1a1a] transition-colors hover:bg-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[rgba(0,0,0,0.12)] focus:ring-offset-2"
             aria-label={`Contactar a ${entry.name} por Instagram`}
           >
             Contactar por Instagram
@@ -162,8 +165,7 @@ const stripColor = getCardStripColor(entry);
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-[10px] bg-[#25D366] px-4 py-2.5 text-base font-semibold text-white transition-colors hover:bg-[#20bd5a] focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2"
-            style="padding: 10px 16px; font-weight: 600;"
+            class="inline-flex items-center justify-center gap-2 min-h-[48px] rounded-xl border border-[rgba(0,0,0,0.12)] px-4 py-3 text-sm font-semibold text-[#1a1a1a] transition-colors hover:bg-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[rgba(0,0,0,0.12)] focus:ring-offset-2"
             aria-label={`Contactar a ${entry.name} por WhatsApp`}
           >
             <svg
@@ -176,13 +178,6 @@ const stripColor = getCardStripColor(entry);
             </svg>
             Contactar por WhatsApp
           </a>
-        )
-      }
-      {
-        !entry.phone && !entry.website && !whatsappUrl && instagramUrl && (
-          <span class="text-sm text-[var(--card-text-muted)]">
-            Escríbeles por DM en Instagram
-          </span>
         )
       }
     </div>

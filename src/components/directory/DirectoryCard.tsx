@@ -38,9 +38,7 @@ export default function DirectoryCard({ entry }: Props) {
 
   return (
     <article
-      className={`relative overflow-hidden rounded-[12px] border border-[var(--card-border)] bg-[var(--card-bg)] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-shadow hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] ${
-        isEmergency ? 'ring-2 ring-[var(--emergency-red)]' : ''
-      }`}
+      className="relative overflow-hidden rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-shadow hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
       aria-labelledby={`entry-name-${entry.id}`}
     >
       {/* Contextual color strip */}
@@ -54,7 +52,7 @@ export default function DirectoryCard({ entry }: Props) {
         <div className="flex flex-wrap items-center gap-2">
           {isEmergency && (
             <span
-              className="inline-flex items-center rounded-full bg-[var(--tag-crisis-bg)] px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--tag-crisis-text)]"
+              className="inline-flex items-center rounded-xl bg-[var(--tag-crisis-bg)] px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--tag-crisis-text)]"
               aria-label="Recurso de emergencia"
             >
               📞 Emergencia
@@ -62,7 +60,7 @@ export default function DirectoryCard({ entry }: Props) {
           )}
           {isOfficial && !isEmergency && (
             <span
-              className="inline-flex items-center rounded-full bg-[var(--tag-government-bg)] px-2.5 py-1 text-xs font-semibold text-[var(--tag-government-text)]"
+              className="inline-flex items-center rounded-xl bg-[var(--tag-government-bg)] px-2.5 py-1 text-xs font-semibold text-[var(--tag-government-text)]"
               aria-label="Recurso oficial"
             >
               🏛 Oficial
@@ -85,18 +83,18 @@ export default function DirectoryCard({ entry }: Props) {
             return (
               <span
                 key={t}
-                className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ${config.bgClass} ${config.textClass}`}
+                className={`inline-flex items-center gap-1 rounded-xl px-2.5 py-1 text-xs font-medium ${config.bgClass} ${config.textClass}`}
               >
                 <span aria-hidden>{config.icon}</span>
                 {config.label}
               </span>
             );
           })}
-          <span className="inline-flex items-center rounded-full bg-[var(--tag-government-bg)] px-2.5 py-1 text-xs font-medium text-[var(--tag-government-text)]">
+          <span className="inline-flex items-center rounded-xl bg-[var(--tag-government-bg)] px-2.5 py-1 text-xs font-medium text-[var(--tag-government-text)]">
             {COST_LABELS[entry.cost] ?? entry.cost}
           </span>
           {entry.online && (
-            <span className="inline-flex items-center rounded-full bg-[var(--tag-general-bg)] px-2.5 py-1 text-xs font-medium text-[var(--tag-general-text)]">
+            <span className="inline-flex items-center rounded-xl bg-[var(--tag-general-bg)] px-2.5 py-1 text-xs font-medium text-[var(--tag-general-text)]">
               En línea
             </span>
           )}
@@ -121,7 +119,8 @@ export default function DirectoryCard({ entry }: Props) {
           {entry.phone && (
             <a
               href={`tel:${formatPhoneForTel(entry.phone)}`}
-              className="inline-flex min-h-[48px] items-center justify-center rounded-[10px] bg-[var(--emergency-red)] px-5 py-3 text-base font-medium text-white transition-colors hover:bg-[var(--emergency-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--emergency-red)] focus:ring-offset-2"
+              className={`inline-flex items-center justify-center min-h-[48px] rounded-xl px-4 py-3 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-[rgba(0,0,0,0.12)] focus:ring-offset-2 ${!isEmergency ? 'border border-[rgba(0,0,0,0.12)] text-[#1a1a1a] hover:bg-[#fafafa]' : ''}`}
+              style={isEmergency ? { backgroundColor: '#b71c1c', color: 'white' } : undefined}
               aria-label={`Llamar a ${entry.name}: ${entry.phone}`}
             >
               Llamar {entry.phone}
@@ -132,7 +131,7 @@ export default function DirectoryCard({ entry }: Props) {
               href={entry.website}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-[48px] items-center justify-center rounded-[10px] bg-[var(--brand-purple-accent)] px-5 py-3 text-base font-medium text-white transition-colors hover:bg-[var(--brand-purple-accent-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2"
+              className="inline-flex items-center justify-center min-h-[48px] rounded-xl border border-[rgba(0,0,0,0.12)] px-4 py-3 text-sm font-semibold text-[#1a1a1a] transition-colors hover:bg-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[rgba(0,0,0,0.12)] focus:ring-offset-2"
               aria-label={`Ver sitio web de ${entry.name}`}
             >
               Ver sitio web
@@ -143,7 +142,7 @@ export default function DirectoryCard({ entry }: Props) {
               href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-[48px] items-center justify-center rounded-[10px] border border-[var(--card-border)] bg-[var(--card-bg)] px-5 py-3 text-base font-medium text-[var(--card-text)] transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2"
+              className="inline-flex items-center justify-center min-h-[48px] rounded-xl border border-[rgba(0,0,0,0.12)] px-4 py-3 text-sm font-semibold text-[#1a1a1a] transition-colors hover:bg-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[rgba(0,0,0,0.12)] focus:ring-offset-2"
               aria-label={`Contactar a ${entry.name} por Instagram`}
             >
               Contactar por Instagram
@@ -154,18 +153,12 @@ export default function DirectoryCard({ entry }: Props) {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-[10px] bg-[#25D366] px-4 py-2.5 text-base font-semibold text-white transition-colors hover:bg-[#20bd5a] focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2"
-              style={{ padding: '10px 16px', fontWeight: 600 }}
+              className="inline-flex items-center justify-center gap-2 min-h-[48px] rounded-xl border border-[rgba(0,0,0,0.12)] px-4 py-3 text-sm font-semibold text-[#1a1a1a] transition-colors hover:bg-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[rgba(0,0,0,0.12)] focus:ring-offset-2"
               aria-label={`Contactar a ${entry.name} por WhatsApp`}
             >
               <WhatsAppIcon className="h-5 w-5 shrink-0" aria-hidden />
               Contactar por WhatsApp
             </a>
-          )}
-          {!entry.phone && !entry.website && !whatsappUrl && instagramUrl && (
-            <span className="text-sm text-[var(--card-text-muted)]">
-              Escríbeles por DM en Instagram
-            </span>
           )}
         </div>
       </div>
