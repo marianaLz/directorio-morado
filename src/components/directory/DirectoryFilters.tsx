@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import Fuse from 'fuse.js';
 import type { DirectoryEntry } from '../../types/directory';
+import { TYPE_TAG_CONFIG } from '../../lib/tagConfig';
 
 const SUPPORT_TYPES = [
   'abortion accompaniment',
@@ -15,42 +16,33 @@ const SUPPORT_TYPES = [
   'crisis hotline',
 ] as const;
 
-const POPULATION_OPTIONS = [
-  'women',
-  'girls',
-  'survivors of sexual violence',
-  'men survivors',
-  'general public',
-] as const;
+const COST_OPTIONS: { value: 'free' | 'low cost' | 'variable' | 'consult directly'; label: string; icon: string }[] = [
+  { value: 'free', label: 'Gratuito', icon: '🆓' },
+  { value: 'low cost', label: 'Bajo costo', icon: '💵' },
+  { value: 'variable', label: 'Variable', icon: '📊' },
+  { value: 'consult directly', label: 'Consultar', icon: '💬' },
+];
 
-const COST_OPTIONS = ['free', 'low cost', 'variable', 'consult directly'] as const;
+const ONLINE_OPTIONS: { value: 'online' | 'inperson'; label: string; icon: string }[] = [
+  { value: 'online', label: 'En línea', icon: '🌐' },
+  { value: 'inperson', label: 'Presencial', icon: '📍' },
+];
 
-const TYPE_LABELS: Record<string, string> = {
-  'abortion accompaniment': 'Acompañamiento en aborto',
-  'psychological support': 'Apoyo psicológico',
-  'legal support': 'Apoyo legal',
-  'community support': 'Apoyo comunitario',
-  'sexual violence support': 'Violencia sexual',
-  'reproductive rights': 'Derechos reproductivos',
-  'sexual health': 'Salud sexual',
-  'financial support': 'Apoyo financiero',
-  'government services': 'Servicios gubernamentales',
-  'crisis hotline': 'Línea de crisis',
-};
-
-const POP_LABELS: Record<string, string> = {
-  women: 'Mujeres',
-  girls: 'Niñas',
-  'survivors of sexual violence': 'Sobrevivientes de violencia sexual',
-  'men survivors': 'Hombres sobrevivientes',
-  'general public': 'Público general',
-};
-
-const COST_LABELS: Record<string, string> = {
-  free: 'Gratuito',
-  'low cost': 'Bajo costo',
-  variable: 'Variable',
-  'consult directly': 'Consultar',
+/** Colores únicos por tipo de apoyo en los filtros (bg + text) */
+const FILTER_TYPE_COLORS: Record<
+  (typeof SUPPORT_TYPES)[number],
+  { bg: string; text: string }
+> = {
+  'abortion accompaniment': { bg: 'bg-emerald-100', text: 'text-emerald-800' },
+  'psychological support': { bg: 'bg-violet-100', text: 'text-violet-800' },
+  'legal support': { bg: 'bg-blue-100', text: 'text-blue-800' },
+  'community support': { bg: 'bg-amber-100', text: 'text-amber-800' },
+  'sexual violence support': { bg: 'bg-rose-100', text: 'text-rose-800' },
+  'reproductive rights': { bg: 'bg-teal-100', text: 'text-teal-800' },
+  'sexual health': { bg: 'bg-cyan-100', text: 'text-cyan-800' },
+  'financial support': { bg: 'bg-orange-100', text: 'text-orange-800' },
+  'government services': { bg: 'bg-slate-100', text: 'text-slate-700' },
+  'crisis hotline': { bg: 'bg-red-100', text: 'text-red-800' },
 };
 
 interface Props {
@@ -59,7 +51,7 @@ interface Props {
   staticEntriesContainerId: string;
 }
 
-const FUSE_OPTIONS: Fuse.IFuseOptions<DirectoryEntry> = {
+const FUSE_OPTIONS = {
   keys: [
     { name: 'name', weight: 0.35 },
     { name: 'city', weight: 0.2 },
@@ -72,46 +64,32 @@ const FUSE_OPTIONS: Fuse.IFuseOptions<DirectoryEntry> = {
   includeScore: false,
 };
 
+type SupportType = (typeof SUPPORT_TYPES)[number];
+const VALID_TYPES = new Set<SupportType>(SUPPORT_TYPES);
+
+function getInitialTypesFromUrl(): SupportType[] {
+  if (typeof window === 'undefined') return [];
+  const params = new URLSearchParams(window.location.search);
+  const tipos = params.getAll('tipo').map((t) => t.trim()).filter(Boolean);
+  return tipos.filter((t): t is SupportType => VALID_TYPES.has(t as SupportType));
+}
+
 export default function DirectoryFilters({ entries, staticEntriesContainerId }: Props) {
   const [search, setSearch] = useState('');
   const [country, setCountry] = useState<string>('');
-  const [state, setState] = useState<string>('');
-  const [city, setCity] = useState<string>('');
-  const [types, setTypes] = useState<string[]>([]);
-  const [population, setPopulation] = useState<string[]>([]);
-  const [cost, setCost] = useState<string>('');
-  const [online, setOnline] = useState<string>(''); // '' | 'online' | 'inperson'
+  const [types, setTypes] = useState<SupportType[]>(getInitialTypesFromUrl);
+  const [cost, setCost] = useState<'free' | 'low cost' | 'variable' | 'consult directly' | ''>('');
+  const [online, setOnline] = useState<'online' | 'inperson' | ''>('');
 
   const countries = useMemo(() => {
     const set = new Set(entries.map((e) => e.country).filter(Boolean));
     return Array.from(set).sort();
   }, [entries]);
 
-  const states = useMemo(() => {
-    if (!country) return [];
-    const set = new Set(
-      entries.filter((e) => e.country === country).map((e) => e.state).filter(Boolean)
-    );
-    return Array.from(set).sort();
-  }, [entries, country]);
-
-  const cities = useMemo(() => {
-    if (!state && !country) return [];
-    const filtered = country
-      ? entries.filter((e) => e.country === country)
-      : entries;
-    const byState = state ? filtered.filter((e) => e.state === state) : filtered;
-    const set = new Set(byState.map((e) => e.city).filter(Boolean));
-    return Array.from(set).sort();
-  }, [entries, country, state]);
-
   const filtered = useMemo(() => {
     let list = entries;
     if (country) list = list.filter((e) => e.country === country);
-    if (state) list = list.filter((e) => e.state === state);
-    if (city) list = list.filter((e) => e.city === city);
     if (types.length > 0) list = list.filter((e) => types.some((t) => e.type.includes(t)));
-    if (population.length > 0) list = list.filter((e) => population.some((p) => e.population.includes(p)));
     if (cost) list = list.filter((e) => e.cost === cost);
     if (online === 'online') list = list.filter((e) => e.online);
     if (online === 'inperson') list = list.filter((e) => !e.online);
@@ -121,10 +99,9 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
     const fuse = new Fuse(list, FUSE_OPTIONS);
     const results = fuse.search(q);
     return results.map((r) => r.item);
-  }, [entries, search, country, state, city, types, population, cost, online]);
+  }, [entries, search, country, types, cost, online]);
 
   const filteredIds = useMemo(() => new Set(filtered.map((e) => e.id)), [filtered]);
-
 
   useEffect(() => {
     if (!staticEntriesContainerId) return;
@@ -138,64 +115,56 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
     });
   }, [staticEntriesContainerId, filteredIds]);
 
-  const toggleType = (t: string) => {
+  const toggleType = (t: SupportType) => {
     setTypes((prev) => (prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]));
   };
-  const togglePopulation = (p: string) => {
-    setPopulation((prev) => (prev.includes(p) ? prev.filter((x) => x !== p) : [...prev, p]));
+
+  const toggleCost = (value: (typeof COST_OPTIONS)[number]['value']) => {
+    setCost((prev) => (prev === value ? '' : value));
+  };
+
+  const toggleOnline = (value: 'online' | 'inperson') => {
+    setOnline((prev) => (prev === value ? '' : value));
   };
 
   const clearFilters = () => {
     setSearch('');
     setCountry('');
-    setState('');
-    setCity('');
     setTypes([]);
-    setPopulation([]);
     setCost('');
     setOnline('');
   };
 
-  return (
-    <div className="space-y-6">
-      <div className="rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] p-4 shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
-        <label htmlFor="directory-search" className="sr-only">
-          Buscar por nombre, ciudad o tipo de apoyo
-        </label>
-        <input
-          id="directory-search"
-          type="search"
-          placeholder="Buscar apoyo, ciudad o organización..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full min-h-[48px] rounded-xl border border-[var(--card-border)] bg-white px-4 py-3 text-base text-[var(--card-text)] placeholder-[var(--card-text-muted)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2"
-          aria-describedby="search-hint"
-          autoComplete="off"
-        />
-        <p id="search-hint" className="mt-2 text-sm text-[var(--card-text-muted)]" role="status">
-          {filtered.length} resultado{filtered.length !== 1 ? 's' : ''}.
-        </p>
-      </div>
+  const hasActiveFilters =
+    search.trim() !== '' || country !== '' || types.length > 0 || cost !== '' || online !== '';
 
-      <details className="rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
-        <summary className="list-none cursor-pointer px-4 py-3 text-base font-semibold text-[var(--card-text)] hover:bg-gray-50 rounded-xl select-none min-h-[48px] flex items-center">
-          Más filtros (ubicación, tipo, costo)
-        </summary>
-        <div className="px-4 pb-4 pt-2 border-t border-[var(--card-border)]">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <div>
-            <label htmlFor="filter-country" className="block text-xs font-medium text-[var(--card-text-muted)]">
+  return (
+    <div className="space-y-4">
+      <div className="rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] p-4 shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+        {/* Search + País en una fila */}
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+          <label htmlFor="directory-search" className="sr-only">
+            Buscar por nombre, ciudad o tipo de apoyo
+          </label>
+          <input
+            id="directory-search"
+            type="search"
+            placeholder="Buscar apoyo, ciudad o organización..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="min-h-[44px] flex-1 rounded-xl border border-[var(--card-border)] bg-white px-4 py-2.5 text-base text-[var(--card-text)] placeholder-[var(--card-text-muted)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2"
+            aria-describedby="search-hint"
+            autoComplete="off"
+          />
+          <div className="flex items-center gap-3">
+            <label htmlFor="filter-country" className="text-sm font-medium text-[var(--card-text-muted)] shrink-0">
               País
             </label>
             <select
               id="filter-country"
               value={country}
-              onChange={(e) => {
-                setCountry(e.target.value);
-                setState('');
-                setCity('');
-              }}
-              className="mt-1 w-full min-h-[48px] rounded-xl border border-[var(--card-border)] bg-white px-3 py-2 text-base text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
+              onChange={(e) => setCountry(e.target.value)}
+              className="min-h-[44px] w-full rounded-xl border border-[var(--card-border)] bg-white px-3 py-2.5 text-base text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] sm:w-auto sm:min-w-[140px]"
             >
               <option value="">Todos</option>
               {countries.map((c) => (
@@ -205,123 +174,115 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
               ))}
             </select>
           </div>
-          <div>
-            <label htmlFor="filter-state" className="block text-xs font-medium text-[var(--card-text-muted)]">
-              Estado
-            </label>
-            <select
-              id="filter-state"
-              value={state}
-              onChange={(e) => {
-                setState(e.target.value);
-                setCity('');
-              }}
-              className="mt-1 w-full min-h-[48px] rounded-xl border border-[var(--card-border)] bg-white px-3 py-2 text-base text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
-            >
-              <option value="">Todos</option>
-              {states.map((s) => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="filter-city" className="block text-xs font-medium text-[var(--card-text-muted)]">
-              Ciudad
-            </label>
-            <select
-              id="filter-city"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              className="mt-1 w-full min-h-[48px] rounded-xl border border-[var(--card-border)] bg-white px-3 py-2 text-base text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
-            >
-              <option value="">Todas</option>
-              {cities.map((c) => (
-                <option key={c} value={c}>{c}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <span className="block text-xs font-medium text-[var(--card-text-muted)] mb-1">Modalidad</span>
-            <select
-              value={online}
-              onChange={(e) => setOnline(e.target.value)}
-              className="w-full min-h-[48px] rounded-xl border border-[var(--card-border)] bg-white px-3 py-2 text-base text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
-              aria-label="En línea o presencial"
-            >
-              <option value="">Todas</option>
-              <option value="online">En línea</option>
-              <option value="inperson">Presencial</option>
-            </select>
-          </div>
-          <div>
-            <label htmlFor="filter-cost" className="block text-xs font-medium text-[var(--card-text-muted)]">
-              Costo
-            </label>
-            <select
-              id="filter-cost"
-              value={cost}
-              onChange={(e) => setCost(e.target.value)}
-              className="mt-1 w-full min-h-[48px] rounded-xl border border-[var(--card-border)] bg-white px-3 py-2 text-base text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
-            >
-              <option value="">Cualquiera</option>
-              {COST_OPTIONS.map((c) => (
-                <option key={c} value={c}>{COST_LABELS[c]}</option>
-              ))}
-            </select>
-          </div>
         </div>
 
+        {/* Tipo de apoyo: tags como en las tarjetas */}
         <div className="mt-4">
-          <span className="block text-xs font-medium text-[var(--card-text-muted)] mb-2">Tipo de apoyo</span>
+          <span className="sr-only">Filtrar por tipo de apoyo</span>
           <div className="flex flex-wrap gap-2">
-            {SUPPORT_TYPES.map((t) => (
-              <label key={t} className="inline-flex items-center gap-2 cursor-pointer min-h-[44px] px-2 py-1 rounded-xl hover:bg-gray-50">
-                <input
-                  type="checkbox"
-                  checked={types.includes(t)}
-                  onChange={() => toggleType(t)}
-                  className="h-5 w-5 rounded border-gray-300 text-[var(--brand-purple-accent)] focus:ring-[var(--brand-purple-accent)] flex-shrink-0"
-                />
-                <span className="text-base text-[var(--card-text)]">{TYPE_LABELS[t]}</span>
-              </label>
-            ))}
+            {SUPPORT_TYPES.map((t) => {
+              const config = TYPE_TAG_CONFIG[t];
+              const colors = FILTER_TYPE_COLORS[t];
+              if (!config || !colors) return null;
+              const selected = types.includes(t);
+              return (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={(e) => {
+                    toggleType(t);
+                    (e.currentTarget as HTMLButtonElement).blur();
+                  }}
+                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1.5 text-xs font-medium transition-all focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 ${colors.bg} ${colors.text} ${selected ? 'ring-2 ring-[var(--brand-purple-accent)] ring-offset-2' : 'opacity-90 hover:opacity-100'}`}
+                  aria-pressed={selected}
+                  aria-label={selected ? `Quitar filtro ${config.label}` : `Filtrar por ${config.label}`}
+                >
+                  <span aria-hidden>{config.icon}</span>
+                  {config.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        <div className="mt-4">
-          <span className="block text-xs font-medium text-[var(--card-text-muted)] mb-2">Población</span>
-          <div className="flex flex-wrap gap-2">
-            {POPULATION_OPTIONS.map((p) => (
-              <label key={p} className="inline-flex items-center gap-2 cursor-pointer min-h-[44px] px-2 py-1 rounded-xl hover:bg-gray-50">
-                <input
-                  type="checkbox"
-                  checked={population.includes(p)}
-                  onChange={() => togglePopulation(p)}
-                  className="h-5 w-5 rounded border-gray-300 text-[var(--brand-purple-accent)] focus:ring-[var(--brand-purple-accent)] flex-shrink-0"
-                />
-                <span className="text-base text-[var(--card-text)]">{POP_LABELS[p]}</span>
-              </label>
-            ))}
+        {/* Costo */}
+        <div className="mt-3">
+          <span className="sr-only">Filtrar por costo</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-medium text-[var(--card-text-muted)] shrink-0">Costo:</span>
+            {COST_OPTIONS.map((opt) => {
+              const selected = cost === opt.value;
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={(e) => {
+                    toggleCost(opt.value);
+                    (e.currentTarget as HTMLButtonElement).blur();
+                  }}
+                  className={`inline-flex items-center gap-1.5 rounded-full bg-[var(--tag-government-bg)] px-2.5 py-1.5 text-xs font-medium text-[var(--tag-government-text)] transition-all focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 ${selected ? 'ring-2 ring-[var(--brand-purple-accent)] ring-offset-2' : 'opacity-80 hover:opacity-100'}`}
+                  aria-pressed={selected}
+                  aria-label={selected ? `Quitar filtro ${opt.label}` : `Filtrar por ${opt.label}`}
+                >
+                  <span aria-hidden>{opt.icon}</span>
+                  {opt.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={clearFilters}
-          className="mt-4 min-h-[48px] px-4 py-2 rounded-xl text-base font-medium text-[var(--card-text)] hover:bg-gray-100 border border-[var(--card-border)]"
-        >
-          Limpiar filtros
-        </button>
+        {/* Modalidad: En línea / Presencial */}
+        <div className="mt-2">
+          <span className="sr-only">Filtrar por modalidad</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-medium text-[var(--card-text-muted)] shrink-0">Modalidad:</span>
+            {ONLINE_OPTIONS.map((opt) => {
+              const selected = online === opt.value;
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={(e) => {
+                    toggleOnline(opt.value);
+                    (e.currentTarget as HTMLButtonElement).blur();
+                  }}
+                  className={`inline-flex items-center gap-1.5 rounded-full bg-[var(--tag-general-bg)] px-2.5 py-1.5 text-xs font-medium text-[var(--tag-general-text)] transition-all focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 ${selected ? 'ring-2 ring-[var(--brand-purple-accent)] ring-offset-2' : 'opacity-80 hover:opacity-100'}`}
+                  aria-pressed={selected}
+                  aria-label={selected ? `Quitar filtro ${opt.label}` : `Filtrar por ${opt.label}`}
+                >
+                  <span aria-hidden>{opt.icon}</span>
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </details>
 
-      <section
-        className="space-y-4"
-        aria-label="Resultados del directorio"
-      >
+        {/* Contador + Limpiar */}
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+          <p id="search-hint" className="text-sm text-[var(--card-text-muted)]" role="status">
+            {filtered.length} resultado{filtered.length !== 1 ? 's' : ''}.
+          </p>
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="text-sm font-medium text-[var(--brand-purple-accent)] hover:underline focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 rounded"
+            >
+              Limpiar filtros
+            </button>
+          )}
+        </div>
+      </div>
+
+      <section className="space-y-4" aria-label="Resultados del directorio">
         {filtered.length === 0 && (
-          <p className="rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] p-8 text-center text-base text-[var(--card-text-muted)]" role="status">
-            No encontramos resultados, intenta buscar por ciudad o tipo de apoyo.
+          <p
+            className="rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] p-8 text-center text-base text-[var(--card-text-muted)]"
+            role="status"
+          >
+            No encontramos resultados. Prueba otro tipo de apoyo o quita filtros.
           </p>
         )}
       </section>

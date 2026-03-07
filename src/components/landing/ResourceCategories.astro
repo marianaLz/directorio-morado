@@ -1,36 +1,44 @@
 ---
+// filterType = value used in DirectoryFilters (SUPPORT_TYPES). Multiple for "Organizaciones".
 const categories = [
   {
     name: "Colectivas",
-    href: "/directorio",
     icon: "👥",
     description: "Colectivas feministas y redes de acompañamiento.",
+    filterTypes: ["community support"],
   },
   {
     name: "Psicólogas",
-    href: "/directorio",
     icon: "🧠",
     description: "Apoyo psicológico y emocional para sobrevivientes.",
+    filterTypes: ["psychological support"],
   },
   {
     name: "Organizaciones",
-    href: "/directorio",
     icon: "🏛",
     description: "ONG y asociaciones de apoyo legal y comunitario.",
+    filterTypes: ["legal support", "community support"],
   },
   {
     name: "Recursos gubernamentales",
-    href: "/#recursos-gubernamentales",
     icon: "🏢",
     description: "Servicios gratuitos del gobierno (CDMX y nacional).",
+    filterTypes: ["government services"],
   },
   {
     name: "Líneas de crisis",
-    href: "/#linea-de-crisis",
     icon: "📞",
     description: "Atención 24 horas. Gratuita en todo México.",
+    filterTypes: ["crisis hotline"],
   },
 ];
+
+function buildDirectorioUrl(filterTypes: string[]): string {
+  if (filterTypes.length === 0) return "/directorio";
+  const params = new URLSearchParams();
+  filterTypes.forEach((t) => params.append("tipo", t));
+  return `/directorio?${params.toString()}`;
+}
 ---
 
 <section
@@ -50,7 +58,7 @@ const categories = [
         categories.map((cat) => (
           <li class="h-full">
             <a
-              href={cat.href}
+              href={buildDirectorioUrl(cat.filterTypes)}
               class="flex flex-col rounded-xl border border-[var(--card-border)] bg-white p-6 transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 h-full"
               style="box-shadow: var(--card-shadow-soft);"
             >

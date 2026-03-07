@@ -15,6 +15,13 @@ const COST_LABELS: Record<string, string> = {
   "consult directly": "Consultar",
 };
 
+const COST_ICONS: Record<string, string> = {
+  free: "🆓",
+  "low cost": "💵",
+  variable: "📊",
+  "consult directly": "💬",
+};
+
 const instagramUrl = entry.instagram
   ? `https://instagram.com/${entry.instagram.replace("@", "")}`
   : null;
@@ -44,16 +51,6 @@ const stripColor = getCardStripColor(entry);
   </div>
   <div class="p-5">
     <div class="flex flex-wrap items-center gap-2">
-      {
-        isEmergency && (
-          <span
-            class="inline-flex items-center rounded-xl bg-[var(--tag-crisis-bg)] px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--tag-crisis-text)]"
-            aria-label="Recurso de emergencia"
-          >
-            📞 Emergencia
-          </span>
-        )
-      }
       {
         isOfficial && !isEmergency && (
           <span
@@ -88,17 +85,21 @@ const stripColor = getCardStripColor(entry);
           })
       }
       <span
-        class="inline-flex items-center rounded-xl bg-[var(--tag-government-bg)] px-2.5 py-1 text-xs font-medium text-[var(--tag-government-text)]"
+        class="inline-flex items-center gap-1 rounded-xl bg-[var(--tag-government-bg)] px-2.5 py-1 text-xs font-medium text-[var(--tag-government-text)]"
       >
+        {
+          COST_ICONS[entry.cost] && (
+            <span aria-hidden>{COST_ICONS[entry.cost]}</span>
+          )
+        }
         {COST_LABELS[entry.cost] ?? entry.cost}
       </span>
-      {
-        entry.online && (
-          <span class="inline-flex items-center rounded-xl bg-[var(--tag-general-bg)] px-2.5 py-1 text-xs font-medium text-[var(--tag-general-text)]">
-            En línea
-          </span>
-        )
-      }
+      <span
+        class="inline-flex items-center gap-1 rounded-xl bg-[var(--tag-general-bg)] px-2.5 py-1 text-xs font-medium text-[var(--tag-general-text)]"
+      >
+        <span aria-hidden>{entry.online ? "🌐" : "📍"}</span>
+        {entry.online ? "En línea" : "Presencial"}
+      </span>
     </div>
     {
       entry.location && (
