@@ -1,0 +1,71 @@
+/**
+ * Directorio Morado — semantic design tokens
+ * Purple = brand. Contextual colors for resource types and sections.
+ */
+
+:root {
+  /* Primary brand */
+  --brand-purple-dark: #260e4c;
+  --brand-purple-deeper: #1f0a3d;
+  --brand-purple-light: #a68cf7;
+  --brand-purple-accent: #5f24af;
+  --brand-purple-accent-hover: #7030c4;
+  --brand-white: #fefeff;
+
+  /* Legacy aliases for gradual migration */
+  --color-bg-top: var(--brand-purple-dark);
+  --color-bg-bottom: var(--brand-purple-deeper);
+  --color-title: var(--brand-purple-light);
+  --color-highlight: var(--brand-white);
+  --color-accent: var(--brand-purple-accent);
+  --color-accent-hover: var(--brand-purple-accent-hover);
+  --color-card-bg: #2d1552;
+  --color-card-border: #3d1f6b;
+
+  /* Card — neutral (directory) */
+  --card-bg: #ffffff;
+  --card-text: #1a1a1a;
+  --card-text-muted: #4b5563;
+  --card-border: rgba(0, 0, 0, 0.08);
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  /* Reproductive / abortion section */
+  --green-dark: #045230;
+  --green-deep: #053e2f;
+  --green-primary: #23c65e;
+  --green-gradient: linear-gradient(180deg, #053e2f 0%, #045230 100%);
+
+  /* Emergency / crisis */
+  --emergency-red: #e53935;
+  --emergency-dark: #b71c1c;
+  --emergency-gradient: linear-gradient(180deg, #b71c1c 0%, #8b0000 100%);
+
+  /* WhatsApp */
+  --whatsapp-green: #25D366;
+
+  /* Tag colors (contextual) */
+  --tag-psychological-bg: #ede9fe;
+  --tag-psychological-text: #5b21b6;
+  --tag-legal-bg: #dbeafe;
+  --tag-legal-text: #1e40af;
+  --tag-abortion-bg: #dcfce7;
+  --tag-abortion-text: #166534;
+  --tag-government-bg: #f3f4f6;
+  --tag-government-text: #374151;
+  --tag-crisis-bg: #fee2e2;
+  --tag-crisis-text: #b91c1c;
+  --tag-community-bg: #fef3c7;
+  --tag-community-text: #92400e;
+  --tag-general-bg: #f5f3ff;
+  --tag-general-text: #5b21b6;
+
+  /* Spacing scale (8px base) */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-6: 48px;
+  --space-8: 64px;
+  --section-gap-mobile: 48px;
+  --section-gap-desktop: 80px;
+}

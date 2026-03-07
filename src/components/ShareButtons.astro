@@ -1,0 +1,56 @@
+---
+interface Props {
+  title?: string;
+  url?: string;
+}
+
+const { title = "Directorio Morado — Red de apoyo · MX", url } = Astro.props;
+const shareUrl = url ?? Astro.url.href;
+const encodedUrl = encodeURIComponent(shareUrl);
+const encodedTitle = encodeURIComponent(title);
+---
+
+<div
+  class="flex flex-wrap items-center gap-2"
+  role="group"
+  aria-label="Compartir directorio"
+>
+  <a
+    href={`https://wa.me/?text=${encodedTitle}%20${encodedUrl}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="inline-flex items-center gap-2 rounded-full border-2 border-[var(--color-title)] bg-transparent px-4 py-2 text-sm font-medium text-[var(--color-title)] hover:bg-white/10 transition-colors min-h-[44px]"
+    aria-label="Compartir por WhatsApp"
+  >
+    <span aria-hidden="true">Compartir por WhatsApp</span>
+  </a>
+  <button
+    type="button"
+    class="copy-link-btn inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-4 py-2 text-sm font-medium text-[var(--color-highlight)] hover:bg-[var(--color-accent-hover)] transition-colors cursor-pointer min-h-[44px]"
+    aria-label="Copiar enlace"
+    data-url={shareUrl}
+  >
+    Copiar enlace
+  </button>
+</div>
+
+<script>
+  document.querySelectorAll(".copy-link-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const url =
+        (btn as HTMLButtonElement).dataset.url ?? window.location.href;
+      try {
+        await navigator.clipboard.writeText(url);
+        const label = btn.getAttribute("aria-label");
+        btn.textContent = "¡Enlace copiado!";
+        btn.setAttribute("aria-label", "Enlace copiado al portapapeles");
+        setTimeout(() => {
+          btn.textContent = "Copiar enlace";
+          if (label) btn.setAttribute("aria-label", label);
+        }, 2000);
+      } catch {
+        btn.textContent = "No se pudo copiar";
+      }
+    });
+  });
+</script>

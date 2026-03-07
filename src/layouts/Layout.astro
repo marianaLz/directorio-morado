@@ -1,23 +1,132 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import SEOLayout from "./SEOLayout.astro";
+import {
+  getBaseUrl,
+  buildWebSiteSchema,
+  buildOrganizationSchema,
+  buildDatasetSchema,
+  buildCrisisServiceSchema,
+} from "../data/schema";
+import AnonymousNote from "../components/AnonymousNote.astro";
+import ShareButtons from "../components/ShareButtons.astro";
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  image?: string;
+  structuredData?: Record<string, unknown>[];
+}
+
+const {
+  title,
+  description = "Directorio Morado es una red de apoyo que conecta a sobrevivientes de violencia sexual con psicólogas, organizaciones, colectivas y recursos de ayuda en México y Latinoamérica.",
+  canonical,
+  image,
+  structuredData: pageStructuredData = [],
+} = Astro.props;
+
+const baseUrl = getBaseUrl();
+const defaultStructuredData = [
+  buildWebSiteSchema(baseUrl),
+  buildOrganizationSchema(baseUrl),
+  buildDatasetSchema(baseUrl),
+  buildCrisisServiceSchema(),
+];
+const allStructuredData = [...defaultStructuredData, ...pageStructuredData];
+---
+
+<SEOLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image={image}
+  structuredData={allStructuredData}
+>
+  <a
+    href="#main"
+    class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:bg-brand-accent focus:px-4 focus:py-2 focus:text-brand-highlight focus:outline-none focus:ring-2 focus:ring-brand-title"
+  >
+    Saltar al contenido
+  </a>
+  <slot name="emergency" />
+  <header class="border-b border-white/10 bg-[var(--color-bg-top)] shadow-sm">
+    <nav
+      class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:py-4 sm:px-6"
+      aria-label="Navegación"
+    >
+      <a
+        href="/"
+        class="text-lg font-semibold min-h-[44px] flex items-center gap-1"
+      >
+        <span class="text-[var(--color-title)]">Directorio</span>
+        <span class="text-[var(--color-highlight)]">Morado</span>
+      </a>
+      <a
+        href="/directorio"
+        class="rounded-full bg-[var(--color-accent)] px-5 py-3 text-base font-medium text-[var(--color-highlight)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-brand-title min-h-[48px] min-w-[140px] flex items-center justify-center transition-colors"
+      >
+        Ver directorio
+      </a>
+    </nav>
+  </header>
+  <main id="main">
+    <slot />
+  </main>
+  <footer
+    class="py-12 sm:py-20 bg-[var(--color-bg-top)] border-t border-white/10"
+  >
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 space-y-6">
+      <AnonymousNote />
+      <div>
+        <p class="text-sm font-medium text-[var(--color-highlight)]/90 mb-2">
+          Comparte este directorio
+        </p>
+        <ShareButtons title="Directorio Morado — Red de apoyo · MX" />
+      </div>
+      <nav class="pt-4 border-t border-white/10" aria-label="Enlaces internos">
+        <a
+          href="/directorio"
+          class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
+        >
+          Ver directorio completo
+        </a>
+        <span class="text-white/50 mx-2" aria-hidden="true">·</span>
+        <a
+          href="/#linea-de-crisis"
+          class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
+        >
+          Línea de crisis 24h
+        </a>
+        <span class="text-white/50 mx-2" aria-hidden="true">·</span>
+        <a
+          href="/#recursos-gubernamentales"
+          class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
+        >
+          Recursos gubernamentales
+        </a>
+        <span class="text-white/50 mx-2" aria-hidden="true">·</span>
+        <a
+          href="/preguntas-frecuentes"
+          class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
+        >
+          Preguntas frecuentes
+        </a>
+        <span class="text-white/50 mx-2" aria-hidden="true">·</span>
+        <a
+          href="/sobre-directorio-morado"
+          class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
+        >
+          Sobre Directorio Morado
+        </a>
+        <span class="text-white/50 mx-2" aria-hidden="true">·</span>
+        <a
+          href="/#categorias"
+          class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
+        >
+          Tipos de recursos
+        </a>
+      </nav>
+    </div>
+  </footer>
+</SEOLayout>

@@ -1,11 +1,40 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import EmergencyBanner from "../components/EmergencyBanner.astro";
+import AnonymousNote from "../components/AnonymousNote.astro";
+import ShareButtons from "../components/ShareButtons.astro";
+import Hero from "../components/landing/Hero.astro";
+import TrustSection from "../components/landing/TrustSection.astro";
+import HowToUse from "../components/landing/HowToUse.astro";
+import ResourceCategories from "../components/landing/ResourceCategories.astro";
+import AbortionSupport from "../components/landing/AbortionSupport.astro";
+import CrisisHotline from "../components/landing/CrisisHotline.astro";
+import GovernmentResources from "../components/landing/GovernmentResources.astro";
+import FAQ from "../components/landing/FAQ.astro";
+import CtaSection from "../components/landing/CtaSection.astro";
+import AboutThisDirectory from "../components/landing/AboutThisDirectory.astro";
+import { faqItems } from "../data/faq";
+import { buildFAQPageSchema } from "../data/schema";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const faqSchema = buildFAQPageSchema(
+  faqItems.map((item) => ({ name: item.question, text: item.answer })),
+);
 ---
 
-<Layout>
-	<Welcome />
+<Layout
+  title="Directorio Morado — Red de apoyo para sobrevivientes de violencia sexual en México"
+  description="Directorio Morado es una red de apoyo que conecta a sobrevivientes de violencia sexual con organizaciones, psicólogas, colectivas y recursos en México y Latinoamérica."
+  structuredData={[faqSchema]}
+>
+  <EmergencyBanner slot="emergency" />
+  <Hero />
+  <!-- <TrustSection /> -->
+  <HowToUse />
+  <ResourceCategories />
+  <AbortionSupport />
+  <!-- <CrisisHotline /> -->
+  <GovernmentResources />
+  <FAQ limit={3} />
+  <CtaSection />
+  <AboutThisDirectory />
 </Layout>

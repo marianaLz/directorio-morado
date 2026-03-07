@@ -1,0 +1,67 @@
+---
+import Layout from '../layouts/Layout.astro';
+import EmergencyBanner from '../components/EmergencyBanner.astro';
+import AnonymousNote from '../components/AnonymousNote.astro';
+import ShareButtons from '../components/ShareButtons.astro';
+import DirectoryFilters from '../components/directory/DirectoryFilters';
+import DirectoryCardStatic from '../components/directory/DirectoryCardStatic.astro';
+import directoryData from '../data/directory.json';
+import type { DirectoryEntry } from '../types/directory';
+import { getBaseUrl, buildDirectoryEntrySchema } from '../data/schema';
+
+const entries = directoryData as DirectoryEntry[];
+const baseUrl = getBaseUrl();
+const directoryStructuredData = entries.map((entry) =>
+  buildDirectoryEntrySchema(entry as import('../data/schema').DirectoryEntryForSchema, baseUrl)
+);
+---
+
+<Layout
+  title="Directorio de apoyo"
+  description="Directorio Morado es una red de apoyo que conecta a sobrevivientes de violencia sexual con organizaciones, psicólogas, colectivas y recursos en México y Latinoamérica."
+  structuredData={directoryStructuredData}
+>
+  <EmergencyBanner slot="emergency" />
+  <div class="min-h-screen bg-[#f5f5f7]">
+  <div class="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
+    <header class="mb-8">
+      <h1 class="text-2xl font-bold text-[var(--card-text)] sm:text-3xl">
+        Directorio de apoyo
+      </h1>
+      <p class="mt-2 text-[var(--card-text-muted)] text-base leading-[1.6]">
+        Red de apoyo · MX. Hay personas que pueden ayudarte.
+      </p>
+      <nav class="mt-4 flex flex-wrap items-center gap-3" aria-label="Enlaces rápidos del directorio">
+        <a href="/#linea-de-crisis" class="text-sm font-medium text-[var(--brand-purple-accent)] hover:underline">
+          Línea de crisis 24h
+        </a>
+        <span class="text-white/50" aria-hidden="true">·</span>
+        <a href="/#recursos-gubernamentales" class="text-sm font-medium text-[var(--brand-purple-accent)] hover:underline">
+          Recursos gubernamentales
+        </a>
+        <span class="text-[var(--card-text-muted)]" aria-hidden="true">·</span>
+        <a href="/" class="text-sm font-medium text-[var(--brand-purple-accent)] hover:underline">
+          Inicio
+        </a>
+        <span class="text-[var(--card-text-muted)]" aria-hidden="true">·</span>
+        <a href="/sobre-directorio-morado" class="text-sm font-medium text-[var(--brand-purple-accent)] hover:underline">
+          Sobre Directorio Morado
+        </a>
+      </nav>
+      <div class="mt-4 flex flex-wrap items-center gap-4">
+        <ShareButtons title="Directorio Morado — Red de apoyo · MX" url={`${baseUrl}/directorio`} />
+      </div>
+    </header>
+
+    <AnonymousNote />
+
+    <DirectoryFilters entries={entries} staticEntriesContainerId="directory-entries" client:load />
+
+    <section id="directory-entries" class="mt-8 space-y-6" aria-label="Listado de recursos del directorio">
+      {entries.map((entry) => (
+        <DirectoryCardStatic entry={entry} />
+      ))}
+    </section>
+  </div>
+  </div>
+</Layout>

@@ -1,0 +1,64 @@
+---
+import Layout from '../layouts/Layout.astro';
+import EmergencyBanner from '../components/EmergencyBanner.astro';
+---
+
+<Layout
+  title="Sobre Directorio Morado"
+  description="Qué es Directorio Morado, cómo se curan los recursos, para quién es y cómo contactar a los recursos. Red de apoyo para sobrevivientes de violencia sexual en México."
+>
+  <EmergencyBanner slot="emergency" />
+  <article class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <header class="mb-8">
+      <h1 class="text-2xl font-bold text-[var(--color-highlight)] sm:text-3xl">
+        Sobre Directorio Morado
+      </h1>
+      <p class="mt-2 text-[var(--color-title)] text-lg">
+        Red de apoyo · MX
+      </p>
+    </header>
+
+    <div class="prose prose-invert max-w-none space-y-6 text-[var(--color-highlight)]/90">
+      <section>
+        <h2 class="text-xl font-semibold text-[var(--color-highlight)] mb-2">¿Qué es este directorio?</h2>
+        <p>
+          Directorio Morado es una red de apoyo que reúne organizaciones, colectivas, psicólogas, abogadas y recursos gubernamentales para sobrevivientes de violencia sexual y personas que buscan apoyo en aborto, derechos reproductivos y salud mental en México y Latinoamérica. Es un recurso público y gratuito; no pertenece al gobierno ni a una sola institución.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-semibold text-[var(--color-highlight)] mb-2">¿Cómo se curan los recursos?</h2>
+        <p>
+          Los recursos que aparecen en el directorio son organizaciones, colectivas y servicios conocidos por su trabajo en acompañamiento, apoyo psicológico, legal o en crisis. Se incluyen tanto iniciativas de la sociedad civil como servicios gubernamentales gratuitos. El directorio se actualiza de forma periódica; si conoces un recurso que debería estar, puedes sugerirlo. No se cobra por aparecer en el listado.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-semibold text-[var(--color-highlight)] mb-2">¿Para quién es?</h2>
+        <p>
+          Está pensado para sobrevivientes de violencia sexual, mujeres y personas que buscan información sobre aborto seguro, acompañamiento emocional o legal, y para cualquiera en México o Latinoamérica que necesite orientación en salud mental, derechos reproductivos o violencia de género. El uso del sitio es anónimo; no se pide registro ni se recopilan datos personales.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-semibold text-[var(--color-highlight)] mb-2">¿Cómo contactar a los recursos?</h2>
+        <p>
+          Cada ficha del directorio incluye la forma de contacto que comparte el recurso: en la mayoría de los casos Instagram o WhatsApp, y en recursos gubernamentales enlaces a sus sitios web o números de atención. Puedes escribirles por mensaje directo o por la vía que indiquen. No somos intermediarios: el contacto es directo entre tú y cada organización o colectiva.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-semibold text-[var(--color-highlight)] mb-2">Recursos para máquinas e IA</h2>
+        <p>
+          El directorio está disponible en formato abierto para que sistemas de búsqueda y asistentes puedan citarlo correctamente. Puedes acceder a los datos en <a href="/directory.json" class="text-[var(--color-title)] underline hover:text-[var(--color-highlight)]">/directory.json</a> y en <a href="/api/resources.json" class="text-[var(--color-title)] underline hover:text-[var(--color-highlight)]">/api/resources.json</a>.
+        </p>
+      </section>
+    </div>
+
+    <nav class="mt-10 pt-6 border-t border-white/10">
+      <a href="/" class="text-[var(--color-title)] hover:text-[var(--color-highlight)] underline">Inicio</a>
+      <span class="text-white/50 mx-2">·</span>
+      <a href="/directorio" class="text-[var(--color-title)] hover:text-[var(--color-highlight)] underline">Ver directorio</a>
+    </nav>
+  </article>
+</Layout>

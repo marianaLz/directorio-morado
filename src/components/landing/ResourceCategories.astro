@@ -1,0 +1,83 @@
+---
+const categories = [
+  {
+    name: "Colectivas",
+    href: "/directorio",
+    icon: "👥",
+    description: "Colectivas feministas y redes de acompañamiento.",
+  },
+  {
+    name: "Psicólogas",
+    href: "/directorio",
+    icon: "🧠",
+    description: "Apoyo psicológico y emocional para sobrevivientes.",
+  },
+  {
+    name: "Organizaciones",
+    href: "/directorio",
+    icon: "🏛",
+    description: "ONG y asociaciones de apoyo legal y comunitario.",
+  },
+  {
+    name: "Recursos gubernamentales",
+    href: "/#recursos-gubernamentales",
+    icon: "🏢",
+    description: "Servicios gratuitos del gobierno (CDMX y nacional).",
+  },
+  {
+    name: "Líneas de crisis",
+    href: "/#linea-de-crisis",
+    icon: "📞",
+    description: "Atención 24 horas. Gratuita en todo México.",
+  },
+];
+---
+
+<section
+  id="categorias"
+  class="py-12 sm:py-20 bg-[#f6f6fb]"
+  aria-labelledby="categories-title"
+>
+  <div class="mx-auto max-w-4xl px-4 sm:px-6">
+    <h2
+      id="categories-title"
+      class="text-2xl font-bold text-[#1a1a1a] sm:text-3xl text-center mb-10"
+      style="font-weight: 700;"
+    >
+      Tipos de recursos
+    </h2>
+    <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" role="list">
+      {
+        categories.map((cat) => (
+          <li class="h-full">
+            <a
+              href={cat.href}
+              class="flex flex-col rounded-[12px] border border-[rgba(0,0,0,0.06)] bg-white p-6 transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#5f24af] focus:ring-offset-2 h-full"
+              style="box-shadow: 0 6px 20px rgba(0,0,0,0.06);"
+            >
+              <span
+                class="flex h-12 w-12 items-center justify-center rounded-full text-2xl"
+                style="width: 48px; height: 48px; border-radius: 999px; background: #f3edff;"
+                aria-hidden="true"
+              >
+                {cat.icon}
+              </span>
+              <h3
+                class="mt-4 text-lg font-semibold text-[#1a1a1a]"
+                style="font-weight: 700;"
+              >
+                {cat.name}
+              </h3>
+              <p
+                class="mt-2 text-[#4b5563] leading-[1.6]"
+                style="font-size: 16px;"
+              >
+                {cat.description}
+              </p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

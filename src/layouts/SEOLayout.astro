@@ -1,0 +1,74 @@
+---
+/**
+ * Directorio Morado — global SEO layout.
+ * Full metadata for Google indexing and AI search visibility.
+ */
+import '../styles/tokens.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Optional. Defaults to global Directorio Morado keywords. */
+  keywords?: string;
+  canonical?: string;
+  image?: string;
+  structuredData?: Record<string, unknown>[];
+}
+
+const { title, description, keywords, canonical, image, structuredData = [] } = Astro.props;
+
+// In dev use current origin so og-image loads locally; in production use SITE for absolute URLs
+const baseUrl = (import.meta.env.DEV ? Astro.url.origin : null) || import.meta.env.SITE || Astro.url.origin;
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonicalUrl = canonical || `${baseUrl}${pathname}`;
+const ogImage = image
+  ? (image.startsWith('http') ? image : `${baseUrl}${image.startsWith('/') ? image : '/' + image}`)
+  : `${baseUrl}/og-image.png`;
+const fullTitle =
+  title.includes(' — ') || title.includes('|') ? title : `${title} | Directorio Morado`;
+
+const defaultKeywords =
+  'directorio morado, red de apoyo mexico, violencia sexual apoyo mexico, psicologas violencia sexual mexico, recursos violencia sexual mexico, ayuda sobrevivientes violencia sexual, directorio apoyo mujeres mexico';
+const metaKeywords = keywords ?? defaultKeywords;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={metaKeywords} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Directorio Morado" />
+    <meta property="og:description" content="Red de apoyo para sobrevivientes de violencia sexual en México." />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="es_MX" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Directorio Morado" />
+    <meta name="twitter:description" content="Red de apoyo para sobrevivientes de violencia sexual en México." />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    {structuredData.map((data) => (
+      <script type="application/ld+json" set:html={JSON.stringify(data)} />
+    ))}
+  </head>
+  <body class="min-h-screen bg-[var(--color-bg-bottom)] font-sans text-[var(--color-highlight)] antialiased text-base leading-[1.6]">
+    <slot />
+  </body>
+</html>

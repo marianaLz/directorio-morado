@@ -1,0 +1,28 @@
+---
+const points = [
+  'No recopilamos datos',
+  'Sin registro',
+  'Nadie sabrá que estuviste aquí',
+];
+---
+<section
+  id="confianza"
+  class="py-12 sm:py-20 bg-[#ffffff]"
+  aria-labelledby="trust-title"
+>
+  <div class="mx-auto max-w-[900px] px-4 sm:px-6">
+    <div
+      class="rounded-[12px] bg-white p-8 text-center transition-transform duration-200 hover:-translate-y-0.5"
+      style="box-shadow: 0 6px 20px rgba(0,0,0,0.06);"
+    >
+      <h2 id="trust-title" class="text-xl font-bold text-[#1a1a1a] sm:text-2xl" style="font-weight: 700;">
+        <span aria-hidden="true">🔒</span> Estás en un espacio seguro
+      </h2>
+      <ul class="mt-6 flex flex-wrap justify-center gap-x-8 gap-y-2 sm:gap-x-12" role="list">
+        {points.map((point) => (
+          <li class="text-[#374151]" style="font-size: 16px; line-height: 1.6;">{point}</li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,36 @@
+---
+const steps = [
+  { stepNum: '1', icon: '🔍', text: 'Buscar por ciudad o tipo de apoyo' },
+  { stepNum: '2', icon: '💬', text: 'Contactar por Instagram o WhatsApp' },
+  { stepNum: '3', icon: '❤️', text: 'Recibir acompañamiento' },
+];
+---
+<section
+  id="como-usar"
+  class="py-12 sm:py-20 bg-[#ffffff]"
+  aria-labelledby="howto-title"
+>
+  <div class="mx-auto max-w-4xl px-4 sm:px-6">
+    <h2 id="howto-title" class="text-xl font-bold text-[#1a1a1a] sm:text-2xl text-center mb-10" style="font-weight: 700;">
+      Cómo funciona el directorio
+    </h2>
+    <ul class="grid gap-6 sm:grid-cols-3" role="list">
+      {steps.map((step) => (
+        <li
+          class="rounded-[14px] bg-white p-6 transition-transform duration-200 hover:-translate-y-0.5"
+          style="box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 24px;"
+        >
+          <span
+            class="inline-block rounded-full px-2.5 py-1 text-sm font-semibold"
+            style="background: #f3edff; color: #5f24af; padding: 4px 10px;"
+            aria-hidden="true"
+          >
+            {step.stepNum}
+          </span>
+          <p class="mt-4 text-2xl leading-none" aria-hidden="true">{step.icon}</p>
+          <p class="mt-4 text-[#374151] leading-[1.6]" style="font-size: 16px;">{step.text}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
