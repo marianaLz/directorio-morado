@@ -55,3 +55,17 @@ service cloud.firestore {
 ```
 
 (La escritura la haces tú con el script/Admin SDK o desde la consola.)
+
+---
+
+## Netlify (y otros CI)
+
+Para que el **build** exporte desde Firestore en Netlify:
+
+1. En Netlify: **Site configuration** → **Environment variables** → **Add a variable**.
+2. **Key:** `FIREBASE_SERVICE_ACCOUNT_JSON`
+3. **Value:** pega el **contenido completo** del JSON de la cuenta de servicio de Firebase (el que descargas en *Configuración → Cuentas de servicio → Generar nueva clave privada*). Puede ser en una sola línea o en varias.
+4. Marca la variable como **sensitive** si quieres que no se muestre en los logs.
+5. **Save** y vuelve a desplegar (Trigger deploy).
+
+Si no configuras esta variable, el build **no fallará**: se usará el `directory-export.json` que esté en el repo (por defecto `[]`), así que el directorio puede salir vacío hasta que añadas la variable.
