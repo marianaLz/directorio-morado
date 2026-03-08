@@ -23,12 +23,14 @@ import Layout from "../layouts/Layout.astro";
             ¿Qué es este directorio?
           </h2>
           <p class="text-base leading-[1.6] text-[var(--card-text-muted)]">
-            Directorio Morado es una red de apoyo que reúne organizaciones,
-            colectivas, psicólogas, abogadas y recursos gubernamentales para
-            sobrevivientes de violencia sexual y personas que buscan apoyo en
-            aborto, derechos reproductivos y salud mental en México y
-            Latinoamérica. Es un recurso público y gratuito; no pertenece al
-            gobierno ni a una sola institución.
+            Directorio Morado es un directorio público y gratuito de recursos de
+            apoyo para sobrevivientes de violencia sexual y personas que buscan
+            apoyo en aborto y derechos reproductivos en México y Latinoamérica.
+            Los recursos se guardan en una base de datos curada; cualquiera puede
+            sugerir un recurso desde el sitio mediante el formulario «Sugerir un
+            recurso», y las sugerencias son revisadas por administradores antes de
+            publicarse. No pertenece al gobierno ni a una sola institución. No se
+            cobra por aparecer en el listado.
           </p>
         </section>
 
@@ -37,13 +39,21 @@ import Layout from "../layouts/Layout.astro";
             ¿Cómo se curan los recursos?
           </h2>
           <p class="text-base leading-[1.6] text-[var(--card-text-muted)]">
-            Los recursos que aparecen en el directorio son organizaciones,
-            colectivas y servicios conocidos por su trabajo en acompañamiento,
-            apoyo psicológico, legal o en crisis. Se incluyen tanto iniciativas
-            de la sociedad civil como servicios gubernamentales gratuitos. El
-            directorio se actualiza de forma periódica; si conoces un recurso
-            que debería estar, puedes sugerirlo. No se cobra por aparecer en el
-            listado.
+            Los administradores mantienen y aprueban las entradas del directorio.
+            Si conoces un recurso que debería estar, puedes enviarlo desde
+            <a href="/sugerir-recurso" class="text-[var(--color-title)] underline hover:text-[var(--card-text)]">Sugerir un recurso</a>;
+            las solicitudes pasan a una cola de pendientes y solo se publican
+            después de ser aprobadas. El directorio incluye organizaciones,
+            colectivas, profesionales y servicios gubernamentales. Los tipos de
+            recurso son: líneas de crisis (24/7), acompañamiento en aborto,
+            apoyo psicológico, legal, comunitario, violencia sexual, derechos
+            reproductivos, salud sexual, apoyo económico, servicios
+            gubernamentales, nutrición, salud médica, asociaciones y fundaciones.
+            Cada entrada indica costo (gratuito, bajo costo, variable, consultar
+            directamente), población a la que se dirige (por ejemplo mujeres,
+            niñas, sobrevivientes de violencia sexual, público general) y si el
+            servicio es en línea, presencial o ambos. La cobertura es México,
+            Latinoamérica y el Caribe.
           </p>
         </section>
 
@@ -56,8 +66,9 @@ import Layout from "../layouts/Layout.astro";
             personas que buscan información sobre aborto seguro, acompañamiento
             emocional o legal, y para cualquiera en México o Latinoamérica que
             necesite orientación en salud mental, derechos reproductivos o
-            violencia de género. El uso del sitio es anónimo; no se pide
-            registro ni se recopilan datos personales.
+            violencia de género. Puedes consultar y filtrar el directorio sin
+            registrarte; el uso es anónimo y no se recopilan datos personales de
+            quienes visitan el sitio.
           </p>
         </section>
 
@@ -66,12 +77,22 @@ import Layout from "../layouts/Layout.astro";
             ¿Cómo contactar a los recursos?
           </h2>
           <p class="text-base leading-[1.6] text-[var(--card-text-muted)]">
-            Cada ficha del directorio incluye la forma de contacto que comparte
-            el recurso: en la mayoría de los casos Instagram o WhatsApp, y en
-            recursos gubernamentales enlaces a sus sitios web o números de
-            atención. Puedes escribirles por mensaje directo o por la vía que
-            indiquen. No somos intermediarios: el contacto es directo entre tú y
-            cada organización o colectiva.
+            Cada ficha del directorio muestra los datos de contacto que el
+            recurso comparte: teléfono, WhatsApp, sitio web, Instagram, horarios
+            de atención. Puedes escribirles o llamarles por la vía que indiquen.
+            No somos intermediarios: el contacto es directo entre tú y cada
+            organización o colectiva.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-[var(--card-text)] mb-3">
+            Aviso sobre emergencias
+          </h2>
+          <p class="text-base leading-[1.6] text-[var(--card-text-muted)]">
+            Directorio Morado es un directorio de información, no un servicio de
+            emergencias. Si estás en peligro inminente, llama al 911. Para
+            atención en crisis 24 horas en México, llama al 800 911 2000.
           </p>
         </section>
 
@@ -80,9 +101,9 @@ import Layout from "../layouts/Layout.astro";
             Recursos para máquinas e IA
           </h2>
           <p class="text-base leading-[1.6] text-[var(--card-text-muted)]">
-            El directorio está disponible en formato abierto para que sistemas
-            de búsqueda y asistentes puedan citarlo correctamente. Puedes
-            acceder a los datos en <a
+            El directorio se exporta en formato JSON para que sistemas de
+            búsqueda y asistentes puedan citarlo correctamente. Puedes acceder a
+            los datos en <a
               href="/directory.json"
               class="text-[var(--color-title)] underline hover:text-[var(--card-text)]"
               >/directory.json</a
@@ -90,7 +111,7 @@ import Layout from "../layouts/Layout.astro";
               href="/api/resources.json"
               class="text-[var(--color-title)] underline hover:text-[var(--card-text)]"
               >/api/resources.json</a
-            >.
+            > (generados en cada build a partir de la base de datos del directorio).
           </p>
         </section>
       </div>
