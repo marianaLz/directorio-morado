@@ -22,7 +22,7 @@ export const SUPPORT_TYPES: SupportType[] = [
 
 export const POPULATION_OPTIONS: { value: PopulationType; label: string; icon: string }[] = [
   { value: 'women', label: 'Mujeres', icon: '👩' },
-  { value: 'girls', label: 'Niñas', icon: '👧' },
+  { value: 'girls', label: 'Niñas, niños y adolescentes', icon: '👧' },
   { value: 'survivors of sexual violence', label: 'Sobrevivientes de violencia sexual', icon: '💜' },
   { value: 'men survivors', label: 'Hombres sobrevivientes', icon: '👨' },
   { value: 'general public', label: 'Público general', icon: '👥' },
