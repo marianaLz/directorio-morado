@@ -1,7 +1,7 @@
 [
   {
     "id": "fondomariamx",
-    "name": "Fondomaríamx",
+    "name": "Fondo María",
     "instagram": "fondomariamx",
     "location": "Nacional",
     "country": "Mexico",
@@ -9,7 +9,8 @@
     "city": "",
     "type": [
       "abortion accompaniment",
-      "financial support"
+      "financial support",
+      "medical and health"
     ],
     "cost": "free",
     "population": [
@@ -17,7 +18,7 @@
       "general public"
     ],
     "online": true,
-    "description": "Primer fondo de aborto en América Latina (2009). Apoyo financiero, emocional y logístico para aborto seguro en todo México."
+    "description": "Primer fondo de aborto en América Latina (2009). Apoyo financiero, emocional y logístico para aborto seguro en todo México. Gratuito."
   },
   {
     "id": "adas",
@@ -41,7 +42,7 @@
   },
   {
     "id": "diramona-hgo",
-    "name": "diramona.hgo",
+    "name": "Diramona Hgo",
     "instagram": "diramona.hgo",
     "location": "Hidalgo",
     "country": "Mexico",
@@ -82,7 +83,7 @@
   },
   {
     "id": "abortolegalpue",
-    "name": "abortolegalpue",
+    "name": "Aborto Legal Puebla",
     "instagram": "abortolegalpue",
     "location": "Puebla",
     "country": "Mexico",
@@ -102,7 +103,7 @@
   },
   {
     "id": "siemprevivas-mx",
-    "name": "siemprevivas.mx",
+    "name": "Siempre Vivas MX",
     "instagram": "siemprevivas.mx",
     "location": "Baja California",
     "country": "Mexico",
@@ -119,11 +120,11 @@
       "general public"
     ],
     "online": true,
-    "description": "Información sobre salud sexual, aborto y derechos reproductivos."
+    "description": "Información sobre salud sexual, aborto y derechos reproductivos. Acompañamiento y desmitificación del aborto."
   },
   {
     "id": "michis-aborteros",
-    "name": "michis_aborteros",
+    "name": "Michis Aborteros",
     "instagram": "michis_aborteros",
     "location": "Nacional",
     "country": "Mexico",
@@ -139,12 +140,12 @@
       "general public"
     ],
     "online": true,
-    "description": "Acompañantes con formación OMS e IPAS. Aborto con medicamentos en casa."
+    "description": "Acompañantas con formación OMS e IPAS. Acompañan abortos con medicamentos en casa, sin juicios y con ternura radical."
   },
   {
     "id": "las-sabinas",
     "name": "Las Sabinas",
-    "instagram": "las_sabinas",
+    "instagram": "_las_sabinas",
     "location": "Estado de México",
     "country": "Mexico",
     "state": "Estado de México",
@@ -159,11 +160,11 @@
       "general public"
     ],
     "online": false,
-    "description": "Red de acompañamiento integral para aborto seguro."
+    "description": "Red de acompañamiento integral para aborto seguro. Apoyo emocional, información y conexión con recursos locales."
   },
   {
     "id": "redacleon",
-    "name": "redacleon",
+    "name": "Red A León",
     "instagram": "redacleon",
     "location": "León, Guanajuato",
     "country": "Mexico",
@@ -179,11 +180,11 @@
       "general public"
     ],
     "online": false,
-    "description": "Red feminista para acompañamiento sin estigmas."
+    "description": "Red feminista: acompañamiento sin estigmas para quienes deciden interrumpir su embarazo."
   },
   {
     "id": "salvemosmilesdevidas",
-    "name": "salvemosmilesdevidas.mexico",
+    "name": "Salvemos Miles de Vidas México",
     "instagram": "salvemosmilesdevidas.mexico",
     "location": "Nacional",
     "country": "Mexico",
@@ -199,18 +200,19 @@
       "general public"
     ],
     "online": true,
-    "description": "Información y acompañamiento para aborto seguro."
+    "description": "Información y acompañamiento para aborto seguro. Difunden derechos reproductivos."
   },
   {
-    "id": "miaaborto-fb",
-    "name": "miaaborto.fb",
-    "instagram": "miaaborto.fb",
+    "id": "miaborto-fb",
+    "name": "Mi Aborto",
+    "instagram": "miaborto.fb",
     "location": "Estado de México",
     "country": "Mexico",
     "state": "Estado de México",
     "city": "",
     "type": [
-      "abortion accompaniment"
+      "abortion accompaniment",
+      "community support"
     ],
     "cost": "consult directly",
     "population": [
@@ -218,11 +220,11 @@
       "general public"
     ],
     "online": true,
-    "description": "Acompañamiento para interrupción legal del embarazo en Estado de México."
+    "description": "Aborto seguro con medicamentos. Apoyo emocional, logístico e informativo a personas gestantes."
   },
   {
     "id": "mariasacompanantes-edomex",
-    "name": "mariasacompanantes_edomex",
+    "name": "Marias Acompañantes Edomex",
     "instagram": "mariasacompanantes_edomex",
     "location": "Estado de México",
     "country": "Mexico",
@@ -238,7 +240,7 @@
       "general public"
     ],
     "online": false,
-    "description": "Red de acompañamiento para ILE en Estado de México."
+    "description": "Aborto seguro con medicamentos. Apoyo emocional, logístico e informativo a personas gestantes."
   },
   {
     "id": "socenredarg",
@@ -258,11 +260,11 @@
       "general public"
     ],
     "online": true,
-    "description": "Socorristas en Red: acompañan abortos seguros con misoprostol."
+    "description": "Acompañan abortos seguros con misoprostol y sororidad feminista transfronteriza."
   },
   {
     "id": "esperanzaenhonduras",
-    "name": "esperanzaenhonduras",
+    "name": "Esperanza en Honduras",
     "instagram": "esperanzaenhonduras",
     "location": "Honduras",
     "country": "Honduras",
@@ -279,11 +281,11 @@
       "general public"
     ],
     "online": true,
-    "description": "Apoyo en países donde el aborto está penalizado."
+    "description": "Acompañan mujeres donde el aborto está totalmente penalizado. Información, contención y redes de apoyo."
   },
   {
     "id": "lascomadresecuador",
-    "name": "lascomadresecuador",
+    "name": "Las Comadres Ecuador",
     "instagram": "lascomadresecuador",
     "location": "Ecuador",
     "country": "Ecuador",
@@ -299,11 +301,11 @@
       "general public"
     ],
     "online": true,
-    "description": "Red de acompañamiento en Ecuador."
+    "description": "Acompañamiento feminista para abortar seguro."
   },
   {
     "id": "surkuna-ec",
-    "name": "Surkuna Ecuador",
+    "name": "Surkuna",
     "instagram": "surkuna.ec",
     "location": "Ecuador",
     "country": "Ecuador",
@@ -325,21 +327,22 @@
     "id": "cruces-x-rosas",
     "name": "Cruces x Rosas",
     "instagram": "crucesxrosas",
-    "location": "Mexico",
+    "location": "Nacional",
     "country": "Mexico",
     "state": "",
     "city": "",
     "type": [
       "psychological support",
-      "sexual violence support"
+      "sexual violence support",
+      "associations and foundations"
     ],
-    "cost": "variable",
+    "cost": "low cost",
     "population": [
       "survivors of sexual violence",
       "women"
     ],
     "online": true,
-    "description": "Terapia psicológica individual y grupal para víctimas de abuso sexual."
+    "description": "Terapia psicológica individual y grupal. Plataforma digital con red de terapeutas. Víctimas de abuso sexual y relaciones violentas. Toda la república. Gratuita o bajo costo (cuota de recuperación)."
   },
   {
     "id": "adivac",
@@ -348,11 +351,12 @@
     "location": "CDMX",
     "country": "Mexico",
     "state": "CDMX",
-    "city": "Ciudad de México",
+    "city": "Santa María la Ribera",
     "type": [
       "psychological support",
       "legal support",
-      "sexual violence support"
+      "sexual violence support",
+      "associations and foundations"
     ],
     "cost": "free",
     "population": [
@@ -360,59 +364,20 @@
       "women"
     ],
     "online": false,
-    "description": "Atención psicológica, jurídica y trabajo social para sobrevivientes."
+    "description": "Atención psicológica, jurídica y trabajo social para sobrevivientes de violencia sexual. Atención individual y grupal."
   },
   {
     "id": "casa-emuna",
     "name": "Casa Emuna",
     "instagram": "casaemuna_",
-    "location": "Mexico",
+    "location": "CDMX",
     "country": "Mexico",
-    "state": "",
+    "state": "CDMX",
     "city": "",
     "type": [
       "psychological support",
-      "sexual violence support"
-    ],
-    "cost": "variable",
-    "population": [
-      "survivors of sexual violence",
-      "women"
-    ],
-    "online": true,
-    "description": "Acompañamiento psicológico especializado en trauma."
-  },
-  {
-    "id": "sorece-ac",
-    "name": "Sorece AC",
-    "instagram": "soreceac",
-    "location": "Mexico",
-    "country": "Mexico",
-    "state": "",
-    "city": "",
-    "type": [
-      "psychological support",
-      "sexual violence support"
-    ],
-    "cost": "variable",
-    "population": [
-      "survivors of sexual violence",
-      "women"
-    ],
-    "online": true,
-    "description": "Psicoterapia desde perspectiva feminista interseccional."
-  },
-  {
-    "id": "redafem",
-    "name": "REDAFEM",
-    "instagram": "redafemoficial",
-    "location": "Mexico",
-    "country": "Mexico",
-    "state": "",
-    "city": "",
-    "type": [
-      "legal support",
-      "sexual violence support"
+      "sexual violence support",
+      "associations and foundations"
     ],
     "cost": "consult directly",
     "population": [
@@ -420,40 +385,64 @@
       "women"
     ],
     "online": true,
-    "description": "Asesoría legal para víctimas de violencia sexual y feminicidio."
+    "description": "Terapia asistida en trauma. Acompañamiento psicológico especializado. Sobrevivientes de violencia y trauma."
   },
   {
-    "id": "casa-gaviota",
-    "name": "Casa Gaviota",
-    "instagram": "casagaviota",
-    "location": "Mexico",
+    "id": "sorece-ac",
+    "name": "Sorece A.C.",
+    "instagram": "soreceac",
+    "phone": "5551618600",
+    "location": "CDMX · Pachuca, Cuernavaca, Córdoba Ver.",
     "country": "Mexico",
-    "state": "",
-    "city": "",
+    "state": "CDMX",
+    "city": "Sta. María la Ribera",
     "type": [
-      "legal support",
       "psychological support",
-      "sexual violence support"
+      "sexual violence support",
+      "associations and foundations"
     ],
     "cost": "variable",
     "population": [
       "survivors of sexual violence",
       "women"
     ],
-    "online": true,
-    "description": "Asesoría legal, terapia psicológica y psiquiatría."
+    "online": false,
+    "description": "Psicoterapia feminista interseccional. Sedes CDMX, Pachuca, Cuernavaca y Córdoba, Ver. Desde $230. Cuota diferenciada."
   },
   {
-    "id": "fundacion-pas",
-    "name": "Fundación PAS",
-    "instagram": "fundacionpas",
-    "location": "Mexico",
+    "id": "redafem",
+    "name": "REDAFEM",
+    "instagram": "redafemoficial",
+    "location": "Nacional",
     "country": "Mexico",
     "state": "",
     "city": "",
     "type": [
+      "legal support",
       "sexual violence support",
-      "psychological support"
+      "associations and foundations"
+    ],
+    "cost": "free",
+    "population": [
+      "survivors of sexual violence",
+      "women"
+    ],
+    "online": true,
+    "description": "Asesoría y acompañamiento legal para víctimas de violencia sexual y feminicidio."
+  },
+  {
+    "id": "casa-gaviota",
+    "name": "Casa Gaviota",
+    "instagram": "casagaviota",
+    "location": "CDMX",
+    "country": "Mexico",
+    "state": "CDMX",
+    "city": "",
+    "type": [
+      "legal support",
+      "psychological support",
+      "sexual violence support",
+      "associations and foundations"
     ],
     "cost": "variable",
     "population": [
@@ -461,60 +450,87 @@
       "women",
       "girls"
     ],
-    "online": true,
-    "description": "Prevención y atención del abuso sexual."
+    "online": false,
+    "description": "Asesoría legal, psicología, psiquiatría y primeros auxilios emocionales. Mujeres y niñas en situación de violencia. Atención integral."
+  },
+  {
+    "id": "fundacion-pas",
+    "name": "Fundación PAS",
+    "instagram": "fundacionpas",
+    "location": "Guadalajara, Jalisco",
+    "country": "Mexico",
+    "state": "Jalisco",
+    "city": "Guadalajara",
+    "type": [
+      "sexual violence support",
+      "psychological support",
+      "associations and foundations"
+    ],
+    "cost": "consult directly",
+    "population": [
+      "survivors of sexual violence",
+      "women",
+      "girls",
+      "general public"
+    ],
+    "online": false,
+    "description": "Prevención y atención del abuso sexual. Talleres, terapia y acompañamiento. Niñas, niños, adolescentes y familias afectadas por abuso sexual."
   },
   {
     "id": "casa-mandarina",
     "name": "Casa Mandarina",
     "instagram": "lacasamandarina",
-    "location": "Mexico",
+    "location": "CDMX",
     "country": "Mexico",
-    "state": "",
+    "state": "CDMX",
     "city": "",
     "type": [
       "sexual violence support",
-      "community support"
+      "community support",
+      "associations and foundations"
     ],
-    "cost": "variable",
+    "cost": "consult directly",
     "population": [
       "survivors of sexual violence",
       "women"
     ],
-    "online": true,
-    "description": "Acompañamiento a sobrevivientes a través del artivismo."
+    "online": false,
+    "description": "Acompañamiento a sobrevivientes de violencia sexual a través del ARTivismo. Sobrevivientes que buscan sanar y alzar la voz."
   },
   {
     "id": "survivors-mens-project",
     "name": "Survivors Men's Project",
     "instagram": "survivorsmensproject.a.c",
-    "location": "Mexico",
+    "location": "México",
     "country": "Mexico",
     "state": "",
     "city": "",
     "type": [
       "psychological support",
-      "sexual violence support"
+      "sexual violence support",
+      "associations and foundations"
     ],
-    "cost": "variable",
+    "cost": "consult directly",
     "population": [
       "men survivors"
     ],
     "online": true,
-    "description": "Apoyo psicológico para hombres sobrevivientes."
+    "description": "Apoyo psicológico y acompañamiento grupal para hombres sobrevivientes. Víctimas de abuso sexual infantil, juvenil y adulto. Espacio seguro."
   },
   {
     "id": "medicas-verde-violeta",
     "name": "Médicas Verde Violeta",
     "instagram": "medicas_verde_violeta",
-    "location": "Mexico",
+    "location": "Nacional",
     "country": "Mexico",
     "state": "",
     "city": "",
     "type": [
       "abortion accompaniment",
       "reproductive rights",
-      "sexual health"
+      "sexual health",
+      "medical and health",
+      "associations and foundations"
     ],
     "cost": "consult directly",
     "population": [
@@ -522,102 +538,148 @@
       "general public"
     ],
     "online": true,
-    "description": "Acompañamiento médico con perspectiva de género."
+    "description": "Acompañamiento médico con perspectiva de género. Atención integral. Mujeres que buscan atención médica feminista ante la violencia."
   },
   {
     "id": "fundacion-granito",
     "name": "Fundación Granito de Arena",
     "instagram": "fgranitodearena",
-    "location": "Mexico",
+    "location": "Nacional",
     "country": "Mexico",
     "state": "",
     "city": "",
     "type": [
       "sexual violence support",
-      "psychological support"
+      "psychological support",
+      "associations and foundations"
     ],
-    "cost": "variable",
+    "cost": "consult directly",
     "population": [
       "girls",
       "survivors of sexual violence"
     ],
     "online": true,
-    "description": "Prevención del abuso sexual infantil."
+    "description": "Prevención del abuso sexual infantil. Programa 'El escudo de la dignidad'. Niñas, niños, adolescentes y adultos que los acompañan."
   },
   {
     "id": "fundacion-cendes",
     "name": "Fundación CENDES",
     "instagram": "fundacion.cendes",
-    "location": "Mexico",
+    "location": "CDMX",
     "country": "Mexico",
-    "state": "",
+    "state": "CDMX",
     "city": "",
     "type": [
       "sexual violence support",
-      "psychological support"
+      "psychological support",
+      "associations and foundations"
     ],
-    "cost": "variable",
+    "cost": "consult directly",
     "population": [
       "girls",
       "survivors of sexual violence"
     ],
     "online": true,
-    "description": "Prevención del abuso sexual infantil y juvenil."
+    "description": "Prevención del abuso sexual infantil y juvenil. Talleres y terapia. Niñas, niños, adolescentes y adultos. También obra de teatro 'Corazonada'."
   },
   {
     "id": "centro-eleia",
     "name": "Centro Eleia",
     "instagram": "centroeleia",
-    "location": "Mexico",
+    "location": "CDMX · Insurgentes Sur",
     "country": "Mexico",
-    "state": "",
-    "city": "",
+    "state": "CDMX",
+    "city": "Ciudad de México",
     "type": [
-      "psychological support"
+      "psychological support",
+      "associations and foundations"
     ],
     "cost": "variable",
     "population": [
       "general public"
     ],
     "online": true,
-    "description": "Clínica de psicoterapia psicoanalítica."
+    "description": "Clínica de psicoterapia psicoanalítica. Atención individual y grupal. Adultos que buscan psicoterapia profunda y especializada. Cuota diferenciada."
   },
   {
     "id": "fundacion-freedom",
     "name": "Fundación Freedom MX",
     "instagram": "fundacionfreedommx",
-    "location": "Mexico",
+    "location": "México",
     "country": "Mexico",
     "state": "",
     "city": "",
     "type": [
       "psychological support",
-      "sexual violence support"
+      "sexual violence support",
+      "associations and foundations"
     ],
-    "cost": "variable",
+    "cost": "consult directly",
     "population": [
       "survivors of sexual violence"
     ],
     "online": true,
-    "description": "Apoyo psicológico para sobrevivientes."
+    "description": "Apoyo psicológico y acompañamiento para sobrevivientes de violencia sexual en México."
   },
   {
     "id": "conasama",
     "name": "CONASAMA",
     "instagram": "conasamamx",
-    "location": "Mexico",
+    "location": "Nacional",
     "country": "Mexico",
     "state": "",
     "city": "",
     "type": [
-      "psychological support"
+      "psychological support",
+      "associations and foundations"
     ],
     "cost": "free",
     "population": [
       "general public"
     ],
     "online": true,
-    "description": "Línea de orientación en salud mental."
+    "description": "Línea de orientación en salud mental. Canalización a servicios especializados. Gratuita."
+  },
+  {
+    "id": "centros-justicia-mujeres",
+    "name": "Centros de Justicia para Mujeres",
+    "location": "Nacional",
+    "country": "Mexico",
+    "state": "",
+    "city": "",
+    "type": [
+      "psychological support",
+      "legal support",
+      "government services",
+      "sexual violence support",
+      "associations and foundations"
+    ],
+    "cost": "free",
+    "population": [
+      "women"
+    ],
+    "online": false,
+    "description": "Apoyo legal y psicológico gratuito. Institucional."
+  },
+  {
+    "id": "sepavige-cdmx",
+    "name": "SEPAVIGE CDMX",
+    "location": "CDMX",
+    "country": "Mexico",
+    "state": "CDMX",
+    "city": "Ciudad de México",
+    "type": [
+      "psychological support",
+      "government services",
+      "sexual violence support",
+      "associations and foundations"
+    ],
+    "cost": "free",
+    "population": [
+      "women"
+    ],
+    "online": false,
+    "description": "Psicología gratuita. IMSS Bienestar."
   },
   {
     "id": "lunas-cdmx",
@@ -630,15 +692,16 @@
     "type": [
       "psychological support",
       "legal support",
-      "government services"
+      "government services",
+      "sexual violence support"
     ],
     "cost": "free",
     "population": [
       "women"
     ],
     "online": false,
-    "description": "Atención psicológica, asesoría legal y trabajo social para mujeres. Sin cita previa.",
-    "hours": "Lunes a Viernes · 9:00 a 17:00",
+    "description": "Atención psicológica, asesoría legal y trabajo social · Sin cita previa. Mujeres en las 16 alcaldías de la CDMX.",
+    "hours": "Lun-Vie 9:00-17:00",
     "isEmergency": false
   },
   {
@@ -651,7 +714,8 @@
     "city": "Ciudad de México",
     "type": [
       "legal support",
-      "government services"
+      "government services",
+      "sexual violence support"
     ],
     "cost": "free",
     "population": [
@@ -659,19 +723,21 @@
       "women"
     ],
     "online": false,
-    "description": "Representación legal gratuita en Ministerios Públicos y acompañamiento durante denuncias. Mujeres víctimas de violencia sexual o violencia familiar."
+    "description": "Representación legal gratuita en Ministerios Públicos. Acompañamiento en denuncia. Para mujeres víctimas de violencia sexual y familiar que quieren o necesitan denunciar."
   },
   {
     "id": "fiscalia-cdmx",
     "name": "Fiscalía CDMX",
     "instagram": "fiscaliacdmx_",
+    "website": "https://www.fiscaliacdmx.gob.mx",
     "location": "CDMX · Fiscalía General de Justicia",
     "country": "Mexico",
     "state": "CDMX",
     "city": "Ciudad de México",
     "type": [
       "legal support",
-      "government services"
+      "government services",
+      "sexual violence support"
     ],
     "cost": "free",
     "population": [
@@ -679,7 +745,7 @@
       "general public"
     ],
     "online": false,
-    "description": "Atención especializada en delitos sexuales y violencia familiar. Denuncia formal de delitos. Personas que quieran presentar denuncia por violencia sexual."
+    "description": "Atención especializada en delitos sexuales y violencia familiar. Denuncia formal. Toda persona que quiera presentar una denuncia por violencia sexual."
   },
   {
     "id": "linea-crisis-800",
@@ -857,7 +923,7 @@
     "id": "psicnaomiledesma",
     "name": "Naomi Ledesma",
     "instagram": "psicnaomiledesma",
-    "phone": "12223508152",
+    "whatsapp": "5212223508152",
     "location": "Nacional",
     "country": "Mexico",
     "state": "",
@@ -1164,7 +1230,7 @@
   },
   {
     "id": "susanny.martin",
-    "name": "Susanny Martín",
+    "name": "Psic. Susanny Martín",
     "instagram": "susanny.martin",
     "location": "Nacional",
     "country": "Mexico",
@@ -1179,7 +1245,7 @@
       "general public"
     ],
     "online": true,
-    "description": "Psicóloga"
+    "description": "Psicóloga."
   },
   {
     "id": "psic.merin",
@@ -1217,7 +1283,7 @@
       "general public"
     ],
     "online": true,
-    "description": "Psicóloga"
+    "description": "Psicóloga · Enfoque feminista."
   },
   {
     "id": "dianeyoung.17",
@@ -1316,7 +1382,7 @@
   },
   {
     "id": "therapcyn",
-    "name": "therapcyn",
+    "name": "Therapcyn",
     "instagram": "therapcyn",
     "location": "Nacional",
     "country": "Mexico",
@@ -1406,10 +1472,10 @@
     "cost": "consult directly",
     "population": [
       "women",
-      "general public"
+      "survivors of sexual violence"
     ],
     "online": true,
-    "description": "TEPT · Psicoterapia Asistida con Caballos"
+    "description": "TEPT · Psicoterapia Asistida con Caballos · Sobreviviente. Acompaña víctimas."
   },
   {
     "id": "dra.elizabethwing",
@@ -1428,7 +1494,7 @@
       "women"
     ],
     "online": true,
-    "description": "Dolor crónico en abuso"
+    "description": "Dolor crónico en abuso · Secuelas de abuso sexual."
   },
   {
     "id": "psicmadeleinemurguia",
@@ -1778,7 +1844,7 @@
   },
   {
     "id": "kellydelvaller",
-    "name": "kellydelvaller",
+    "name": "Kelly del Valler",
     "instagram": "kellydelvaller",
     "location": "Nacional",
     "country": "Mexico",
@@ -1790,14 +1856,14 @@
     "cost": "consult directly",
     "population": [
       "women",
-      "general public"
+      "survivors of sexual violence"
     ],
     "online": true,
-    "description": "Psicóloga. No estamos solxs"
+    "description": "Psicóloga · Sobreviviente · \"No estamos solxs\"."
   },
   {
     "id": "tiripeuta",
-    "name": "tiripeuta",
+    "name": "Tiripeuta",
     "instagram": "tiripeuta",
     "location": "Nacional",
     "country": "Mexico",
@@ -1812,7 +1878,7 @@
       "general public"
     ],
     "online": true,
-    "description": "Perspectiva de género. 16 años con mujeres en violencia"
+    "description": "Psicóloga · Perspectiva de género · 16 años con mujeres en violencia. Online y presencial."
   },
   {
     "id": "giryescobar",
@@ -1987,7 +2053,7 @@
   },
   {
     "id": "galaviz_caro",
-    "name": "galaviz_caro",
+    "name": "Carolina Galaviz",
     "instagram": "galaviz_caro",
     "location": "CDMX",
     "country": "Mexico",
@@ -2002,7 +2068,7 @@
       "general public"
     ],
     "online": false,
-    "description": "Terapeuta de trauma · Cofundadora Casa Emuna"
+    "description": "Terapeuta de trauma · Cofundadora @casaemuna_."
   },
   {
     "id": "cecirose90",
@@ -2177,7 +2243,7 @@
   },
   {
     "id": "angie_carrilloo",
-    "name": "angie_carrilloo",
+    "name": "Angie Carrillo",
     "instagram": "angie_carrilloo",
     "location": "Guadalajara",
     "country": "Mexico",
@@ -2347,7 +2413,7 @@
       "general public"
     ],
     "online": true,
-    "description": "DDHH Proyecto Brújula de Bruja: asesoría legal, contención emocional"
+    "description": "DDHH Proyecto \"Brújula de Bruja\": asesoría legal, contención emocional y reconstrucción de vida."
   },
   {
     "id": "alexiacortezmx",
@@ -2370,7 +2436,7 @@
   },
   {
     "id": "abogadadisruptiva",
-    "name": "abogadadisruptiva",
+    "name": "Colectiva jurídica DDHH",
     "instagram": "abogadadisruptiva",
     "website": "mailto:abogadadisruptiva@gmail.com",
     "location": "Nacional",
@@ -2390,7 +2456,7 @@
   },
   {
     "id": "artemisas",
-    "name": "_artemisas",
+    "name": "Colectiva Artemisas",
     "instagram": "_artemisas",
     "location": "Nacional",
     "country": "Mexico",
@@ -2429,7 +2495,7 @@
   },
   {
     "id": "yesssantanam",
-    "name": "yesssantanam",
+    "name": "Yess Santanam",
     "instagram": "yesssantanam",
     "location": "Guadalajara",
     "country": "Mexico",
@@ -2444,7 +2510,7 @@
       "general public"
     ],
     "online": false,
-    "description": "Abogada familiar. Feminista"
+    "description": "Abogada familiar · Feminista."
   },
   {
     "id": "hildatellezl.oficial",
@@ -2468,10 +2534,10 @@
   },
   {
     "id": "yunuensshh",
-    "name": "yunuensshh",
+    "name": "Abogada",
     "instagram": "yunuensshh",
     "phone": "4521436779",
-    "location": "Uruapan",
+    "location": "Uruapan, Mich.",
     "country": "Mexico",
     "state": "Michoacán",
     "city": "Uruapan",
@@ -2488,9 +2554,9 @@
   },
   {
     "id": "lucysaboria",
-    "name": "lucysaboria",
+    "name": "Lucy Saboría",
     "instagram": "lucysaboria",
-    "location": "Tijuana",
+    "location": "Tijuana, BC",
     "country": "Mexico",
     "state": "Baja California",
     "city": "Tijuana",
@@ -2503,11 +2569,11 @@
       "general public"
     ],
     "online": false,
-    "description": "Abogada"
+    "description": "Abogada (@abogada_Lucy)."
   },
   {
     "id": "ileanna_dompar",
-    "name": "Ileanna",
+    "name": "Ileanna Dompar",
     "instagram": "ileanna_dompar",
     "phone": "4431359681",
     "location": "Nacional",
@@ -2523,7 +2589,7 @@
       "general public"
     ],
     "online": true,
-    "description": "Abogada"
+    "description": "Abogada."
   },
   {
     "id": "esqueda.ca",
@@ -2543,11 +2609,11 @@
       "general public"
     ],
     "online": true,
-    "description": "Abogada"
+    "description": "Abogada."
   },
   {
     "id": "lunas.delsur",
-    "name": "lunas.delsur",
+    "name": "Lunas del Sur",
     "instagram": "lunas.delsur",
     "location": "Oaxaca",
     "country": "Mexico",
@@ -2562,7 +2628,7 @@
       "general public"
     ],
     "online": false,
-    "description": "Colectiva activista Abogada en Oaxaca"
+    "description": "Colectiva activista · Abogada en Oaxaca."
   },
   {
     "id": "g.a.b.i.i.3.5.7",
@@ -2584,64 +2650,6 @@
     "description": "Abogada"
   },
   {
-    "id": "soreceac",
-    "name": "Sorece A.C.",
-    "instagram": "soreceac",
-    "phone": "5551618600",
-    "location": "CDMX",
-    "country": "Mexico",
-    "state": "CDMX",
-    "city": "Ciudad de México",
-    "type": [
-      "community support"
-    ],
-    "cost": "variable",
-    "population": [
-      "women",
-      "general public"
-    ],
-    "online": false,
-    "description": "Psicoterapia feminista interseccional"
-  },
-  {
-    "id": "redafemoficial",
-    "name": "REDAFEM",
-    "instagram": "redafemoficial",
-    "location": "Nacional",
-    "country": "Mexico",
-    "state": "",
-    "city": "",
-    "type": [
-      "community support"
-    ],
-    "cost": "free",
-    "population": [
-      "women",
-      "general public"
-    ],
-    "online": true,
-    "description": "Asesoría y acompañamiento legal. Violencia sexual y feminicidio"
-  },
-  {
-    "id": "casagaviota",
-    "name": "Casa Gaviota",
-    "instagram": "casagaviota",
-    "location": "CDMX",
-    "country": "Mexico",
-    "state": "CDMX",
-    "city": "Ciudad de México",
-    "type": [
-      "community support"
-    ],
-    "cost": "variable",
-    "population": [
-      "women",
-      "general public"
-    ],
-    "online": false,
-    "description": "Asesoría legal, psicología, psiquiatría. Mujeres y niñas en violencia"
-  },
-  {
     "id": "balanceac",
     "name": "Liberas",
     "instagram": "balanceac",
@@ -2650,7 +2658,9 @@
     "state": "",
     "city": "",
     "type": [
-      "community support"
+      "community support",
+      "sexual violence support",
+      "associations and foundations"
     ],
     "cost": "consult directly",
     "population": [
@@ -2669,7 +2679,8 @@
     "state": "",
     "city": "",
     "type": [
-      "psychological support"
+      "psychological support",
+      "associations and foundations"
     ],
     "cost": "consult directly",
     "population": [
@@ -2688,7 +2699,11 @@
     "state": "",
     "city": "",
     "type": [
-      "community support"
+      "legal support",
+      "psychological support",
+      "medical and health",
+      "community support",
+      "associations and foundations"
     ],
     "cost": "free",
     "population": [
@@ -2707,7 +2722,9 @@
     "state": "",
     "city": "",
     "type": [
-      "community support"
+      "community support",
+      "sexual violence support",
+      "associations and foundations"
     ],
     "cost": "free",
     "population": [
@@ -2721,12 +2738,14 @@
     "id": "lentes.purpura",
     "name": "Lentes Púrpura A.C.",
     "instagram": "lentes.purpura",
+    "phone": "5574722348",
     "location": "Nacional",
     "country": "Mexico",
     "state": "",
     "city": "",
     "type": [
-      "community support"
+      "community support",
+      "associations and foundations"
     ],
     "cost": "consult directly",
     "population": [
@@ -2747,7 +2766,8 @@
     "city": "",
     "type": [
       "sexual health",
-      "reproductive rights"
+      "reproductive rights",
+      "medical and health"
     ],
     "cost": "consult directly",
     "population": [
@@ -2758,28 +2778,8 @@
     "description": "Médico de cabecera · Salud de la mujer"
   },
   {
-    "id": "medicas_verde_violeta",
-    "name": "medicas_verde_violeta",
-    "instagram": "medicas_verde_violeta",
-    "location": "Nacional",
-    "country": "Mexico",
-    "state": "",
-    "city": "",
-    "type": [
-      "sexual health",
-      "reproductive rights"
-    ],
-    "cost": "consult directly",
-    "population": [
-      "women",
-      "general public"
-    ],
-    "online": true,
-    "description": "Colectiva médica · Derecho al aborto"
-  },
-  {
     "id": "ginacastellanos",
-    "name": "ginacastellanos_",
+    "name": "Gina Castellanos",
     "instagram": "ginacastellanos_",
     "location": "Nacional",
     "country": "Mexico",
@@ -2787,7 +2787,8 @@
     "city": "",
     "type": [
       "sexual health",
-      "reproductive rights"
+      "reproductive rights",
+      "medical and health"
     ],
     "cost": "consult directly",
     "population": [
@@ -2799,7 +2800,7 @@
   },
   {
     "id": "irene.robles.v",
-    "name": "irene.robles.v",
+    "name": "Irene Robles",
     "instagram": "irene.robles.v",
     "location": "Nacional",
     "country": "Mexico",
@@ -2807,7 +2808,8 @@
     "city": "",
     "type": [
       "sexual health",
-      "reproductive rights"
+      "reproductive rights",
+      "medical and health"
     ],
     "cost": "consult directly",
     "population": [
@@ -2827,7 +2829,8 @@
     "city": "",
     "type": [
       "sexual health",
-      "reproductive rights"
+      "reproductive rights",
+      "medical and health"
     ],
     "cost": "consult directly",
     "population": [
@@ -2847,7 +2850,8 @@
     "city": "",
     "type": [
       "sexual health",
-      "reproductive rights"
+      "reproductive rights",
+      "medical and health"
     ],
     "cost": "consult directly",
     "population": [
@@ -2856,5 +2860,75 @@
     ],
     "online": true,
     "description": "Comunidad endometriosis · Red de profesionales de salud"
+  },
+  {
+    "id": "el-placer-de-nutrirnos",
+    "name": "El placer de nutrirnos",
+    "instagram": "el_placer_de_nutrirnos",
+    "location": "Nacional",
+    "country": "Mexico",
+    "state": "",
+    "city": "",
+    "type": ["nutrition support"],
+    "cost": "consult directly",
+    "population": ["women", "general public"],
+    "online": true,
+    "description": "Nutrióloga · Alimentación consciente"
+  },
+  {
+    "id": "nurigamez",
+    "name": "Nuri Gamez",
+    "instagram": "nurigamez",
+    "location": "Nacional",
+    "country": "Mexico",
+    "state": "",
+    "city": "",
+    "type": ["nutrition support"],
+    "cost": "consult directly",
+    "population": ["women", "general public"],
+    "online": true,
+    "description": "Nutrióloga"
+  },
+  {
+    "id": "lifeforce-physio",
+    "name": "LifeForce Physio",
+    "instagram": "lifeforce_physio",
+    "location": "Nacional",
+    "country": "Mexico",
+    "state": "",
+    "city": "",
+    "type": ["medical and health"],
+    "cost": "consult directly",
+    "population": ["women"],
+    "online": true,
+    "description": "Rehabilitación física para mujeres"
+  },
+  {
+    "id": "anahi-gtez",
+    "name": "Anahí G.",
+    "instagram": "anahi_gtez",
+    "location": "Jalisco",
+    "country": "Mexico",
+    "state": "Jalisco",
+    "city": "",
+    "type": ["community support"],
+    "cost": "free",
+    "population": ["women", "general public"],
+    "online": false,
+    "description": "Trabajadora social · Voluntaria"
+  },
+  {
+    "id": "anghelotobella",
+    "name": "Miguel Ángel",
+    "instagram": "anghelotobella",
+    "location": "Nacional",
+    "country": "Mexico",
+    "state": "",
+    "city": "",
+    "type": ["community support"],
+    "cost": "free",
+    "population": ["women", "girls", "general public"],
+    "online": true,
+    "description": "Maestro de primaria · Apoyo pedagógico gratuito para hijos de víctimas"
   }
 ]

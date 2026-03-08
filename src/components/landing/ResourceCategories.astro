@@ -2,34 +2,64 @@
 // filterType = value used in DirectoryFilters (SUPPORT_TYPES). Multiple for "Organizaciones".
 const categories = [
   {
+    name: "Líneas de crisis",
+    icon: "📞",
+    description: "Atención 24 h. Gratuita.",
+    filterTypes: ["crisis hotline"],
+  },
+  {
     name: "Colectivas",
     icon: "👥",
-    description: "Colectivas feministas y redes de acompañamiento.",
+    description: "Redes y colectivas feministas.",
     filterTypes: ["community support"],
+  },
+  {
+    name: "Acompañamiento ILE",
+    icon: "🌿",
+    description: "Acompañamiento seguro y gratuito.",
+    filterTypes: ["abortion accompaniment"],
   },
   {
     name: "Psicólogas",
     icon: "🧠",
-    description: "Apoyo psicológico y emocional para sobrevivientes.",
+    description: "Apoyo psicológico y terapia.",
     filterTypes: ["psychological support"],
+  },
+  {
+    name: "Abogadas",
+    icon: "⚖️",
+    description: "Asesoría y acompañamiento legal.",
+    filterTypes: ["legal support"],
   },
   {
     name: "Organizaciones",
     icon: "🏛",
-    description: "ONG y asociaciones de apoyo legal y comunitario.",
+    description: "ONG y apoyo legal o comunitario.",
     filterTypes: ["legal support", "community support"],
   },
   {
     name: "Recursos gubernamentales",
     icon: "🏢",
-    description: "Servicios gratuitos del gobierno (CDMX y nacional).",
+    description: "Servicios gratuitos del Estado.",
     filterTypes: ["government services"],
   },
   {
-    name: "Líneas de crisis",
-    icon: "📞",
-    description: "Atención 24 horas. Gratuita en todo México.",
-    filterTypes: ["crisis hotline"],
+    name: "Nutriólogas",
+    icon: "🌿",
+    description: "Nutrición y alimentación.",
+    filterTypes: ["nutrition support"],
+  },
+  {
+    name: "Médicas y Salud",
+    icon: "🩺",
+    description: "Salud de la mujer y derecho al cuerpo.",
+    filterTypes: ["medical and health", "sexual health"],
+  },
+  {
+    name: "Asociaciones y Fundaciones",
+    icon: "🤝",
+    description: "Refugios, apoyo legal y psicológico.",
+    filterTypes: ["associations and foundations"],
   },
 ];
 
@@ -46,14 +76,17 @@ function buildDirectorioUrl(filterTypes: string[]): string {
   class="py-12 sm:py-20 bg-[#f6f6fb]"
   aria-labelledby="categories-title"
 >
-  <div class="mx-auto max-w-5xl px-4 sm:px-6">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
     <h2
       id="categories-title"
       class="text-2xl font-bold text-[var(--card-text)] sm:text-3xl text-center mb-10"
     >
       Tipos de recursos
     </h2>
-    <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" role="list">
+    <ul
+      class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
+      role="list"
+    >
       {
         categories.map((cat) => (
           <li class="h-full">

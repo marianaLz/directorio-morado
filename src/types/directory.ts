@@ -8,7 +8,10 @@ export type SupportType =
   | 'sexual health'
   | 'financial support'
   | 'government services'
-  | 'crisis hotline';
+  | 'crisis hotline'
+  | 'nutrition support'
+  | 'medical and health'
+  | 'associations and foundations';
 
 export type PopulationType =
   | 'women'

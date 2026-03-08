@@ -4,6 +4,7 @@ import type { DirectoryEntry } from '../../types/directory';
 import { TYPE_TAG_CONFIG } from '../../lib/tagConfig';
 
 const SUPPORT_TYPES = [
+  'crisis hotline',
   'abortion accompaniment',
   'psychological support',
   'legal support',
@@ -13,7 +14,9 @@ const SUPPORT_TYPES = [
   'sexual health',
   'financial support',
   'government services',
-  'crisis hotline',
+  'nutrition support',
+  'medical and health',
+  'associations and foundations',
 ] as const;
 
 const COST_OPTIONS: { value: 'free' | 'low cost' | 'variable' | 'consult directly'; label: string; icon: string }[] = [
@@ -27,23 +30,6 @@ const ONLINE_OPTIONS: { value: 'online' | 'inperson'; label: string; icon: strin
   { value: 'online', label: 'En línea', icon: '🌐' },
   { value: 'inperson', label: 'Presencial', icon: '📍' },
 ];
-
-/** Colores únicos por tipo de apoyo en los filtros (bg + text) */
-const FILTER_TYPE_COLORS: Record<
-  (typeof SUPPORT_TYPES)[number],
-  { bg: string; text: string }
-> = {
-  'abortion accompaniment': { bg: 'bg-emerald-100', text: 'text-emerald-800' },
-  'psychological support': { bg: 'bg-violet-100', text: 'text-violet-800' },
-  'legal support': { bg: 'bg-blue-100', text: 'text-blue-800' },
-  'community support': { bg: 'bg-amber-100', text: 'text-amber-800' },
-  'sexual violence support': { bg: 'bg-rose-100', text: 'text-rose-800' },
-  'reproductive rights': { bg: 'bg-teal-100', text: 'text-teal-800' },
-  'sexual health': { bg: 'bg-cyan-100', text: 'text-cyan-800' },
-  'financial support': { bg: 'bg-orange-100', text: 'text-orange-800' },
-  'government services': { bg: 'bg-slate-100', text: 'text-slate-700' },
-  'crisis hotline': { bg: 'bg-red-100', text: 'text-red-800' },
-};
 
 interface Props {
   entries: DirectoryEntry[];
@@ -149,7 +135,7 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
           <input
             id="directory-search"
             type="search"
-            placeholder="Buscar apoyo, ciudad o organización..."
+            placeholder="Buscar por tipo de apoyo, ciudad o organización..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="min-h-[44px] flex-1 rounded-xl border border-[var(--card-border)] bg-white px-4 py-2.5 text-base text-[var(--card-text)] placeholder-[var(--card-text-muted)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2"
@@ -182,8 +168,7 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
           <div className="flex flex-wrap gap-2">
             {SUPPORT_TYPES.map((t) => {
               const config = TYPE_TAG_CONFIG[t];
-              const colors = FILTER_TYPE_COLORS[t];
-              if (!config || !colors) return null;
+              if (!config) return null;
               const selected = types.includes(t);
               return (
                 <button
@@ -193,7 +178,7 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
                     toggleType(t);
                     (e.currentTarget as HTMLButtonElement).blur();
                   }}
-                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1.5 text-xs font-medium transition-all focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 ${colors.bg} ${colors.text} ${selected ? 'ring-2 ring-[var(--brand-purple-accent)] ring-offset-2' : 'opacity-90 hover:opacity-100'}`}
+                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1.5 text-xs font-medium transition-all focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 ${config.bgClass} ${config.textClass} ${selected ? 'ring-2 ring-[var(--brand-purple-accent)] ring-offset-2' : 'opacity-90 hover:opacity-100'}`}
                   aria-pressed={selected}
                   aria-label={selected ? `Quitar filtro ${config.label}` : `Filtrar por ${config.label}`}
                 >
