@@ -70,5 +70,9 @@ const metaKeywords = keywords ?? defaultKeywords;
   </head>
   <body class="min-h-screen bg-[var(--color-bg-bottom)] font-sans text-[var(--color-highlight)] antialiased text-base leading-[1.6]">
     <slot />
+    <script>
+      import { getAnalyticsSafe } from '../lib/firebase';
+      getAnalyticsSafe();
+    </script>
   </body>
 </html>

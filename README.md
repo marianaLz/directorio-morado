@@ -46,7 +46,7 @@ The website is designed with privacy and accessibility in mind. It does not coll
 - **TypeScript** — Type-safe code
 - **Tailwind CSS** — Styling and design tokens
 - **React** — Interactive components (e.g. directory filters, search)
-- **JSON** — Directory data (`src/data/directory.json`)
+- **Firebase Firestore** — Directory data (source of truth); export to JSON at build for public API and SEO
 - **Fuse.js** — Fuzzy search across name, city, state, description, and tags
 - **Schema.org** — Structured data (FAQ, Organization, Dataset, etc.) for SEO
 

@@ -17,6 +17,10 @@ pnpm-debug.log*
 .env
 .env.production
 
+# Firebase service account key (nunca subir a git)
+*firebase*service*account*.json
+*-firebase-adminsdk-*.json
+
 # macOS-specific files
 .DS_Store
 

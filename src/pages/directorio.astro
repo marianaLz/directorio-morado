@@ -3,18 +3,15 @@ import Layout from "../layouts/Layout.astro";
 import EmergencyBanner from "../components/EmergencyBanner.astro";
 import AnonymousNote from "../components/AnonymousNote.astro";
 import ShareButtons from "../components/ShareButtons.astro";
-import DirectoryFilters from "../components/directory/DirectoryFilters";
-import DirectoryCardStatic from "../components/directory/DirectoryCardStatic.astro";
-import directoryData from "../data/directory.json";
+import DirectoryFromFirestore from "../components/directory/DirectoryFromFirestore";
+import directoryExport from "../data/directory-export.json";
 import type { DirectoryEntry } from "../types/directory";
 import { getBaseUrl, buildDirectoryEntrySchema } from "../data/schema";
 
-const entries = directoryData as DirectoryEntry[];
-const sortedEntries = [...entries].sort(
-  (a, b) => (b.isEmergency ? 1 : 0) - (a.isEmergency ? 1 : 0),
-);
+// Structured data / LD+JSON desde export de Firestore (generado en build por export-from-firestore.mjs)
+const entriesForSchema = directoryExport as DirectoryEntry[];
 const baseUrl = getBaseUrl();
-const directoryStructuredData = entries.map((entry) =>
+const directoryStructuredData = entriesForSchema.map((entry) =>
   buildDirectoryEntrySchema(
     entry as import("../data/schema").DirectoryEntryForSchema,
     baseUrl,
@@ -37,40 +34,6 @@ const directoryStructuredData = entries.map((entry) =>
         <p class="mt-2 text-[var(--card-text-muted)] text-base leading-[1.6]">
           Red de apoyo · MX. Hay personas que pueden ayudarte.
         </p>
-        <nav
-          class="mt-4 flex flex-wrap items-center gap-3"
-          aria-label="Enlaces rápidos del directorio"
-        >
-          <a
-            href="/#linea-de-crisis"
-            class="text-sm font-medium text-[var(--brand-purple-accent)] hover:underline"
-          >
-            Línea de crisis 24h
-          </a>
-          <span class="text-white/50" aria-hidden="true">·</span>
-          <a
-            href="/#recursos-gubernamentales"
-            class="text-sm font-medium text-[var(--brand-purple-accent)] hover:underline"
-          >
-            Recursos gubernamentales
-          </a>
-          <span class="text-[var(--card-text-muted)]" aria-hidden="true">·</span
-          >
-          <a
-            href="/"
-            class="text-sm font-medium text-[var(--brand-purple-accent)] hover:underline"
-          >
-            Inicio
-          </a>
-          <span class="text-[var(--card-text-muted)]" aria-hidden="true">·</span
-          >
-          <a
-            href="/sobre-directorio-morado"
-            class="text-sm font-medium text-[var(--brand-purple-accent)] hover:underline"
-          >
-            Sobre Directorio Morado
-          </a>
-        </nav>
         <div class="mt-4 flex flex-wrap items-center gap-4">
           <ShareButtons
             title="Directorio Morado — Red de apoyo · MX"
@@ -81,19 +44,7 @@ const directoryStructuredData = entries.map((entry) =>
 
       <AnonymousNote />
 
-      <DirectoryFilters
-        entries={sortedEntries}
-        staticEntriesContainerId="directory-entries"
-        client:load
-      />
-
-      <section
-        id="directory-entries"
-        class="mt-8 space-y-6"
-        aria-label="Listado de recursos del directorio"
-      >
-        {sortedEntries.map((entry) => <DirectoryCardStatic entry={entry} />)}
-      </section>
+      <DirectoryFromFirestore client:load />
     </div>
   </div>
 </Layout>
