@@ -4,6 +4,7 @@
  */
 import { initializeApp } from 'firebase/app';
 import { getAnalytics, type Analytics } from 'firebase/analytics';
+import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -27,5 +28,6 @@ export function getAnalyticsSafe(): Analytics | null {
   return analytics;
 }
 
+export const auth = getAuth(app);
 export const db = getFirestore(app);
 export { app };

@@ -1,0 +1,15 @@
+---
+import AdminLayout from "../layouts/AdminLayout.astro";
+import AdminPanel from "../components/admin/AdminPanel";
+---
+
+<AdminLayout
+  title="Panel admin"
+  description="Acceso restringido al panel de administración del directorio."
+>
+  <div class="min-h-screen bg-[#f6f6fb]">
+    <div class="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
+      <AdminPanel client:load />
+    </div>
+  </div>
+</Layout>

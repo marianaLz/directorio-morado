@@ -1,0 +1,32 @@
+---
+/**
+ * Layout mínimo para /admin: sin navbar, footer ni banner. Conserva estilos (tokens, fuentes).
+ */
+import '../styles/tokens.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Panel de administración.' } = Astro.props;
+const fullTitle = title.includes('|') ? title : `${title} | Directorio Morado`;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen bg-[var(--color-bg-bottom)] font-sans text-[var(--color-highlight)] antialiased text-base leading-[1.6]">
+    <slot />
+  </body>
+</html>
