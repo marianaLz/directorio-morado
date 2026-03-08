@@ -6,7 +6,7 @@ export function getBaseUrl(): string {
   if (typeof import.meta.env.SITE === 'string' && import.meta.env.SITE) {
     return import.meta.env.SITE.replace(/\/$/, '');
   }
-  return 'https://directoriomorado.mx';
+  return 'https://directoriomorado.com';
 }
 
 export function buildWebSiteSchema(baseUrl: string): Record<string, unknown> {
