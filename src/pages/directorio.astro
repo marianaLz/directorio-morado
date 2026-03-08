@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import AnonymousNote from "../components/AnonymousNote.astro";
 import ShareButtons from "../components/ShareButtons.astro";
 import DirectoryFromFirestore from "../components/directory/DirectoryFromFirestore";
+import BackToTop from "../components/directory/BackToTop";
 import directoryExport from "../data/directory-export.json";
 import type { DirectoryEntry } from "../types/directory";
 import { getBaseUrl, buildDirectoryEntrySchema } from "../data/schema";
@@ -43,6 +44,7 @@ const directoryStructuredData = entriesForSchema.map((entry) =>
       <AnonymousNote />
 
       <DirectoryFromFirestore client:load />
+      <BackToTop client:load />
     </div>
   </div>
 </Layout>
