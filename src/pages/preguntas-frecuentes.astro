@@ -1,6 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import EmergencyBanner from "../components/EmergencyBanner.astro";
 import FAQ from "../components/landing/FAQ.astro";
 import { buildFAQPageSchema } from "../data/schema";
 import { faqItems } from "../data/faq";
@@ -15,8 +14,7 @@ const faqSchema = buildFAQPageSchema(
   description="Preguntas frecuentes sobre el Directorio Morado: apoyo para sobrevivientes de violencia sexual en México."
   structuredData={[faqSchema]}
 >
-  <EmergencyBanner slot="emergency" />
-  <div class="min-h-screen bg-[#f6f6fb]">
+  <div class="min-h-[calc(100vh-432px)] bg-[#f6f6fb]">
     <FAQ />
   </div>
 </Layout>

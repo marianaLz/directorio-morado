@@ -9,6 +9,7 @@ import {
 } from "../data/schema";
 import AnonymousNote from "../components/AnonymousNote.astro";
 import ShareButtons from "../components/ShareButtons.astro";
+import EmergencyBanner from "../components/EmergencyBanner.astro";
 
 interface Props {
   title: string;
@@ -43,7 +44,7 @@ const allStructuredData = [...defaultStructuredData, ...pageStructuredData];
   image={image}
   structuredData={allStructuredData}
 >
-  <slot name="emergency" />
+  <EmergencyBanner />
   <header class="border-b border-white/10 bg-[var(--color-bg-top)] shadow-sm">
     <nav
       class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:py-4 sm:px-6"
@@ -78,10 +79,24 @@ const allStructuredData = [...defaultStructuredData, ...pageStructuredData];
           aria-label="Enlaces internos"
         >
           <a
+            href="/"
+            class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
+          >
+            Inicio
+          </a>
+          <span class="text-white/50 mx-2" aria-hidden="true">·</span>
+          <a
             href="/directorio"
             class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
           >
             Ver directorio completo
+          </a>
+          <span class="text-white/50 mx-2" aria-hidden="true">·</span>
+          <a
+            href="/sugerir-recurso"
+            class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
+          >
+            Sugerir un recurso
           </a>
           <span class="text-white/50 mx-2" aria-hidden="true">·</span>
           <a

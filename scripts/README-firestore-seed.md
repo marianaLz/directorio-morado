@@ -56,6 +56,8 @@ service cloud.firestore {
 
 (La escritura la haces tú con el script/Admin SDK o desde la consola.)
 
+**Colección `directory_pending`:** Las solicitudes del formulario "Sugerir un recurso" (home) se guardan aquí con `status: 'pending'`. Solo están permitidas las **creaciones** (el público no puede leer ni editar). Para publicar una solicitud, en Firebase Console (o con un script) copia el documento a la colección `directory` asignando un `id` (ej. slug del nombre) y bórralo de `directory_pending` si quieres.
+
 ---
 
 ## Netlify (y otros CI)

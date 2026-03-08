@@ -1,6 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import EmergencyBanner from "../components/EmergencyBanner.astro";
 import Hero from "../components/landing/Hero.astro";
 import ResourceCategories from "../components/landing/ResourceCategories.astro";
 import AbortionSupport from "../components/landing/AbortionSupport.astro";
@@ -21,7 +20,6 @@ const faqSchema = buildFAQPageSchema(
   description="Directorio Morado es una red de apoyo que conecta a sobrevivientes de violencia sexual con organizaciones, psicólogas, colectivas y recursos en México y Latinoamérica."
   structuredData={[faqSchema]}
 >
-  <EmergencyBanner slot="emergency" />
   <Hero />
   <ResourceCategories />
   <AbortionSupport />

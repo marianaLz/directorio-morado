@@ -1,0 +1,15 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SubmitResourceForm from "../components/landing/SubmitResourceForm";
+---
+
+<Layout
+  title="Sugerir un recurso — Directorio Morado"
+  description="Propón una organización, colectiva o profesional para el directorio. Las solicitudes se revisan antes de publicarse."
+>
+  <div class="bg-[#f6f6fb] min-h-[calc(100vh-432px)]">
+    <div class="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
+      <SubmitResourceForm client:load />
+    </div>
+  </div>
+</Layout>
