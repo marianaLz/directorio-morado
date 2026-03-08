@@ -1,5 +1,6 @@
 import type { DirectoryEntry } from '../../types/directory';
 import { TYPE_TAG_CONFIG, getCardStripColor } from '../../lib/tagConfig';
+import { POPULATION_OPTIONS } from '../../data/formOptions';
 
 const COST_LABELS: Record<string, string> = {
   free: 'Gratuito',
@@ -83,6 +84,22 @@ export default function DirectoryCard({ entry }: Props) {
             <span aria-hidden>{entry.online ? '🌐' : '📍'}</span>
             {entry.online ? 'En línea' : 'Presencial'}
           </span>
+          {Array.isArray(entry.population) &&
+            entry.population.length > 0 &&
+            entry.population.map((p) => {
+              const opt = POPULATION_OPTIONS.find((o) => o.value === p);
+              const label = opt?.label ?? p;
+              const icon = opt?.icon ?? '';
+              return (
+                <span
+                  key={p}
+                  className="inline-flex items-center gap-1 rounded-full bg-[var(--tag-population-bg)] px-2.5 py-1.5 text-xs font-medium text-[var(--tag-population-text)]"
+                >
+                  {icon && <span aria-hidden>{icon}</span>}
+                  {label}
+                </span>
+              );
+            })}
         </div>
         {entry.location && (
           <p className="mt-3 flex items-start gap-2 text-sm text-[var(--card-text-muted)]">

@@ -398,7 +398,7 @@ export default function SubmitResourceForm() {
             <button
               type="submit"
               disabled={status === 'submitting'}
-              className="w-full min-h-[48px] rounded-xl bg-[var(--brand-purple-accent)] px-4 py-3 text-base font-semibold text-white transition-colors hover:bg-[#7030c4] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed w-fit"
+              className="min-h-[48px] rounded-xl bg-[var(--brand-purple-accent)] px-4 py-3 text-base font-semibold text-white transition-colors hover:bg-[#7030c4] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] w-fit focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed w-fit"
             >
               {status === 'submitting' ? 'Enviando…' : 'Enviar solicitud'}
             </button>

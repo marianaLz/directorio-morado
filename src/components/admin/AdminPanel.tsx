@@ -136,14 +136,20 @@ export default function AdminPanel() {
     setSaving(true);
     setError('');
     try {
-      const { status, createdAt, submitterEmail, ...rest } = item.data as Record<string, unknown>;
+      const { status, createdAt, submitterEmail, id: _id, ...rest } = item.data as Record<string, unknown>;
       const id = makeId(String(rest.name));
-      await setDoc(doc(db, COL_DIRECTORY, id), {
+      const payload: Record<string, unknown> = {
         ...rest,
+        id,
         state: rest.state ?? '',
         city: rest.city ?? '',
         hours: rest.hours ?? null,
+      };
+      // Firestore no acepta undefined; eliminar cualquier campo undefined
+      Object.keys(payload).forEach((key) => {
+        if (payload[key] === undefined) delete payload[key];
       });
+      await setDoc(doc(db, COL_DIRECTORY, id), payload);
       await deleteDoc(doc(db, COL_PENDING, item.id));
       await loadPending();
       await loadDirectory();

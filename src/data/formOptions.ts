@@ -20,12 +20,12 @@ export const SUPPORT_TYPES: SupportType[] = [
   'associations and foundations',
 ];
 
-export const POPULATION_OPTIONS: { value: PopulationType; label: string }[] = [
-  { value: 'women', label: 'Mujeres' },
-  { value: 'girls', label: 'Niñas' },
-  { value: 'survivors of sexual violence', label: 'Sobrevivientes de violencia sexual' },
-  { value: 'men survivors', label: 'Hombres sobrevivientes' },
-  { value: 'general public', label: 'Público general' },
+export const POPULATION_OPTIONS: { value: PopulationType; label: string; icon: string }[] = [
+  { value: 'women', label: 'Mujeres', icon: '👩' },
+  { value: 'girls', label: 'Niñas', icon: '👧' },
+  { value: 'survivors of sexual violence', label: 'Sobrevivientes de violencia sexual', icon: '💜' },
+  { value: 'men survivors', label: 'Hombres sobrevivientes', icon: '👨' },
+  { value: 'general public', label: 'Público general', icon: '👥' },
 ];
 
 export const COST_OPTIONS: { value: CostType; label: string }[] = [

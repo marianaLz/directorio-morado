@@ -1,7 +1,8 @@
 import { useMemo, useState, useEffect } from 'react';
 import Fuse from 'fuse.js';
-import type { DirectoryEntry } from '../../types/directory';
+import type { DirectoryEntry, PopulationType } from '../../types/directory';
 import { TYPE_TAG_CONFIG } from '../../lib/tagConfig';
+import { POPULATION_OPTIONS } from '../../data/formOptions';
 
 const SUPPORT_TYPES = [
   'crisis hotline',
@@ -66,6 +67,7 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
   const [types, setTypes] = useState<SupportType[]>(getInitialTypesFromUrl);
   const [cost, setCost] = useState<'free' | 'low cost' | 'variable' | 'consult directly' | ''>('');
   const [online, setOnline] = useState<'online' | 'inperson' | ''>('');
+  const [population, setPopulation] = useState<PopulationType[]>([]);
 
   const countries = useMemo(() => {
     const set = new Set(entries.map((e) => e.country).filter(Boolean));
@@ -79,13 +81,16 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
     if (cost) list = list.filter((e) => e.cost === cost);
     if (online === 'online') list = list.filter((e) => e.online);
     if (online === 'inperson') list = list.filter((e) => !e.online);
+    if (population.length > 0) {
+      list = list.filter((e) => Array.isArray(e.population) && population.some((p) => e.population!.includes(p)));
+    }
 
     const q = search.trim();
     if (!q) return list;
     const fuse = new Fuse(list, FUSE_OPTIONS);
     const results = fuse.search(q);
     return results.map((r) => r.item);
-  }, [entries, search, country, types, cost, online]);
+  }, [entries, search, country, types, cost, online, population]);
 
   const filteredIds = useMemo(() => new Set(filtered.map((e) => e.id)), [filtered]);
 
@@ -113,16 +118,21 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
     setOnline((prev) => (prev === value ? '' : value));
   };
 
+  const togglePopulation = (p: PopulationType) => {
+    setPopulation((prev) => (prev.includes(p) ? prev.filter((x) => x !== p) : [...prev, p]));
+  };
+
   const clearFilters = () => {
     setSearch('');
     setCountry('');
     setTypes([]);
     setCost('');
     setOnline('');
+    setPopulation([]);
   };
 
   const hasActiveFilters =
-    search.trim() !== '' || country !== '' || types.length > 0 || cost !== '' || online !== '';
+    search.trim() !== '' || country !== '' || types.length > 0 || cost !== '' || online !== '' || population.length > 0;
 
   return (
     <div className="space-y-4">
@@ -233,6 +243,33 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
                     (e.currentTarget as HTMLButtonElement).blur();
                   }}
                   className={`inline-flex items-center gap-1.5 rounded-full bg-[var(--tag-general-bg)] px-2.5 py-1.5 text-xs font-medium text-[var(--tag-general-text)] transition-all focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 ${selected ? 'ring-2 ring-[var(--brand-purple-accent)] ring-offset-2' : 'opacity-80 hover:opacity-100'}`}
+                  aria-pressed={selected}
+                  aria-label={selected ? `Quitar filtro ${opt.label}` : `Filtrar por ${opt.label}`}
+                >
+                  <span aria-hidden>{opt.icon}</span>
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Población */}
+        <div className="mt-2">
+          <span className="sr-only">Filtrar por población a la que se dirige el recurso</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-medium text-[var(--card-text-muted)] shrink-0">Población:</span>
+            {POPULATION_OPTIONS.map((opt) => {
+              const selected = population.includes(opt.value);
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={(e) => {
+                    togglePopulation(opt.value);
+                    (e.currentTarget as HTMLButtonElement).blur();
+                  }}
+                  className={`inline-flex items-center gap-1.5 rounded-full bg-[var(--tag-population-bg)] px-2.5 py-1.5 text-xs font-medium text-[var(--tag-population-text)] transition-all focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 ${selected ? 'ring-2 ring-[var(--brand-purple-accent)] ring-offset-2' : 'opacity-80 hover:opacity-100'}`}
                   aria-pressed={selected}
                   aria-label={selected ? `Quitar filtro ${opt.label}` : `Filtrar por ${opt.label}`}
                 >
