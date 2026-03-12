@@ -28,6 +28,7 @@ const emptyForm = {
   cost: '' as CostType | '',
   population: [] as PopulationType[],
   online: true,
+  inPerson: false,
 };
 
 function validateWebsite(url: string): boolean {
@@ -45,7 +46,7 @@ export default function SubmitResourceForm() {
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const update = (key: keyof typeof form, value: string | boolean | SupportType[] | PopulationType[] | CostType) => {
+  const update = (key: keyof typeof form, value: string | boolean | SupportType[] | PopulationType[] | CostType | undefined) => {
     setForm((prev) => ({ ...prev, [key]: value }));
     setErrorMessage('');
   };
@@ -99,6 +100,10 @@ export default function SubmitResourceForm() {
       setErrorMessage('Indica la ubicación.');
       return;
     }
+    if (!form.online && !form.inPerson) {
+      setErrorMessage('Indica al menos una modalidad (En línea o Presencial).');
+      return;
+    }
     if (!validateWebsite(form.website)) {
       setErrorMessage('La URL del sitio web no es válida.');
       return;
@@ -124,6 +129,7 @@ export default function SubmitResourceForm() {
         cost: form.cost,
         population: form.population.length ? form.population : ['general public'],
         online: form.online,
+        inPerson: form.inPerson,
       });
       setStatus('success');
       setForm(emptyForm);
@@ -346,24 +352,23 @@ export default function SubmitResourceForm() {
             </div>
             <div>
               <span className={labelClass}>Modalidad</span>
+              <p className="mt-1 text-sm text-[var(--card-text-muted)]">Puedes marcar una o ambas.</p>
               <div className="mt-2 flex flex-wrap gap-4">
                 <label className="inline-flex items-center gap-2 cursor-pointer text-[var(--card-text)]">
                   <input
-                    type="radio"
-                    name="online"
-                    checked={form.online === true}
-                    onChange={() => update('online', true)}
-                    className="rounded-full border-gray-300 text-[var(--brand-purple-accent)] focus:ring-[var(--brand-purple-accent)]"
+                    type="checkbox"
+                    checked={form.online}
+                    onChange={(e) => update('online', e.target.checked)}
+                    className="rounded border-gray-300 text-[var(--brand-purple-accent)] focus:ring-[var(--brand-purple-accent)]"
                   />
                   <span>En línea</span>
                 </label>
                 <label className="inline-flex items-center gap-2 cursor-pointer text-[var(--card-text)]">
                   <input
-                    type="radio"
-                    name="online"
-                    checked={form.online === false}
-                    onChange={() => update('online', false)}
-                    className="rounded-full border-gray-300 text-[var(--brand-purple-accent)] focus:ring-[var(--brand-purple-accent)]"
+                    type="checkbox"
+                    checked={form.inPerson}
+                    onChange={(e) => update('inPerson', e.target.checked)}
+                    className="rounded border-gray-300 text-[var(--brand-purple-accent)] focus:ring-[var(--brand-purple-accent)]"
                   />
                   <span>Presencial</span>
                 </label>

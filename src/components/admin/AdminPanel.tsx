@@ -536,6 +536,7 @@ const defaultPayload: Record<string, unknown> = {
   cost: 'consult directly',
   population: ['general public'],
   online: true,
+  inPerson: false,
   instagram: null,
   website: null,
   phone: null,
@@ -548,8 +549,12 @@ function ResourceModal({ item, mode, onClose, onSaveEdit, onCreate, saving }: Re
   const [form, setForm] = useState<Record<string, unknown>>(defaultPayload);
 
   useEffect(() => {
-    if (item?.data) setForm({ ...defaultPayload, ...item.data });
-    else if (mode === 'create') setForm({ ...defaultPayload });
+    if (item?.data) {
+      const data = item.data as Record<string, unknown>;
+      const merged = { ...defaultPayload, ...data };
+      if (!('inPerson' in data)) merged.inPerson = !data.online;
+      setForm(merged);
+    } else if (mode === 'create') setForm({ ...defaultPayload });
   }, [item, mode]);
 
   const update = (key: string, value: unknown) => setForm((prev) => ({ ...prev, [key]: value }));
@@ -724,24 +729,23 @@ function ResourceModal({ item, mode, onClose, onSaveEdit, onCreate, saving }: Re
           </div>
           <div>
             <span className={labelClass}>Modalidad</span>
+            <p className="mt-1 text-xs text-[var(--card-text-muted)]">Puedes marcar una o ambas.</p>
             <div className="mt-1 flex gap-4">
               <label className="inline-flex items-center gap-2 cursor-pointer text-[var(--card-text)]">
                 <input
-                  type="radio"
-                  name="online"
+                  type="checkbox"
                   checked={form.online === true}
-                  onChange={() => update('online', true)}
-                  className="rounded-full border-gray-300 text-[var(--brand-purple-accent)]"
+                  onChange={(e) => update('online', e.target.checked)}
+                  className="rounded border-gray-300 text-[var(--brand-purple-accent)]"
                 />
                 En línea
               </label>
               <label className="inline-flex items-center gap-2 cursor-pointer text-[var(--card-text)]">
                 <input
-                  type="radio"
-                  name="online"
-                  checked={form.online === false}
-                  onChange={() => update('online', false)}
-                  className="rounded-full border-gray-300 text-[var(--brand-purple-accent)]"
+                  type="checkbox"
+                  checked={form.inPerson === true}
+                  onChange={(e) => update('inPerson', e.target.checked)}
+                  className="rounded border-gray-300 text-[var(--brand-purple-accent)]"
                 />
                 Presencial
               </label>

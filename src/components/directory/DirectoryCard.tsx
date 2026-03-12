@@ -80,10 +80,18 @@ export default function DirectoryCard({ entry }: Props) {
             {COST_ICONS[entry.cost] && <span aria-hidden>{COST_ICONS[entry.cost]}</span>}
             {COST_LABELS[entry.cost] ?? entry.cost}
           </span>
-          <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1.5 text-xs font-medium text-slate-700">
-            <span aria-hidden>{entry.online ? '🌐' : '📍'}</span>
-            {entry.online ? 'En línea' : 'Presencial'}
-          </span>
+          {entry.online && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1.5 text-xs font-medium text-slate-700">
+              <span aria-hidden>🌐</span>
+              En línea
+            </span>
+          )}
+          {(entry.inPerson ?? !entry.online) && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1.5 text-xs font-medium text-slate-700">
+              <span aria-hidden>📍</span>
+              Presencial
+            </span>
+          )}
           {Array.isArray(entry.population) &&
             entry.population.length > 0 &&
             entry.population.map((p) => {

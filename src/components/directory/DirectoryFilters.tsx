@@ -80,7 +80,7 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
     if (types.length > 0) list = list.filter((e) => types.some((t) => e.type.includes(t)));
     if (cost) list = list.filter((e) => e.cost === cost);
     if (online === 'online') list = list.filter((e) => e.online);
-    if (online === 'inperson') list = list.filter((e) => !e.online);
+    if (online === 'inperson') list = list.filter((e) => e.inPerson ?? !e.online);
     if (population.length > 0) {
       list = list.filter((e) => Array.isArray(e.population) && population.some((p) => e.population!.includes(p)));
     }

@@ -22,6 +22,7 @@ function docToEntry(doc: { id: string; data: () => Record<string, unknown> }): D
     cost: (rest.cost as DirectoryEntry['cost']) ?? 'consult directly',
     population: Array.isArray(rest.population) ? (rest.population as DirectoryEntry['population']) : [],
     online: Boolean(rest.online),
+    inPerson: rest.inPerson === true ? true : (rest.inPerson === false ? false : undefined),
     description: (rest.description as string) ?? '',
   } as DirectoryEntry;
 }

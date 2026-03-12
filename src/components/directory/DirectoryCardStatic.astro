@@ -95,12 +95,26 @@ const stripColor = getCardStripColor(entry);
         }
         {COST_LABELS[entry.cost] ?? entry.cost}
       </span>
-      <span
-        class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1.5 text-xs font-medium text-slate-700"
-      >
-        <span aria-hidden>{entry.online ? "🌐" : "📍"}</span>
-        {entry.online ? "En línea" : "Presencial"}
-      </span>
+      {
+        entry.online && (
+          <span
+            class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1.5 text-xs font-medium text-slate-700"
+          >
+            <span aria-hidden>🌐</span>
+            En línea
+          </span>
+        )
+      }
+      {
+        (entry.inPerson ?? !entry.online) && (
+          <span
+            class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1.5 text-xs font-medium text-slate-700"
+          >
+            <span aria-hidden>📍</span>
+            Presencial
+          </span>
+        )
+      }
       {
         Array.isArray(entry.population) &&
           entry.population.length > 0 &&

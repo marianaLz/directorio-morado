@@ -36,6 +36,7 @@ export interface DirectoryEntry {
   cost: CostType;
   population: PopulationType[];
   online: boolean;
+  inPerson?: boolean;
   description: string;
   whatsapp?: string;
   hours?: string;
