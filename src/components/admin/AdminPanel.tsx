@@ -29,6 +29,16 @@ import {
   COUNTRY_OPTIONS,
   getSupportTypeLabel,
 } from "../../data/formOptions";
+import {
+  TYPE_TAG_CONFIG,
+  TYPE_TAG_CLASS,
+  META_TAG_CLASS,
+} from "../../lib/tagConfig";
+import ButtonSolid from "../ui/ButtonSolid";
+import ButtonOutline from "../ui/ButtonOutline";
+import ButtonGhost from "../ui/ButtonGhost";
+import Dimo from "../../assets/svg/Dimo";
+import { buttonSolidClass } from "../ui/buttonClasses";
 
 const COL_PENDING = "directory_pending";
 const COL_DIRECTORY = "directory";
@@ -86,6 +96,56 @@ function formFieldsFromDoc(
   return rest;
 }
 
+function formatRegistro(data: Record<string, unknown>): string {
+  const raw = data.createdAt ?? data.updatedAt;
+  if (!raw) return "—";
+  try {
+    let date: Date | null = null;
+    if (
+      typeof raw === "object" &&
+      raw !== null &&
+      "toDate" in raw &&
+      typeof (raw as { toDate: () => Date }).toDate === "function"
+    ) {
+      date = (raw as { toDate: () => Date }).toDate();
+    } else if (typeof raw === "string" || typeof raw === "number") {
+      date = new Date(raw);
+    }
+    if (!date || Number.isNaN(date.getTime())) return "—";
+    return date.toLocaleString("es-MX", {
+      dateStyle: "short",
+      timeStyle: "short",
+    });
+  } catch {
+    return "—";
+  }
+}
+
+function TypeCell({ types }: { types: unknown }) {
+  if (!Array.isArray(types) || types.length === 0) {
+    return <span className="text-[var(--brand-gray)]/60">—</span>;
+  }
+  const known = (types as string[]).filter((t) => TYPE_TAG_CONFIG[t]);
+  const shown = known.slice(0, 2);
+  const extra = known.length - shown.length;
+  return (
+    <div className="flex flex-wrap gap-1">
+      {shown.map((t) => {
+        const config = TYPE_TAG_CONFIG[t];
+        return (
+          <span
+            key={t}
+            className={`${TYPE_TAG_CLASS} ${config.bgClass} ${config.textClass}`}
+          >
+            {config.label}
+          </span>
+        );
+      })}
+      {extra > 0 && <span className={META_TAG_CLASS}>+{extra}</span>}
+    </div>
+  );
+}
+
 export default function AdminPanel() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -98,11 +158,12 @@ export default function AdminPanel() {
   const [selected, setSelected] = useState<DocItem | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [toast, setToast] = useState("");
   const [confirmModal, setConfirmModal] = useState<{
     title: string;
     message: string;
     confirmLabel: string;
-    variant: "danger" | "reject";
+    variant: "danger" | "primary";
     onConfirm: () => void;
   } | null>(null);
 
@@ -112,12 +173,34 @@ export default function AdminPanel() {
   );
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (u) => {
+    const unsub = onAuthStateChanged(auth, async (u) => {
+      if (u && !isAllowedAdminEmail(u.email)) {
+        setToast("Tu cuenta no tiene permiso para acceder a este panel.");
+        await signOut(auth);
+        setUser(null);
+        setLoading(false);
+        return;
+      }
       setUser(u);
       setLoading(false);
     });
     return () => unsub();
   }, []);
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = window.setTimeout(() => setToast(""), 5000);
+    return () => window.clearTimeout(t);
+  }, [toast]);
+
+  useEffect(() => {
+    if (!confirmModal) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setConfirmModal(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [confirmModal]);
 
   const loadPending = async () => {
     const snap = await getDocs(collection(db, COL_PENDING));
@@ -159,8 +242,13 @@ export default function AdminPanel() {
 
   const handleLogin = async () => {
     setError("");
+    setToast("");
     try {
-      await signInWithPopup(auth, new GoogleAuthProvider());
+      const result = await signInWithPopup(auth, new GoogleAuthProvider());
+      if (!isAllowedAdminEmail(result.user.email)) {
+        await signOut(auth);
+        setToast("Tu cuenta no tiene permiso para acceder a este panel.");
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error al iniciar sesión");
     }
@@ -168,48 +256,59 @@ export default function AdminPanel() {
 
   const handleLogout = () => signOut(auth);
 
-  const handleApprove = async (item: DocItem) => {
+  const handleApprove = (item: DocItem) => {
     if (item.ref !== "pending") return;
-    setSaving(true);
-    setError("");
-    try {
-      const {
-        status,
-        createdAt,
-        submitterEmail,
-        id: _id,
-        ...rest
-      } = item.data as Record<string, unknown>;
-      const id = makeId(String(rest.name));
-      const payload: Record<string, unknown> = {
-        ...rest,
-        id,
-        state: rest.state ?? "",
-        city: rest.city ?? "",
-        hours: rest.hours ?? null,
-      };
-      // Firestore no acepta undefined; eliminar cualquier campo undefined
-      Object.keys(payload).forEach((key) => {
-        if (payload[key] === undefined) delete payload[key];
-      });
-      await setDoc(doc(db, COL_DIRECTORY, id), payload);
-      await deleteDoc(doc(db, COL_PENDING, item.id));
-      await loadPending();
-      await loadDirectory();
-      setModal(null);
-      setSelected(null);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Error al aprobar");
-    } finally {
-      setSaving(false);
-    }
+    setConfirmModal({
+      title: "Aprobar solicitud",
+      message: `¿Publicar «${String(item.data.name)}» en el directorio?`,
+      confirmLabel: "Aprobar",
+      variant: "primary",
+      onConfirm: async () => {
+        setConfirmModal(null);
+        setSaving(true);
+        setError("");
+        try {
+          const {
+            status,
+            createdAt,
+            submitterEmail,
+            id: _id,
+            ...rest
+          } = item.data as Record<string, unknown>;
+          void status;
+          void submitterEmail;
+          const id = makeId(String(rest.name));
+          const payload: Record<string, unknown> = {
+            ...rest,
+            id,
+            state: rest.state ?? "",
+            city: rest.city ?? "",
+            hours: rest.hours ?? null,
+            ...(createdAt != null ? { createdAt } : {}),
+          };
+          Object.keys(payload).forEach((key) => {
+            if (payload[key] === undefined) delete payload[key];
+          });
+          await setDoc(doc(db, COL_DIRECTORY, id), payload);
+          await deleteDoc(doc(db, COL_PENDING, item.id));
+          await loadPending();
+          await loadDirectory();
+          setModal(null);
+          setSelected(null);
+          setToast("Recurso aprobado y publicado.");
+        } catch (e) {
+          setError(e instanceof Error ? e.message : "Error al aprobar");
+        } finally {
+          setSaving(false);
+        }
+      },
+    });
   };
 
   const handleDelete = (item: DocItem) => {
     setConfirmModal({
       title: "Eliminar recurso",
-      message:
-        "¿Eliminar este registro del directorio? Esta acción no se puede deshacer.",
+      message: `¿Eliminar «${String(item.data.name)}» del directorio? Esta acción no se puede deshacer.`,
       confirmLabel: "Eliminar",
       variant: "danger",
       onConfirm: async () => {
@@ -221,6 +320,7 @@ export default function AdminPanel() {
           await loadDirectory();
           setModal(null);
           setSelected(null);
+          setToast("Recurso eliminado.");
         } catch (e) {
           setError(e instanceof Error ? e.message : "Error al eliminar");
         } finally {
@@ -234,10 +334,9 @@ export default function AdminPanel() {
     if (item.ref !== "pending") return;
     setConfirmModal({
       title: "Rechazar solicitud",
-      message:
-        "¿Rechazar esta solicitud? Se eliminará de pendientes y no se publicará en el directorio.",
+      message: `¿Rechazar «${String(item.data.name)}»? Se eliminará de pendientes y no se publicará.`,
       confirmLabel: "Rechazar",
-      variant: "reject",
+      variant: "danger",
       onConfirm: async () => {
         setConfirmModal(null);
         setSaving(true);
@@ -247,6 +346,7 @@ export default function AdminPanel() {
           await loadPending();
           setModal(null);
           setSelected(null);
+          setToast("Solicitud rechazada.");
         } catch (e) {
           setError(e instanceof Error ? e.message : "Error al rechazar");
         } finally {
@@ -314,75 +414,59 @@ export default function AdminPanel() {
 
   if (loading) {
     return (
-      <div className="flex min-h-[40vh] items-center justify-center text-[var(--card-text-muted)]">
+      <div className="flex min-h-[40vh] items-center justify-center text-[var(--brand-gray)]">
         Cargando…
       </div>
     );
   }
 
-  if (!user) {
+  const toastEl = toast ? (
+    <div
+      role="status"
+      className="fixed bottom-6 left-1/2 z-50 w-[min(100%-2rem,24rem)] -translate-x-1/2 rounded-xl bg-[var(--brand-gray)] px-4 py-3 text-center text-sm text-[var(--brand-white)] shadow-lg"
+    >
+      {toast}
+    </div>
+  ) : null;
+
+  if (!user || !allowed) {
     return (
-      <div className="flex min-h-[75vh] flex-col items-center justify-center px-4">
-        <div className="mx-auto w-full max-w-md rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] p-8 text-center">
-          <h2 className="text-xl font-semibold text-[var(--card-text)]">
-            Panel administrativo
-          </h2>
-          <p className="mt-2 text-sm text-[var(--card-text-muted)]">
-            Inicia sesión con Google para continuar.
-          </p>
-          {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
-          <div className="mt-6 flex gap-4">
-            <button
-              type="button"
-              onClick={handleLogin}
-              className="inline-flex min-h-[48px] w-full items-center justify-center rounded-xl bg-[var(--brand-purple-accent)] px-5 py-3 text-base font-semibold text-white hover:bg-[#7030c4] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
-            >
-              Entrar con Google
-            </button>
-            <a
-              href="/"
-              className="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl border border-[var(--card-border)] bg-transparent px-5 py-3 text-sm font-medium text-[var(--card-text)] hover:bg-[var(--card-border)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
-            >
-              Volver al inicio
-            </a>
+      <>
+        {toastEl}
+        <div className="flex min-h-[75vh] flex-col items-center justify-center">
+          <div className="mx-auto w-full max-w-md rounded-2xl bg-[var(--brand-white)] p-8 text-center shadow-[0_2px_16px_rgba(76,74,77,0.08)] lg:p-10">
+            <div className="mx-auto w-40 lg:w-48">
+              <Dimo color="var(--brand-primary)" />
+            </div>
+            <h1 className="mt-6 text-2xl font-bold text-[var(--brand-primary)] lg:text-3xl">
+              Panel administrativo
+            </h1>
+            <p className="mt-3 text-base text-[var(--brand-gray)]">
+              Inicia sesión con Google para gestionar recursos y solicitudes.
+            </p>
+            {error && (
+              <p
+                className="mt-4 rounded-lg bg-[var(--tag-crisis-bg)] px-3 py-2 text-sm text-[var(--tag-crisis-text)]"
+                role="alert"
+              >
+                {error}
+              </p>
+            )}
+            <div className="mt-8 flex flex-col gap-3">
+              <ButtonSolid
+                type="button"
+                onClick={handleLogin}
+                className="w-full"
+              >
+                Entrar con Google
+              </ButtonSolid>
+              <ButtonGhost href="/" className="w-full">
+                Volver al inicio
+              </ButtonGhost>
+            </div>
           </div>
         </div>
-      </div>
-    );
-  }
-
-  if (!allowed) {
-    return (
-      <div className="flex min-h-[75vh] flex-col items-center justify-center px-4">
-        <div
-          className="mx-auto w-full max-w-sm rounded-xl border p-8 text-center"
-          style={{
-            borderColor: "var(--tag-crisis-text)",
-            backgroundColor: "var(--tag-crisis-bg)",
-          }}
-        >
-          <h2
-            className="text-xl font-semibold"
-            style={{ color: "var(--tag-crisis-text)" }}
-          >
-            Sin acceso
-          </h2>
-          <p
-            className="mt-2 text-sm"
-            style={{ color: "var(--tag-crisis-text)" }}
-          >
-            Tu cuenta ({user.email}) no tiene permiso para acceder a este panel.
-          </p>
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="mt-6 text-sm font-medium underline hover:no-underline"
-            style={{ color: "var(--tag-crisis-text)" }}
-          >
-            Cerrar sesión
-          </button>
-        </div>
-      </div>
+      </>
     );
   }
 
@@ -392,180 +476,247 @@ export default function AdminPanel() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <h1 className="text-xl font-bold text-[var(--card-text)]">
-            Panel admin
-          </h1>
-          <span className="text-sm text-[var(--card-text-muted)]">
-            {user.email}
-          </span>
+      {toastEl}
+
+      <header className="flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-[var(--brand-white)] p-4 shadow-[0_2px_12px_rgba(76,74,77,0.06)] sm:p-5">
+        <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+          <div className="hidden w-28 shrink-0 sm:block">
+            <Dimo color="var(--brand-primary)" />
+          </div>
+          <div className="min-w-0">
+            <h1 className="text-xl font-bold text-[var(--brand-primary)] sm:text-2xl">
+              Panel admin
+            </h1>
+            <p className="mt-0.5 truncate text-sm text-[var(--brand-gray)]">
+              {user.email}
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <ButtonGhost href="/" className="text-sm">
+            Ver sitio
+          </ButtonGhost>
+          <ButtonGhost type="button" onClick={handleLogout} className="text-sm">
+            Cerrar sesión
+          </ButtonGhost>
+        </div>
+      </header>
+
+      <div className="rounded-2xl bg-[var(--brand-white)] p-4 shadow-[0_2px_12px_rgba(76,74,77,0.06)] sm:p-5">
+        <div
+          className="flex gap-1 rounded-xl bg-[var(--brand-lavender)]/60 p-1"
+          role="tablist"
+          aria-label="Secciones del panel"
+        >
           <button
             type="button"
-            onClick={handleLogout}
-            className="text-sm font-medium text-[var(--brand-purple-accent)] hover:underline"
+            role="tab"
+            aria-selected={tab === "pending"}
+            onClick={() => setTab("pending")}
+            className={`flex-1 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--brand-lilac)] focus:ring-offset-2 ${
+              tab === "pending"
+                ? "bg-[var(--brand-white)] text-[var(--brand-primary)] shadow-sm"
+                : "text-[var(--brand-gray)] hover:text-[var(--brand-primary)]"
+            }`}
           >
-            Cerrar sesión
+            Pendientes
+            <span
+              className={`ml-2 inline-flex min-w-6 items-center justify-center rounded-full px-1.5 py-0.5 text-xs font-medium ${
+                tab === "pending"
+                  ? "bg-[var(--brand-primary)] text-[var(--brand-white)]"
+                  : "bg-[var(--brand-white)]/80 text-[var(--brand-gray)]"
+              }`}
+            >
+              {pending.length}
+            </span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === "directory"}
+            onClick={() => setTab("directory")}
+            className={`flex-1 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--brand-lilac)] focus:ring-offset-2 ${
+              tab === "directory"
+                ? "bg-[var(--brand-white)] text-[var(--brand-primary)] shadow-sm"
+                : "text-[var(--brand-gray)] hover:text-[var(--brand-primary)]"
+            }`}
+          >
+            Publicados
+            <span
+              className={`ml-2 inline-flex min-w-6 items-center justify-center rounded-full px-1.5 py-0.5 text-xs font-medium ${
+                tab === "directory"
+                  ? "bg-[var(--brand-primary)] text-[var(--brand-white)]"
+                  : "bg-[var(--brand-white)]/80 text-[var(--brand-gray)]"
+              }`}
+            >
+              {directory.length}
+            </span>
           </button>
         </div>
-      </div>
 
-      <div className="flex gap-2 border-b border-[var(--card-border)]">
-        <button
-          type="button"
-          onClick={() => setTab("pending")}
-          className={`border-b-2 px-4 py-2 text-sm font-medium focus:outline-none ${
-            tab === "pending"
-              ? "border-[var(--brand-purple-accent)] text-[var(--brand-purple-accent)]"
-              : "border-transparent text-[var(--card-text-muted)] hover:text-[var(--card-text)]"
-          }`}
-        >
-          Pendientes ({pending.length})
-        </button>
-        <button
-          type="button"
-          onClick={() => setTab("directory")}
-          className={`border-b-2 px-4 py-2 text-sm font-medium focus:outline-none ${
-            tab === "directory"
-              ? "border-[var(--brand-purple-accent)] text-[var(--brand-purple-accent)]"
-              : "border-transparent text-[var(--card-text-muted)] hover:text-[var(--card-text)]"
-          }`}
-        >
-          Aceptados ({directory.length})
-        </button>
-      </div>
+        {error && (
+          <div
+            className="mt-4 rounded-xl bg-[var(--tag-crisis-bg)] px-4 py-3 text-sm text-[var(--tag-crisis-text)]"
+            role="alert"
+          >
+            {error}
+          </div>
+        )}
 
-      {error && (
-        <div
-          className="rounded-lg bg-red-50 px-4 py-2 text-sm text-red-800"
-          role="alert"
-        >
-          {error}
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <label htmlFor="admin-search" className="sr-only">
+            Buscar recursos
+          </label>
+          <input
+            id="admin-search"
+            type="search"
+            placeholder="Buscar por nombre, ubicación o país…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="min-h-[44px] w-full flex-1 rounded-xl border border-[var(--brand-lilac)]/50 bg-[var(--brand-white)] px-4 py-2.5 text-[var(--brand-gray)] placeholder:text-[var(--brand-gray)]/50 focus:border-[var(--brand-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]"
+          />
+          {search.trim() !== "" && (
+            <ButtonGhost
+              type="button"
+              onClick={() => setSearch("")}
+              className="shrink-0"
+            >
+              Limpiar
+            </ButtonGhost>
+          )}
+          <ButtonSolid
+            type="button"
+            onClick={() => {
+              setSelected(null);
+              setModal("create");
+            }}
+            className="shrink-0 !px-4 !py-3 text-sm"
+          >
+            Crear recurso
+          </ButtonSolid>
         </div>
-      )}
 
-      <div className="flex flex-wrap items-center gap-4">
-        <input
-          type="search"
-          placeholder="Buscar por nombre, ubicación, país…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="min-h-[44px] flex-1 min-w-[200px] rounded-xl border border-[var(--card-border)] bg-white px-4 py-2 text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
-        />
-        <button
-          type="button"
-          onClick={() => {
-            setSelected(null);
-            setModal("create");
-          }}
-          className="min-h-[44px] rounded-xl bg-[var(--brand-purple-accent)] px-4 py-2 text-sm font-semibold text-white hover:bg-[#7030c4] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)]"
-        >
-          Crear recurso
-        </button>
-      </div>
+        <p className="mt-3 text-sm text-[var(--brand-gray)]" role="status">
+          {list.length} resultado{list.length !== 1 ? "s" : ""}
+          {search.trim() ? ` para «${search.trim()}»` : ""}.
+        </p>
 
-      <div className="overflow-x-auto rounded-xl border border-[var(--card-border)] bg-white">
-        <table className="w-full text-left text-sm">
-          <thead>
-            <tr className="border-b border-[var(--card-border)] bg-slate-50">
-              <th className="p-3 font-medium text-[var(--card-text)]">
-                Nombre
-              </th>
-              <th className="p-3 font-medium text-[var(--card-text)]">
-                Ubicación
-              </th>
-              <th className="p-3 font-medium text-[var(--card-text)]">País</th>
-              <th className="p-3 font-medium text-[var(--card-text)]">Tipo</th>
-              <th
-                className="p-3 font-medium text-[var(--card-text)] w-[1%] whitespace-nowrap"
-                style={{ minWidth: "220px" }}
-              >
-                Acciones
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {list.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={5}
-                  className="p-6 text-center text-[var(--card-text-muted)]"
-                >
-                  {tab === "pending"
-                    ? "No hay solicitudes pendientes."
-                    : "No hay recursos."}
-                </td>
+        <div className="mt-4 overflow-x-auto rounded-xl border border-[var(--brand-lavender)]">
+          <table className="w-full min-w-[720px] text-left text-sm">
+            <thead>
+              <tr className="border-b border-[var(--brand-lavender)] bg-[var(--brand-lavender)]/50">
+                <th className="p-3 font-semibold text-[var(--brand-gray)]">
+                  Nombre
+                </th>
+                <th className="p-3 font-semibold text-[var(--brand-gray)]">
+                  Ubicación
+                </th>
+                <th className="p-3 font-semibold text-[var(--brand-gray)]">
+                  País
+                </th>
+                <th className="p-3 font-semibold text-[var(--brand-gray)]">
+                  Tipo
+                </th>
+                <th className="p-3 font-semibold text-[var(--brand-gray)] whitespace-nowrap">
+                  Registro
+                </th>
+                <th className="p-3 font-semibold text-[var(--brand-gray)] whitespace-nowrap">
+                  Acciones
+                </th>
               </tr>
-            ) : (
-              list.map((item) => (
-                <tr
-                  key={`${item.ref}-${item.id}`}
-                  className="border-b border-[var(--card-border)] hover:bg-slate-50"
-                >
-                  <td className="p-3 font-medium text-[var(--card-text)]">
-                    {String(item.data.name)}
-                  </td>
-                  <td className="p-3 text-[var(--card-text-muted)]">
-                    {String(item.data.location || "")}
-                  </td>
-                  <td className="p-3 text-[var(--card-text-muted)]">
-                    {String(item.data.country || "")}
-                  </td>
-                  <td className="p-3 text-[var(--card-text-muted)]">
-                    {Array.isArray(item.data.type)
-                      ? (item.data.type as string[])
-                          .map(getSupportTypeLabel)
-                          .join(", ")
-                      : ""}
-                  </td>
-                  <td className="p-3 whitespace-nowrap">
-                    <div className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelected(item);
-                          setModal("edit");
-                        }}
-                        className="text-[var(--brand-purple-accent)] hover:underline"
-                      >
-                        Ver / Editar
-                      </button>
-                      {tab === "pending" ? (
-                        <>
-                          <button
-                            type="button"
-                            onClick={() => handleApprove(item)}
-                            disabled={saving}
-                            className="text-emerald-600 hover:underline disabled:opacity-50"
-                          >
-                            Aprobar
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleReject(item)}
-                            disabled={saving}
-                            className="text-red-600 hover:underline disabled:opacity-50"
-                          >
-                            Rechazar
-                          </button>
-                        </>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => handleDelete(item)}
-                          disabled={saving}
-                          className="text-red-600 hover:underline disabled:opacity-50"
-                        >
-                          Eliminar
-                        </button>
-                      )}
-                    </div>
+            </thead>
+            <tbody>
+              {list.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="p-10 text-center text-[var(--brand-gray)]"
+                  >
+                    <p className="font-medium">
+                      {tab === "pending"
+                        ? "No hay solicitudes pendientes"
+                        : "No hay recursos publicados"}
+                    </p>
+                    <p className="mt-1 text-sm opacity-80">
+                      {search.trim()
+                        ? "Prueba otra búsqueda o limpia el filtro."
+                        : tab === "pending"
+                          ? "Las nuevas sugerencias aparecerán aquí."
+                          : "Crea un recurso o aprueba una solicitud pendiente."}
+                    </p>
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                list.map((item) => (
+                  <tr
+                    key={`${item.ref}-${item.id}`}
+                    className="border-b border-[var(--brand-lavender)] last:border-0 hover:bg-[var(--brand-lavender)]/30"
+                  >
+                    <td className="p-3 font-medium text-[var(--brand-gray)]">
+                      {String(item.data.name)}
+                    </td>
+                    <td className="p-3 text-[var(--brand-gray)]">
+                      {String(item.data.location || "—")}
+                    </td>
+                    <td className="p-3 text-[var(--brand-gray)]">
+                      {String(item.data.country) === "Mexico"
+                        ? "México"
+                        : String(item.data.country || "—")}
+                    </td>
+                    <td className="p-3">
+                      <TypeCell types={item.data.type} />
+                    </td>
+                    <td className="p-3 whitespace-nowrap text-[var(--brand-gray)]/80">
+                      {formatRegistro(item.data)}
+                    </td>
+                    <td className="p-3">
+                      <div className="flex flex-wrap gap-1.5">
+                        <ButtonGhost
+                          type="button"
+                          onClick={() => {
+                            setSelected(item);
+                            setModal("edit");
+                          }}
+                        >
+                          Editar
+                        </ButtonGhost>
+                        {tab === "pending" ? (
+                          <>
+                            <ButtonGhost
+                              type="button"
+                              onClick={() => handleApprove(item)}
+                              disabled={saving}
+                              className="!border-[var(--brand-green)]/30 !text-[var(--brand-green)] hover:!bg-[var(--brand-sage)]/40"
+                            >
+                              Aprobar
+                            </ButtonGhost>
+                            <ButtonGhost
+                              type="button"
+                              onClick={() => handleReject(item)}
+                              disabled={saving}
+                              className="!border-[var(--brand-red)]/25 !text-[var(--brand-red)] hover:!bg-[var(--tag-crisis-bg)]"
+                            >
+                              Rechazar
+                            </ButtonGhost>
+                          </>
+                        ) : (
+                          <ButtonGhost
+                            type="button"
+                            onClick={() => handleDelete(item)}
+                            disabled={saving}
+                            className="!border-[var(--brand-red)]/25 !text-[var(--brand-red)] hover:!bg-[var(--tag-crisis-bg)]"
+                          >
+                            Eliminar
+                          </ButtonGhost>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {(modal === "edit" || modal === "create") && (
@@ -585,38 +736,40 @@ export default function AdminPanel() {
 
       {confirmModal && (
         <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4"
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4 backdrop-blur-[2px]"
           role="dialog"
           aria-modal="true"
           aria-labelledby="confirm-title"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setConfirmModal(null);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") setConfirmModal(null);
+          }}
         >
-          <div className="w-full max-w-sm rounded-xl border border-[var(--card-border)] bg-white p-6 shadow-xl">
+          <div className="w-full max-w-sm rounded-2xl bg-[var(--brand-white)] p-6 shadow-xl">
             <h3
               id="confirm-title"
-              className="text-lg font-semibold text-[var(--card-text)]"
+              className="text-lg font-semibold text-[var(--brand-primary)]"
             >
               {confirmModal.title}
             </h3>
-            <p className="mt-2 text-sm text-[var(--card-text-muted)]">
+            <p className="mt-2 text-sm leading-relaxed text-[var(--brand-gray)]">
               {confirmModal.message}
             </p>
-            <div className="mt-6 flex justify-end gap-3">
-              <button
-                type="button"
-                onClick={() => setConfirmModal(null)}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-[var(--card-text)] hover:bg-gray-50"
-              >
+            <div className="mt-6 flex justify-end gap-2">
+              <ButtonGhost type="button" onClick={() => setConfirmModal(null)}>
                 Cancelar
-              </button>
+              </ButtonGhost>
               <button
                 type="button"
                 onClick={() => confirmModal.onConfirm()}
                 disabled={saving}
-                className={`rounded-lg px-4 py-2 text-sm font-semibold text-white disabled:opacity-50 ${
+                className={
                   confirmModal.variant === "danger"
-                    ? "bg-red-600 hover:bg-red-700"
-                    : "bg-amber-600 hover:bg-amber-700"
-                }`}
+                    ? `${buttonSolidClass} !border-[var(--brand-red)] !bg-[var(--brand-red)] !px-4 !py-3 text-sm`
+                    : `${buttonSolidClass} !px-4 !py-3 text-sm`
+                }
               >
                 {saving ? "…" : confirmModal.confirmLabel}
               </button>
@@ -704,8 +857,8 @@ function ResourceModal({
   };
 
   const inputClass =
-    "mt-1 block w-full min-h-[40px] rounded-lg border border-[var(--card-border)] bg-white px-3 py-2 text-sm text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--brand-purple-accent)]";
-  const labelClass = "block text-sm font-medium text-[var(--card-text)]";
+    "mt-1 block w-full min-h-[40px] rounded-xl border border-[var(--brand-lilac)] bg-[var(--brand-white)] px-3 py-2 text-sm text-[var(--brand-text)] focus:border-[var(--brand-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--brand-primary)]";
+  const labelClass = "block text-sm font-medium text-[var(--brand-text)]";
 
   return (
     <div
@@ -714,11 +867,11 @@ function ResourceModal({
       aria-modal="true"
     >
       <div
-        className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl border border-[var(--card-border)] bg-white p-6 shadow-xl"
+        className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl border border-[var(--brand-lilac)] bg-[var(--brand-white)] p-6 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4">
-          <h2 className="text-lg font-semibold text-[var(--card-text)]">
+          <h2 className="text-lg font-semibold text-[var(--brand-text)]">
             {mode === "edit" ? "Ver / Editar" : "Crear recurso"}
           </h2>
         </div>
@@ -818,10 +971,10 @@ function ResourceModal({
                   key={t}
                   type="button"
                   onClick={() => toggleType(t)}
-                  className={`rounded-full px-2.5 py-1 text-xs font-medium ${
+                  className={`rounded-xl px-2.5 py-1 text-xs font-medium ${
                     (form.type as string[])?.includes(t)
-                      ? "bg-[var(--brand-purple-accent)] text-white"
-                      : "bg-slate-100 text-slate-700"
+                      ? "bg-[var(--brand-primary)] text-[var(--brand-white)]"
+                      : "bg-[var(--brand-lilac)] text-[var(--brand-text)]"
                   }`}
                 >
                   {getSupportTypeLabel(t)}
@@ -852,10 +1005,10 @@ function ResourceModal({
                   key={opt.value}
                   type="button"
                   onClick={() => togglePopulation(opt.value)}
-                  className={`rounded-full px-2.5 py-1 text-xs font-medium ${
+                  className={`rounded-xl px-2.5 py-1 text-xs font-medium ${
                     (form.population as string[])?.includes(opt.value)
-                      ? "bg-violet-100 text-violet-800"
-                      : "bg-slate-100 text-slate-700"
+                      ? "bg-brand-lilac/40 text-[var(--brand-primary)]"
+                      : "bg-[var(--brand-lilac)] text-[var(--brand-text)]"
                   }`}
                 >
                   {opt.label}
@@ -865,45 +1018,37 @@ function ResourceModal({
           </div>
           <div>
             <span className={labelClass}>Modalidad</span>
-            <p className="mt-1 text-xs text-[var(--card-text-muted)]">
+            <p className="mt-1 text-xs text-[var(--brand-text)]">
               Puedes marcar una o ambas.
             </p>
             <div className="mt-1 flex gap-4">
-              <label className="inline-flex items-center gap-2 cursor-pointer text-[var(--card-text)]">
+              <label className="inline-flex items-center gap-2 cursor-pointer text-[var(--brand-text)]">
                 <input
                   type="checkbox"
                   checked={form.online === true}
                   onChange={(e) => update("online", e.target.checked)}
-                  className="rounded border-gray-300 text-[var(--brand-purple-accent)]"
+                  className="rounded-xl border-[var(--brand-lilac)] text-[var(--brand-primary)]"
                 />
                 En línea
               </label>
-              <label className="inline-flex items-center gap-2 cursor-pointer text-[var(--card-text)]">
+              <label className="inline-flex items-center gap-2 cursor-pointer text-[var(--brand-text)]">
                 <input
                   type="checkbox"
                   checked={form.inPerson === true}
                   onChange={(e) => update("inPerson", e.target.checked)}
-                  className="rounded border-gray-300 text-[var(--brand-purple-accent)]"
+                  className="rounded-xl border-[var(--brand-lilac)] text-[var(--brand-primary)]"
                 />
                 Presencial
               </label>
             </div>
           </div>
           <div className="flex justify-end gap-2 pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-[var(--card-text)] hover:bg-gray-50"
-            >
+            <ButtonOutline type="button" onClick={onClose} className="text-sm">
               Cancelar
-            </button>
-            <button
-              type="submit"
-              disabled={saving}
-              className="rounded-lg bg-[var(--brand-purple-accent)] px-4 py-2 text-sm font-semibold text-white hover:bg-[#7030c4] disabled:opacity-50"
-            >
+            </ButtonOutline>
+            <ButtonSolid type="submit" disabled={saving} className="text-sm">
               {saving ? "Guardando…" : "Guardar"}
-            </button>
+            </ButtonSolid>
           </div>
         </form>
       </div>

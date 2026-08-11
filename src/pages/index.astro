@@ -2,28 +2,40 @@
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/landing/Hero.astro";
 import ResourceCategories from "../components/landing/ResourceCategories.astro";
+import Statistics from "../components/landing/Statistics.astro";
 import AbortionSupport from "../components/landing/AbortionSupport.astro";
 import FAQ from "../components/landing/FAQ.astro";
-import CtaSection from "../components/landing/CtaSection.astro";
-import AboutThisDirectory from "../components/landing/AboutThisDirectory.astro";
-
-import { faqItems } from "../data/faq";
-import { buildFAQPageSchema } from "../data/schema";
-
-const faqSchema = buildFAQPageSchema(
-  faqItems.map((item) => ({ name: item.question, text: item.answer })),
-);
+import "../styles/home-motion.css";
 ---
 
 <Layout
   title="Directorio Morado — Red de apoyo para sobrevivientes de violencia sexual en México"
   description="Directorio Morado es una red de apoyo que conecta a sobrevivientes de violencia sexual con organizaciones, psicólogas, colectivas y recursos en México y Latinoamérica."
-  structuredData={[faqSchema]}
 >
   <Hero />
   <ResourceCategories />
+  <Statistics />
   <AbortionSupport />
-  <FAQ limit={3} />
-  <CtaSection />
-  <AboutThisDirectory />
+  <FAQ />
 </Layout>
+
+<script>
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const items = document.querySelectorAll<HTMLElement>(".home-reveal");
+
+  if (reduce || !("IntersectionObserver" in window)) {
+    items.forEach((el) => el.classList.add("is-visible"));
+  } else {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          io.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -6% 0px" },
+    );
+    items.forEach((el) => io.observe(el));
+  }
+</script>

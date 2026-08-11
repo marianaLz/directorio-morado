@@ -1,0 +1,91 @@
+---
+import SectionTitle from "../ui/SectionTitle.astro";
+import SectionSubtitle from "../ui/SectionSubtitle.astro";
+import Section from "../ui/Section.astro";
+
+const stats = [
+  {
+    value: "70.1%",
+    label:
+      "De las mujeres de 15 años y más en México ha experimentado al menos una situación de violencia a lo largo de la vida —psicológica, física, sexual, económica o patrimonial—, según la ENDIREH 2021 del INEGI.",
+    bg: "var(--brand-lilac)",
+  },
+  {
+    value: "49.7%",
+    label:
+      "Ha vivido violencia sexual en algún momento de su vida. Es el segundo tipo de violencia más frecuente después de la psicológica (51.6 %), y fue el que más aumentó respecto a 2016.",
+    bg: "var(--brand-sage)",
+  },
+  {
+    value: "12.6%",
+    label:
+      "Sufrió violencia sexual durante la infancia (antes de los 15 años): cerca de 6.4 millones de mujeres. Las personas agresoras más frecuentes suelen ser familiares cercanos.",
+    bg: "var(--brand-lilac)",
+  },
+  {
+    value: "39.9%",
+    label:
+      "De quienes tienen o han tenido pareja ha experimentado violencia en la relación actual o última. La violencia psicológica es la más común en este ámbito (35.4 %).",
+    bg: "var(--brand-green)",
+  },
+  {
+    value: "852",
+    label:
+      "Feminicidios o muertes violentas de mujeres por razón de género registrados en México en 2024, según el monitoreo regional de la CEPAL: en promedio, una cada 10 horas.",
+    bg: "var(--brand-primary)",
+  },
+  {
+    value: "9",
+    label:
+      "Mujeres mueren de forma violenta cada día en el país, al sumar feminicidios y homicidios dolosos de mujeres reportados por el SESNSP en 2024.",
+    bg: "var(--brand-green)",
+  },
+] as const;
+---
+
+<Section
+  id="estadisticos"
+  bg={null}
+  class="bg-gradient-to-b from-[var(--brand-lavender)] to-[var(--brand-white)]"
+  aria-labelledby="stats-title"
+>
+  <div class="mx-auto max-w-5xl px-4 sm:px-6">
+    <div class="home-reveal">
+      <SectionTitle id="stats-title">Estadísticas</SectionTitle>
+      <SectionSubtitle>
+        Según datos de la ENDIREH 2021 del INEGI, CEPAL, Observatorio de Igualdad
+        de Género y SESNSP.
+      </SectionSubtitle>
+    </div>
+
+    <ul
+      class="mt-8 lg:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8 lg:pb-12"
+      role="list"
+    >
+      {
+        stats.map((stat, i) => (
+          <li
+            class:list={[
+              "home-reveal stat-card flex min-h-[224px] flex-col gap-4 rounded-2xl p-4 lg:p-8 sm:min-h-[320px] text-[var(--brand-white)]",
+              (i === 1 || i === 4) && "stat-card--offset",
+            ]}
+            style={`background-color: ${stat.bg}; transition-delay: ${i * 70}ms;`}
+          >
+            <p class="text-6xl font-light leading-none lg:text-8xl">
+              {stat.value}
+            </p>
+            <p class="text-sm leading-relaxed lg:text-base">{stat.label}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p
+      class="home-reveal mt-8 text-center text-xs text-[var(--brand-gray)] lg:mt-16 lg:text-sm"
+    >
+      Fuentes: ENDIREH 2021 (INEGI); CEPAL, Observatorio de Igualdad de Género
+      (feminicidios 2024); SESNSP / CELIG — Cámara de Diputados (muertes
+      violentas de mujeres, 2024).
+    </p>
+  </div>
+</Section>

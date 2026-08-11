@@ -1,66 +1,56 @@
 /**
- * Directorio Morado — semantic design tokens
- * Purple = brand. Contextual colors for resource types and sections.
+ * Directorio Morado — design tokens
+ * Palette: #404793 #B699C3 #2A4726 #D04742 #BDCEBC #4C4A4D #FFFFFF #E9E0ED
+ * Tag colors: cool neutrals distinct from brand fills (no lilac/sage/primary/green reuse).
  */
 
 :root {
-  /* Primary brand */
-  --brand-purple-dark: #260e4c;
-  --brand-purple-deeper: #1f0a3d;
-  --brand-purple-light: #a68cf7;
-  --brand-purple-accent: #5f24af;
-  --brand-purple-accent-hover: #7030c4;
-  --brand-white: #fefeff;
+  /* Typography */
+  --font-sans: 'Sofia Pro', system-ui, sans-serif;
 
-  /* Legacy aliases for gradual migration */
-  --color-bg-top: var(--brand-purple-dark);
-  --color-bg-bottom: var(--brand-purple-deeper);
-  --color-title: var(--brand-purple-light);
-  --color-highlight: var(--brand-white);
-  --color-accent: var(--brand-purple-accent);
-  --color-accent-hover: var(--brand-purple-accent-hover);
-  --color-card-bg: #2d1552;
-  --color-card-border: #3d1f6b;
+  /* Brand palette */
+  --brand-primary: #404793;
+  --brand-lilac: #b699c3;
+  --brand-lavender: #e9e0ed;
+  --brand-green: #2a4726;
+  --brand-red: #d04742;
+  --brand-sage: #bdcebc;
+  --brand-gray: #4c4a4d;
+  --brand-white: #ffffff;
+  --brand-black: #000000;
+  --brand-text: #4c4a4d;
 
-  /* Card — neutral (directory) */
-  --card-bg: #ffffff;
-  --card-text: #1a1a1a;
-  --card-text-muted: #4b5563;
-  --card-border: rgba(0, 0, 0, 0.08);
-  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --card-shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.06);
-
-  /* Reproductive / abortion section */
-  --green-dark: #045230;
-  --green-deep: #053e2f;
-  --green-primary: #23c65e;
-  --green-gradient: linear-gradient(180deg, #053e2f 0%, #045230 100%);
-
-  /* Emergency / crisis */
-  --emergency-red: #e53935;
-  --emergency-dark: #b71c1c;
-  --emergency-gradient: linear-gradient(180deg, #b71c1c 0%, #8b0000 100%);
-
-  /* WhatsApp */
-  --whatsapp-green: #25D366;
-
-  /* Tag colors (contextual) */
-  --tag-psychological-bg: #ede9fe;
-  --tag-psychological-text: #5b21b6;
-  --tag-legal-bg: #dbeafe;
+  /* Tag colors — cool but clearly distinct hues (filters + cards); avoid brand fills */
+  --tag-crisis-bg: #ffe4e6;
+  --tag-crisis-text: #9f1239;
+  --tag-psychological-bg: #e0e7ff;
+  --tag-psychological-text: #312e81;
+  --tag-legal-bg: #bfdbfe;
   --tag-legal-text: #1e40af;
-  --tag-abortion-bg: #dcfce7;
-  --tag-abortion-text: #166534;
-  --tag-government-bg: #f3f4f6;
-  --tag-government-text: #374151;
-  --tag-crisis-bg: #fee2e2;
-  --tag-crisis-text: #b91c1c;
-  --tag-community-bg: #fef3c7;
-  --tag-community-text: #92400e;
+  --tag-abortion-bg: #d8f3ee;
+  --tag-abortion-text: #2a6b63;
+  --tag-reproductive-bg: #d9f0f5;
+  --tag-reproductive-text: #2a6a7a;
+  --tag-government-bg: #e5e7eb;
+  --tag-government-text: #1f2937;
+  --tag-community-bg: #c7d2fe;
+  --tag-community-text: #3730a3;
+  --tag-accompaniment-bg: #f5d0fe;
+  --tag-accompaniment-text: #a21caf;
+  --tag-sexual-health-bg: #bae6fd;
+  --tag-sexual-health-text: #0369a1;
+  --tag-financial-bg: #fef3c7;
+  --tag-financial-text: #92400e;
+  --tag-nutrition-bg: #e8f0d8;
+  --tag-nutrition-text: #4a6235;
+  --tag-medical-bg: #cbd5e1;
+  --tag-medical-text: #1e293b;
+  --tag-associations-bg: #e9d5ff;
+  --tag-associations-text: #6b21a8;
   --tag-population-bg: #fce7f3;
   --tag-population-text: #9d174d;
-  --tag-general-bg: #f5f3ff;
-  --tag-general-text: #5b21b6;
+  --tag-meta-bg: #f3f4f6;
+  --tag-meta-text: #4b5563;
 
   /* Spacing scale (8px base) */
   --space-1: 8px;

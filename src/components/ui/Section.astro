@@ -1,0 +1,30 @@
+---
+import { brandColorVar, sectionPaddingClass, type BrandColor } from './sectionHeadingClasses';
+
+interface Props {
+  /** Brand palette key for background. Default: white. Pass `null` for custom bg (e.g. gradient via class). */
+  bg?: BrandColor | null;
+  id?: string;
+  'aria-labelledby'?: string;
+  class?: string;
+}
+
+const {
+  bg = 'white',
+  id,
+  'aria-labelledby': ariaLabelledby,
+  class: className = '',
+} = Astro.props;
+
+const classes = [sectionPaddingClass, className].filter(Boolean).join(' ');
+const style = bg == null ? undefined : `background-color: ${brandColorVar(bg)};`;
+---
+
+<section
+  id={id}
+  class={classes}
+  style={style}
+  aria-labelledby={ariaLabelledby}
+>
+  <slot />
+</section>

@@ -7,9 +7,10 @@ import {
   buildDatasetSchema,
   buildCrisisServiceSchema,
 } from "../data/schema";
-import AnonymousNote from "../components/AnonymousNote.astro";
-import ShareButtons from "../components/ShareButtons.astro";
 import EmergencyBanner from "../components/EmergencyBanner.astro";
+import ButtonSolid from "../components/ui/ButtonSolid.astro";
+import Isotype from "../assets/svg/isotype.astro";
+import Dimo from "../assets/svg/dimo.astro";
 
 interface Props {
   title: string;
@@ -45,72 +46,62 @@ const allStructuredData = [...defaultStructuredData, ...pageStructuredData];
   structuredData={allStructuredData}
 >
   <EmergencyBanner />
-  <header class="border-b border-white/10 bg-[var(--color-bg-top)] shadow-sm">
-    <nav
-      class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:py-4 sm:px-6"
-      aria-label="Navegación"
+
+  <nav
+    class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:py-4 sm:px-6"
+    aria-label="Navegación"
+  >
+    <a
+      href="/"
+      class="text-lg font-semibold min-h-[44px] flex items-center gap-1"
     >
-      <a
-        href="/"
-        class="text-lg font-semibold min-h-[44px] flex items-center gap-1"
-      >
-        <span class="text-[var(--color-title)]">Directorio</span>
-        <span class="text-[var(--color-highlight)]">Morado</span>
-      </a>
-      <a
-        href="/directorio"
-        class="rounded-xl bg-[var(--color-accent)] px-5 py-3 text-base font-medium text-[var(--color-highlight)] hover:bg-[var(--color-accent-hover)] focus:outline-none focus:ring-2 focus:ring-brand-title min-h-[48px] min-w-[140px] flex items-center justify-center transition-colors"
-      >
-        Ver directorio
-      </a>
-    </nav>
-  </header>
+      <Isotype />
+    </a>
+    <ButtonSolid href="/directorio" class="min-w-[140px]">
+      Ver directorio
+    </ButtonSolid>
+  </nav>
+
   <main id="main">
     <slot />
   </main>
-  <footer
-    class="py-12 sm:py-20 bg-[var(--color-bg-top)] border-t border-white/10"
-  >
-    <div class="mx-auto max-w-6xl px-4 sm:px-6 space-y-6">
-      <AnonymousNote />
+
+  <footer class="pt-48 lg:pt-96 pb-8 bg-[var(--brand-primary)]">
+    <div
+      class="mx-auto max-w-6xl px-4 sm:px-6 space-y-12 text-[var(--brand-white)]"
+    >
+      <div
+        class="flex flex-col lg:flex-row gap-12 lg:items-center justify-between"
+      >
+        <div class="leading-[2] text-base" role="note" aria-label="Privacidad">
+          <p class="font-semibold">Estás en un espacio seguro</p>
+          <p>No recopilamos datos.</p>
+          <p>Sin registro.</p>
+          <p>Nadie sabrá que estuviste aquí.</p>
+        </div>
+
+        <div class="w-full max-w-lg">
+          <Dimo color="var(--brand-white)" />
+        </div>
+      </div>
+
       <div>
         <nav
-          class="pt-4 border-t border-white/10"
+          class="pt-10 border-t border-white/10 flex gap-2 flex-wrap"
           aria-label="Enlaces internos"
         >
-          <a
-            href="/"
-            class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
-          >
-            Inicio
-          </a>
-          <span class="text-white/50 mx-2" aria-hidden="true">·</span>
-          <a
-            href="/directorio"
-            class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
-          >
+          <a href="/" class="text-sm font-medium underline"> Inicio </a>
+          <span class="text-brand-white/50 mx-2" aria-hidden="true">·</span>
+          <a href="/directorio" class="text-sm font-medium underline">
             Ver directorio completo
           </a>
-          <span class="text-white/50 mx-2" aria-hidden="true">·</span>
-          <a
-            href="/sugerir-recurso"
-            class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
-          >
+          <span class="text-brand-white/50 mx-2" aria-hidden="true">·</span>
+          <a href="/sugerir-recurso" class="text-sm font-medium underline">
             Sugerir un recurso
           </a>
-          <span class="text-white/50 mx-2" aria-hidden="true">·</span>
-          <a
-            href="/preguntas-frecuentes"
-            class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
-          >
+          <span class="text-brand-white/50 mx-2" aria-hidden="true">·</span>
+          <a href="/preguntas-frecuentes" class="text-sm font-medium underline">
             Preguntas frecuentes
-          </a>
-          <span class="text-white/50 mx-2" aria-hidden="true">·</span>
-          <a
-            href="/sobre-directorio-morado"
-            class="text-sm font-medium text-[var(--color-title)] hover:text-[var(--color-highlight)] underline"
-          >
-            Sobre Directorio Morado
           </a>
         </nav>
       </div>

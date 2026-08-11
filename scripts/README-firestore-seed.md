@@ -7,8 +7,8 @@ La colección **directory** en Firestore es la fuente de verdad del directorio. 
 1. **Editas datos** en Firestore (consola, formulario futuro o script).
 2. **Build** ejecuta `export-from-firestore.mjs`, que:
    - Lee la colección `directory`
-   - Escribe `public/directory.json`, `public/api/resources.json`, `src/data/directory-export.json` y `scripts/directory-by-category.json`
-3. **Astro build** usa `directory-export.json` para el LD+JSON (SEO) de la página del directorio.
+   - Escribe `public/directory.json`, `public/api/resources.json` y `scripts/directory-by-category.json`
+3. **Astro build** usa `public/directory.json` para el LD+JSON (SEO) de la página del directorio.
 4. En **runtime**, la página del directorio consume Firestore directamente.
 
 ## Credenciales para el build
@@ -70,4 +70,4 @@ Para que el **build** exporte desde Firestore en Netlify:
 4. Marca la variable como **sensitive** si quieres que no se muestre en los logs.
 5. **Save** y vuelve a desplegar (Trigger deploy).
 
-Si no configuras esta variable, el build **no fallará**: se usará el `directory-export.json` que esté en el repo (por defecto `[]`), así que el directorio puede salir vacío hasta que añadas la variable.
+Si no configuras esta variable, el build **no fallará**: se usará el `public/directory.json` que esté en el repo (por defecto `[]`), así que el SEO puede salir vacío hasta que añadas la variable.

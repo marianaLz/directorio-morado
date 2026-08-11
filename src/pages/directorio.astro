@@ -1,12 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import AnonymousNote from "../components/AnonymousNote.astro";
 import ShareButtons from "../components/ShareButtons.astro";
 import DirectoryFromFirestore from "../components/directory/DirectoryFromFirestore";
 import BackToTop from "../components/directory/BackToTop";
-import directoryExport from "../data/directory-export.json";
+import SectionTitle from "../components/ui/SectionTitle.astro";
+import SectionSubtitle from "../components/ui/SectionSubtitle.astro";
+import directoryExport from "../../public/directory.json";
 import type { DirectoryEntry } from "../types/directory";
 import { getBaseUrl, buildDirectoryEntrySchema } from "../data/schema";
+import Section from "../components/ui/Section.astro";
 
 // Structured data / LD+JSON desde export de Firestore (generado en build por export-from-firestore.mjs)
 const entriesForSchema = directoryExport as DirectoryEntry[];
@@ -24,27 +26,22 @@ const directoryStructuredData = entriesForSchema.map((entry) =>
   description="Directorio Morado es una red de apoyo que conecta a sobrevivientes de violencia sexual con organizaciones, psicólogas, colectivas y recursos en México y Latinoamérica."
   structuredData={directoryStructuredData}
 >
-  <div class="min-h-[calc(100vh-432px)] bg-[#f6f6fb]">
-    <div class="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
-      <header class="mb-8">
-        <h1 class="text-2xl font-bold text-[var(--card-text)] sm:text-3xl">
-          Directorio de apoyo
-        </h1>
-        <p class="mt-2 text-[var(--card-text-muted)] text-base leading-[1.6]">
+  <Section>
+    <div class="mx-auto max-w-5xl px-4 sm:px-6">
+      <header class="mb-8 lg:mb-16">
+        <SectionTitle as="h1">Directorio de apoyo</SectionTitle>
+        <SectionSubtitle class="mb-4 lg:mb-8">
           Red de apoyo · MX. Hay personas que pueden ayudarte.
-        </p>
-        <div class="mt-4 flex flex-wrap items-center gap-4">
-          <ShareButtons
-            title="Directorio Morado — Red de apoyo · MX"
-            url={`${baseUrl}/directorio`}
-          />
-        </div>
-      </header>
+        </SectionSubtitle>
 
-      <AnonymousNote />
+        <ShareButtons
+          title="Directorio Morado — Red de apoyo · MX"
+          url={`${baseUrl}/directorio`}
+        />
+      </header>
 
       <DirectoryFromFirestore client:load />
       <BackToTop client:load />
     </div>
-  </div>
+  </Section>
 </Layout>

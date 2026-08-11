@@ -1,55 +1,77 @@
 ---
+import ButtonOutline from "./ui/ButtonOutline.astro";
+
 interface Props {
   title?: string;
+  text?: string;
   url?: string;
 }
 
-const { title = "Directorio Morado — Red de apoyo · MX", url } = Astro.props;
+const {
+  title = "Directorio Morado — Red de apoyo · MX",
+  text = "Directorio de recursos de apoyo para sobrevivientes de violencia sexual en México.",
+  url,
+} = Astro.props;
 const shareUrl = url ?? Astro.url.href;
-const encodedUrl = encodeURIComponent(shareUrl);
-const encodedTitle = encodeURIComponent(title);
 ---
 
 <div
-  class="flex flex-wrap items-center gap-2"
-  role="group"
-  aria-label="Compartir directorio"
+  class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-8"
 >
-  <a
-    href={`https://wa.me/?text=${encodedTitle}%20${encodedUrl}`}
-    target="_blank"
-    rel="noopener noreferrer"
-    class="inline-flex items-center gap-2 rounded-xl border-2 border-[var(--color-accent)] bg-transparent px-4 py-2 text-sm font-medium text-[var(--color-accent)] hover:bg-white/10 transition-colors min-h-[44px]"
-    aria-label="Compartir por WhatsApp"
-  >
-    <span aria-hidden="true">Compartir por WhatsApp</span>
-  </a>
-  <button
+  <div class="max-w-xl">
+    <p class="text-base font-semibold text-[var(--brand-primary)] lg:text-lg">
+      Estás en un espacio seguro
+    </p>
+    <p class="mt-1 text-sm lg:text-base">
+      No recopilamos datos. Sin registro. Nadie sabrá que estuviste aquí.
+    </p>
+  </div>
+
+  <ButtonOutline
     type="button"
-    class="copy-link-btn inline-flex items-center gap-2 rounded-xl bg-[var(--color-accent)] px-4 py-2 text-sm font-medium text-[var(--color-highlight)] hover:bg-[var(--color-accent-hover)] transition-colors cursor-pointer min-h-[44px]"
-    aria-label="Copiar enlace"
+    class="share-native-btn shrink-0 cursor-pointer text-sm"
+    aria-label="Compartir directorio"
+    data-title={title}
+    data-text={text}
     data-url={shareUrl}
   >
-    Copiar enlace
-  </button>
+    Compartir
+  </ButtonOutline>
 </div>
 
 <script>
-  document.querySelectorAll(".copy-link-btn").forEach((btn) => {
+  document.querySelectorAll(".share-native-btn").forEach((btn) => {
     btn.addEventListener("click", async () => {
-      const url =
-        (btn as HTMLButtonElement).dataset.url ?? window.location.href;
+      const el = btn as HTMLButtonElement;
+      const shareData = {
+        title: el.dataset.title ?? document.title,
+        text: el.dataset.text ?? "",
+        url: el.dataset.url ?? window.location.href,
+      };
+
+      const original = "Compartir";
+      const setLabel = (label: string) => {
+        el.textContent = label;
+      };
+
       try {
-        await navigator.clipboard.writeText(url);
-        const label = btn.getAttribute("aria-label");
-        btn.textContent = "¡Enlace copiado!";
-        btn.setAttribute("aria-label", "Enlace copiado al portapapeles");
+        if (typeof navigator.share === "function") {
+          await navigator.share(shareData);
+          return;
+        }
+
+        await navigator.clipboard.writeText(shareData.url);
+        setLabel("¡Enlace copiado!");
+        el.setAttribute("aria-label", "Enlace copiado al portapapeles");
         setTimeout(() => {
-          btn.textContent = "Copiar enlace";
-          if (label) btn.setAttribute("aria-label", label);
+          setLabel(original);
+          el.setAttribute("aria-label", "Compartir directorio");
         }, 2000);
-      } catch {
-        btn.textContent = "No se pudo copiar";
+      } catch (err) {
+        // User cancelled the native share sheet — ignore
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        setLabel("No se pudo compartir");
+        setTimeout(() => setLabel(original), 2000);
       }
     });
   });

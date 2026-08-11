@@ -1,53 +1,38 @@
 ---
-import { faqItems } from "../../data/faq";
-
-interface Props {
-  /** Max number of questions to show. If set, a "Ver todas" link is shown. */
-  limit?: number;
-}
-
-const { limit } = Astro.props;
-const items = limit ? faqItems.slice(0, limit) : faqItems;
-const showAllLink = limit != null && faqItems.length > limit;
+import { faqItemsHome } from "../../data/faq";
+import SectionTitle from "../ui/SectionTitle.astro";
+import SectionSubtitle from "../ui/SectionSubtitle.astro";
+import Section from "../ui/Section.astro";
+import Link from "../ui/Link.astro";
 ---
 
-<section
-  id="preguntas-frecuentes"
-  class="py-12 sm:py-20 bg-white"
-  aria-labelledby="faq-title"
->
+<Section id="preguntas-frecuentes" bg="white" aria-labelledby="faq-title">
   <div class="mx-auto max-w-5xl px-4 sm:px-6">
-    <h2 id="faq-title" class="text-2xl font-bold text-[var(--card-text)] sm:text-3xl text-center mb-10">
-      Preguntas frecuentes
-    </h2>
-    <dl class="space-y-4">
+    <div class="home-reveal">
+      <SectionTitle id="faq-title">Preguntas frecuentes</SectionTitle>
+      <SectionSubtitle>
+        Respuestas claras sobre apoyo, denuncia y emergencias.
+      </SectionSubtitle>
+    </div>
+    <dl class="space-y-4 lg:space-y-8 mt-8 lg:mt-16">
       {
-        items.map((faq) => (
+        faqItemsHome.map((faq, i) => (
           <div
-            class="rounded-xl border border-[var(--card-border)] bg-white p-5 transition-transform duration-200 hover:-translate-y-0.5"
-            style="box-shadow: var(--card-shadow-soft);"
+            class="home-reveal rounded-2xl border border-[var(--brand-lilac)] p-4 lg:p-6"
+            style={`transition-delay: ${i * 80}ms;`}
           >
-            <dt id={faq.id} class="text-lg font-semibold text-[var(--card-text)]">
+            <dt id={faq.id} class="text-lg font-semibold">
               {faq.question}
             </dt>
-            <dd class="mt-3 text-base leading-[1.6] text-[var(--card-text-muted)]" aria-labelledby={faq.id}>
+            <dd class="mt-2" aria-labelledby={faq.id}>
               {faq.answer}
             </dd>
           </div>
         ))
       }
     </dl>
-    {
-      showAllLink && (
-        <p class="mt-8 text-center">
-          <a
-            href="/preguntas-frecuentes"
-            class="text-[var(--brand-purple-accent)] font-semibold underline hover:text-[var(--brand-purple-deeper)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 rounded"
-          >
-            Ver todas las preguntas
-          </a>
-        </p>
-      )
-    }
+    <div class="home-reveal mt-10 flex justify-center" style="transition-delay: 240ms;">
+      <Link href="/preguntas-frecuentes">Ver todas las preguntas</Link>
+    </div>
   </div>
-</section>
+</Section>

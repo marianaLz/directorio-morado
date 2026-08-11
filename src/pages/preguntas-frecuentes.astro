@@ -1,8 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import FAQ from "../components/landing/FAQ.astro";
-import { buildFAQPageSchema } from "../data/schema";
+import Section from "../components/ui/Section.astro";
+import SectionTitle from "../components/ui/SectionTitle.astro";
+import SectionSubtitle from "../components/ui/SectionSubtitle.astro";
 import { faqItems } from "../data/faq";
+import { buildFAQPageSchema } from "../data/schema";
 
 const faqSchema = buildFAQPageSchema(
   faqItems.map((item) => ({ name: item.question, text: item.answer })),
@@ -10,11 +12,35 @@ const faqSchema = buildFAQPageSchema(
 ---
 
 <Layout
-  title="Preguntas frecuentes | Directorio Morado"
-  description="Preguntas frecuentes sobre el Directorio Morado: apoyo para sobrevivientes de violencia sexual en México."
+  title="Preguntas frecuentes — Directorio Morado"
+  description="Respuestas sobre Directorio Morado: qué es, para quién es, apoyo psicológico, denuncia, cómo sugerir recursos y emergencias."
   structuredData={[faqSchema]}
 >
-  <div class="min-h-[calc(100vh-432px)] bg-[#f6f6fb]">
-    <FAQ />
-  </div>
+  <Section bg="white" aria-labelledby="faq-page-title">
+    <div class="mx-auto max-w-5xl px-4 sm:px-6">
+      <header class="mb-8">
+        <SectionTitle as="h1" id="faq-page-title"
+          >Preguntas frecuentes</SectionTitle
+        >
+        <SectionSubtitle>
+          Respuestas claras sobre el directorio, apoyo, denuncia y emergencias.
+        </SectionSubtitle>
+      </header>
+
+      <dl class="space-y-4 lg:space-y-8">
+        {
+          faqItems.map((faq) => (
+            <div class="rounded-2xl border border-[var(--brand-lilac)] p-4 lg:p-6">
+              <dt id={faq.id} class="text-lg font-semibold">
+                {faq.question}
+              </dt>
+              <dd class="mt-2" aria-labelledby={faq.id}>
+                {faq.answer}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </Section>
 </Layout>

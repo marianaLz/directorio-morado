@@ -1,45 +1,45 @@
 ---
-
+import Dimo from "../../assets/svg/dimo.astro";
+import ButtonSolid from "../ui/ButtonSolid.astro";
+import ButtonOutline from "../ui/ButtonOutline.astro";
+import SectionSubtitle from "../ui/SectionSubtitle.astro";
+import Section from "../ui/Section.astro";
 ---
 
-<section
-  id="hero"
-  class="relative overflow-hidden py-12 sm:py-20"
-  style="background: linear-gradient(180deg, #260e4c 0%, #1f0a3d 100%);"
-  aria-labelledby="hero-title"
->
-  <div class="mx-auto max-w-4xl px-4 text-center sm:px-6">
+<Section id="hero" bg="white" aria-labelledby="hero-title">
+  <div
+    class="mx-auto max-w-4xl px-4 text-center sm:px-6 flex items-center justify-center flex-col"
+  >
+    <div class="home-fade-up w-full max-w-64 lg:max-w-80 mx-auto">
+      <Dimo />
+    </div>
     <h1
       id="hero-title"
-      class="text-3xl font-bold tracking-tight text-[var(--color-highlight)] sm:text-4xl md:text-5xl"
+      class="home-fade-up home-delay-1 text-2xl font-black text-[var(--brand-gray)] lg:text-3xl uppercase tracking-wide mt-4"
     >
       Directorio Morado
     </h1>
-    <p class="mt-4 text-xl font-medium text-[var(--color-title)] sm:text-2xl">
+    <p
+      class="home-fade-up home-delay-2 my-6 text-xl font-bold text-[var(--brand-lilac)] lg:text-2xl"
+    >
       Red de apoyo · MX
     </p>
-    <p class="mt-6 text-base leading-[1.6] text-[var(--color-highlight)]/90">
-      Directorio de recursos de apoyo para sobrevivientes de violencia sexual en
-      México.
-    </p>
-    <p
-      class="mt-4 text-base font-medium leading-[1.6] text-[var(--color-highlight)]/95"
+    <div class="home-fade-up home-delay-3">
+      <SectionSubtitle class="mt-0">
+        Directorio de recursos de apoyo para sobrevivientes de violencia sexual
+        en México.
+      </SectionSubtitle>
+      <SectionSubtitle class="mt-0">
+        No estás solx. Hay personas que pueden ayudarte.
+      </SectionSubtitle>
+    </div>
+    <div
+      class="home-fade-up home-delay-4 mt-10 flex flex-col gap-4 lg:gap-6 sm:flex-row sm:justify-center"
     >
-      No estás solx. Hay personas que pueden ayudarte.
-    </p>
-    <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center sm:gap-4">
-      <a
-        href="/directorio"
-        class="inline-flex min-h-[48px] w-full items-center justify-center rounded-xl bg-[#5f24af] px-5 py-3 text-base font-semibold text-white shadow-lg transition-colors hover:bg-[#7030c4] focus:outline-none focus:ring-4 focus:ring-[var(--color-title)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg-top)] sm:w-auto"
-      >
-        Explorar directorio
-      </a>
-      <a
-        href="/sugerir-recurso"
-        class="inline-flex min-h-[48px] w-full items-center justify-center rounded-xl border-2 border-[var(--color-title)] bg-transparent px-5 py-3 text-base font-semibold text-[var(--color-highlight)] transition-colors hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-[var(--color-title)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg-top)] sm:w-auto"
-      >
+      <ButtonSolid href="/directorio"> Explorar directorio </ButtonSolid>
+      <ButtonOutline href="/sugerir-recurso">
         Sugerir un recurso
-      </a>
+      </ButtonOutline>
     </div>
   </div>
-</section>
+</Section>

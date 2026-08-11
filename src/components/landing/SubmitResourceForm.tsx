@@ -1,31 +1,39 @@
-import { useState } from 'react';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
-import type { SupportType, PopulationType, CostType } from '../../types/directory';
+import { useState } from "react";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../../lib/firebase";
+import type {
+  SupportType,
+  PopulationType,
+  CostType,
+} from "../../types/directory";
 import {
   SUPPORT_TYPES,
   POPULATION_OPTIONS,
   COST_OPTIONS,
   COUNTRY_OPTIONS,
   getSupportTypeLabel,
-} from '../../data/formOptions';
+} from "../../data/formOptions";
+import ButtonSolid from "../ui/ButtonSolid";
+import SectionTitle from "../ui/SectionTitle";
+import SectionSubtitle from "../ui/SectionSubtitle";
+import Section from "../ui/Section";
 
-const PENDING_COLLECTION = 'directory_pending';
+const PENDING_COLLECTION = "directory_pending";
 
-type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
+type FormStatus = "idle" | "submitting" | "success" | "error";
 
 const emptyForm = {
-  name: '',
-  description: '',
-  instagram: '',
-  website: '',
-  phone: '',
-  whatsapp: '',
-  location: '',
-  country: '',
-  countryOther: '',
+  name: "",
+  description: "",
+  instagram: "",
+  website: "",
+  phone: "",
+  whatsapp: "",
+  location: "",
+  country: "",
+  countryOther: "",
   types: [] as SupportType[],
-  cost: '' as CostType | '',
+  cost: "" as CostType | "",
   population: [] as PopulationType[],
   online: true,
   inPerson: false,
@@ -34,7 +42,7 @@ const emptyForm = {
 function validateWebsite(url: string): boolean {
   if (!url.trim()) return true;
   try {
-    new URL(url.startsWith('http') ? url : `https://${url}`);
+    new URL(url.startsWith("http") ? url : `https://${url}`);
     return true;
   } catch {
     return false;
@@ -43,20 +51,31 @@ function validateWebsite(url: string): boolean {
 
 export default function SubmitResourceForm() {
   const [form, setForm] = useState(emptyForm);
-  const [status, setStatus] = useState<FormStatus>('idle');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [status, setStatus] = useState<FormStatus>("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const update = (key: keyof typeof form, value: string | boolean | SupportType[] | PopulationType[] | CostType | undefined) => {
+  const update = (
+    key: keyof typeof form,
+    value:
+      | string
+      | boolean
+      | SupportType[]
+      | PopulationType[]
+      | CostType
+      | undefined,
+  ) => {
     setForm((prev) => ({ ...prev, [key]: value }));
-    setErrorMessage('');
+    setErrorMessage("");
   };
 
   const toggleType = (t: SupportType) => {
     setForm((prev) => ({
       ...prev,
-      types: prev.types.includes(t) ? prev.types.filter((x) => x !== t) : [...prev.types, t],
+      types: prev.types.includes(t)
+        ? prev.types.filter((x) => x !== t)
+        : [...prev.types, t],
     }));
-    setErrorMessage('');
+    setErrorMessage("");
   };
 
   const togglePopulation = (p: PopulationType) => {
@@ -70,128 +89,148 @@ export default function SubmitResourceForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorMessage('');
+    setErrorMessage("");
 
     const name = form.name.trim();
     const description = form.description.trim();
-    const country = form.country === 'Otro' ? form.countryOther.trim() : form.country;
+    const country =
+      form.country === "Otro" ? form.countryOther.trim() : form.country;
 
     if (!name) {
-      setErrorMessage('El nombre del recurso o organización es obligatorio.');
+      setErrorMessage("El nombre del recurso o organización es obligatorio.");
       return;
     }
     if (!description) {
-      setErrorMessage('La descripción es obligatoria.');
+      setErrorMessage("La descripción es obligatoria.");
       return;
     }
     if (form.types.length === 0) {
-      setErrorMessage('Selecciona al menos un tipo de apoyo.');
+      setErrorMessage("Selecciona al menos un tipo de apoyo.");
       return;
     }
     if (!form.cost) {
-      setErrorMessage('Indica el costo.');
+      setErrorMessage("Indica el costo.");
       return;
     }
     if (!country) {
-      setErrorMessage('Indica el país.');
+      setErrorMessage("Indica el país.");
       return;
     }
     if (!form.location.trim()) {
-      setErrorMessage('Indica la ubicación.');
+      setErrorMessage("Indica la ubicación.");
       return;
     }
     if (!form.online && !form.inPerson) {
-      setErrorMessage('Indica al menos una modalidad (En línea o Presencial).');
+      setErrorMessage("Indica al menos una modalidad (En línea o Presencial).");
       return;
     }
     if (!validateWebsite(form.website)) {
-      setErrorMessage('La URL del sitio web no es válida.');
+      setErrorMessage("La URL del sitio web no es válida.");
       return;
     }
 
-    setStatus('submitting');
+    setStatus("submitting");
 
     try {
       await addDoc(collection(db, PENDING_COLLECTION), {
-        status: 'pending',
+        status: "pending",
         createdAt: serverTimestamp(),
         name,
         description,
         instagram: form.instagram.trim() || null,
-        website: form.website.trim() ? (form.website.trim().startsWith('http') ? form.website.trim() : `https://${form.website.trim()}`) : null,
+        website: form.website.trim()
+          ? form.website.trim().startsWith("http")
+            ? form.website.trim()
+            : `https://${form.website.trim()}`
+          : null,
         phone: form.phone.trim() || null,
         whatsapp: form.whatsapp.trim() || null,
-        location: form.location.trim() || '',
+        location: form.location.trim() || "",
         country,
-        state: '',
-        city: '',
+        state: "",
+        city: "",
         type: form.types,
         cost: form.cost,
-        population: form.population.length ? form.population : ['general public'],
+        population: form.population.length
+          ? form.population
+          : ["general public"],
         online: form.online,
         inPerson: form.inPerson,
       });
-      setStatus('success');
+      setStatus("success");
       setForm(emptyForm);
     } catch (err) {
-      setStatus('error');
-      setErrorMessage(err instanceof Error ? err.message : 'No se pudo enviar. Intenta de nuevo.');
+      setStatus("error");
+      setErrorMessage(
+        err instanceof Error
+          ? err.message
+          : "No se pudo enviar. Intenta de nuevo.",
+      );
     }
   };
 
   const inputClass =
-    'mt-1 block w-full min-h-[44px] rounded-xl border border-[var(--card-border)] bg-white px-4 py-2.5 text-base text-[var(--card-text)] placeholder-[var(--card-text-muted)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2';
-  const labelClass = 'block text-sm font-medium text-[var(--card-text)]';
+    "mt-1 block w-full min-h-[44px] rounded-xl border border-[var(--brand-lilac)] bg-[var(--brand-white)] px-4 py-2.5 text-base text-[var(--brand-text)] placeholder-[var(--brand-text)] focus:border-[var(--brand-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:ring-offset-2";
+  const labelClass = "block text-sm font-medium text-[var(--brand-text)]";
 
-  if (status === 'success') {
+  if (status === "success") {
     return (
       <div
-        className="rounded-xl border border-emerald-200 bg-emerald-50 p-6 text-center text-emerald-800"
+        className="rounded-2xl border border-[var(--brand-lilac)] bg-[var(--brand-lilac)] p-6 text-center text-[var(--brand-green)]"
         role="status"
       >
         <p className="font-semibold">Solicitud enviada</p>
         <p className="mt-2 text-sm">
-          Tu propuesta será revisada antes de publicarse en el directorio. No es necesario hacer nada más.
+          Tu propuesta será revisada antes de publicarse en el directorio. No es
+          necesario hacer nada más.
         </p>
       </div>
     );
   }
 
   return (
-    <section
-      id="sugerir-recurso"
-      aria-labelledby="form-title"
-    >
-      <div className="mx-auto">
-        <h1 id="form-title" className="text-2xl font-bold text-[var(--card-text)] sm:text-3xl">
+    <Section id="sugerir-recurso" bg="white" aria-labelledby="form-title">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6">
+        <SectionTitle as="h1" id="form-title">
           Sugerir un recurso
-        </h1>
-        <p className="mt-2 text-[var(--card-text-muted)] text-base leading-[1.6] mb-8">
-          Propón una organización, colectiva o profesional para el directorio. Las solicitudes se revisan antes de publicarse.
-        </p>
+        </SectionTitle>
+        <SectionSubtitle className="mb-8">
+          Propón una organización, colectiva o profesional para el directorio.
+          Las solicitudes se revisan antes de publicarse.
+        </SectionSubtitle>
 
-        <form onSubmit={handleSubmit} className="space-y-6 rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] p-6 shadow-sm">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-6 rounded-2xl border border-[var(--brand-lilac)] bg-[var(--brand-white)] p-6 shadow-sm"
+        >
           {errorMessage && (
-            <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">
+            <p
+              className="rounded-xl bg-[var(--brand-red)] px-4 py-3 text-sm text-[var(--brand-white)]"
+              role="alert"
+            >
               {errorMessage}
             </p>
           )}
-          {status === 'error' && !errorMessage && (
-            <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">
+          {status === "error" && !errorMessage && (
+            <p
+              className="rounded-xl bg-[var(--brand-red)] px-4 py-3 text-sm text-[var(--brand-white)]"
+              role="alert"
+            >
               No se pudo enviar. Revisa tu conexión e intenta de nuevo.
             </p>
           )}
 
           <div>
             <label htmlFor="name" className={labelClass}>
-              Nombre del recurso o organización <span className="text-red-600">*</span>
+              Nombre del recurso o organización{" "}
+              <span className="text-[var(--brand-red)]">*</span>
             </label>
             <input
               id="name"
               type="text"
               required
               value={form.name}
-              onChange={(e) => update('name', e.target.value)}
+              onChange={(e) => update("name", e.target.value)}
               className={inputClass}
               placeholder="Ej. Colectiva X, Psic. María López"
             />
@@ -199,14 +238,14 @@ export default function SubmitResourceForm() {
 
           <div>
             <label htmlFor="description" className={labelClass}>
-              Descripción <span className="text-red-600">*</span>
+              Descripción <span className="text-[var(--brand-red)]">*</span>
             </label>
             <textarea
               id="description"
               required
               rows={4}
               value={form.description}
-              onChange={(e) => update('description', e.target.value)}
+              onChange={(e) => update("description", e.target.value)}
               className={inputClass}
               placeholder="Qué tipo de apoyo ofrecen, a quién va dirigido, si es gratuito o con costo..."
             />
@@ -214,23 +253,29 @@ export default function SubmitResourceForm() {
 
           <div className="grid gap-6 sm:grid-cols-2">
             <div>
-              <label htmlFor="instagram" className={labelClass}>Instagram (usuario)</label>
+              <label htmlFor="instagram" className={labelClass}>
+                Instagram (usuario)
+              </label>
               <input
                 id="instagram"
                 type="text"
                 value={form.instagram}
-                onChange={(e) => update('instagram', e.target.value.replace('@', ''))}
+                onChange={(e) =>
+                  update("instagram", e.target.value.replace("@", ""))
+                }
                 className={inputClass}
                 placeholder="usuario"
               />
             </div>
             <div>
-              <label htmlFor="website" className={labelClass}>Sitio web</label>
+              <label htmlFor="website" className={labelClass}>
+                Sitio web
+              </label>
               <input
                 id="website"
                 type="url"
                 value={form.website}
-                onChange={(e) => update('website', e.target.value)}
+                onChange={(e) => update("website", e.target.value)}
                 className={inputClass}
                 placeholder="https://..."
               />
@@ -239,22 +284,26 @@ export default function SubmitResourceForm() {
 
           <div className="grid gap-6 sm:grid-cols-2">
             <div>
-              <label htmlFor="phone" className={labelClass}>Teléfono</label>
+              <label htmlFor="phone" className={labelClass}>
+                Teléfono
+              </label>
               <input
                 id="phone"
                 type="tel"
                 value={form.phone}
-                onChange={(e) => update('phone', e.target.value)}
+                onChange={(e) => update("phone", e.target.value)}
                 className={inputClass}
               />
             </div>
             <div>
-              <label htmlFor="whatsapp" className={labelClass}>WhatsApp (número con lada)</label>
+              <label htmlFor="whatsapp" className={labelClass}>
+                WhatsApp (número con lada)
+              </label>
               <input
                 id="whatsapp"
                 type="tel"
                 value={form.whatsapp}
-                onChange={(e) => update('whatsapp', e.target.value)}
+                onChange={(e) => update("whatsapp", e.target.value)}
                 className={inputClass}
                 placeholder="Ej. 5215512345678"
               />
@@ -264,44 +313,48 @@ export default function SubmitResourceForm() {
           <div className="grid gap-6 sm:grid-cols-2">
             <div>
               <label htmlFor="country" className={labelClass}>
-                País <span className="text-red-600">*</span>
+                País <span className="text-[var(--brand-red)]">*</span>
               </label>
               <select
                 id="country"
                 required
                 value={form.country}
-                onChange={(e) => update('country', e.target.value)}
+                onChange={(e) => update("country", e.target.value)}
                 className={inputClass}
               >
                 <option value="">Selecciona</option>
                 {COUNTRY_OPTIONS.map((c) => (
-                  <option key={c.value} value={c.value}>{c.label}</option>
+                  <option key={c.value} value={c.value}>
+                    {c.label}
+                  </option>
                 ))}
               </select>
             </div>
             <div>
               <label htmlFor="location" className={labelClass}>
-                Ubicación <span className="text-red-600">*</span>
+                Ubicación <span className="text-[var(--brand-red)]">*</span>
               </label>
               <input
                 id="location"
                 type="text"
                 required
                 value={form.location}
-                onChange={(e) => update('location', e.target.value)}
+                onChange={(e) => update("location", e.target.value)}
                 className={inputClass}
                 placeholder="Ej. Nacional, CDMX, Guadalajara"
               />
             </div>
           </div>
-          {form.country === 'Otro' && (
+          {form.country === "Otro" && (
             <div>
-              <label htmlFor="countryOther" className={labelClass}>Especificar país</label>
+              <label htmlFor="countryOther" className={labelClass}>
+                Especificar país
+              </label>
               <input
                 id="countryOther"
                 type="text"
                 value={form.countryOther}
-                onChange={(e) => update('countryOther', e.target.value)}
+                onChange={(e) => update("countryOther", e.target.value)}
                 className={inputClass}
               />
             </div>
@@ -309,7 +362,8 @@ export default function SubmitResourceForm() {
 
           <div>
             <span className={labelClass}>
-              Tipo de apoyo <span className="text-red-600">*</span> (al menos uno)
+              Tipo de apoyo <span className="text-[var(--brand-red)]">*</span>{" "}
+              (al menos uno)
             </span>
             <div className="mt-2 flex flex-wrap gap-2">
               {SUPPORT_TYPES.map((t) => {
@@ -319,10 +373,10 @@ export default function SubmitResourceForm() {
                     key={t}
                     type="button"
                     onClick={() => toggleType(t)}
-                    className={`inline-flex items-center rounded-full px-3 py-1.5 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 ${
+                    className={`inline-flex items-center rounded-xl px-3 py-1.5 text-sm font-medium transition-colors ${
                       selected
-                        ? 'bg-[var(--brand-purple-accent)] text-white'
-                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                        ? "bg-[var(--brand-lilac)] text-[var(--brand-white)]"
+                        : "bg-[var(--brand-lavender)] text-[var(--brand-black)] hover:bg-[var(--brand-lilac)]"
                     }`}
                   >
                     {getSupportTypeLabel(t)}
@@ -335,40 +389,44 @@ export default function SubmitResourceForm() {
           <div className="grid gap-6 sm:grid-cols-2">
             <div>
               <label htmlFor="cost" className={labelClass}>
-                Costo <span className="text-red-600">*</span>
+                Costo <span className="text-[var(--brand-red)]">*</span>
               </label>
               <select
                 id="cost"
                 required
                 value={form.cost}
-                onChange={(e) => update('cost', e.target.value as CostType)}
+                onChange={(e) => update("cost", e.target.value as CostType)}
                 className={inputClass}
               >
                 <option value="">Selecciona</option>
                 {COST_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
                 ))}
               </select>
             </div>
             <div>
               <span className={labelClass}>Modalidad</span>
-              <p className="mt-1 text-sm text-[var(--card-text-muted)]">Puedes marcar una o ambas.</p>
+              <p className="mt-1 text-sm text-[var(--brand-text)]">
+                Puedes marcar una o ambas.
+              </p>
               <div className="mt-2 flex flex-wrap gap-4">
-                <label className="inline-flex items-center gap-2 cursor-pointer text-[var(--card-text)]">
+                <label className="inline-flex items-center gap-2 cursor-pointer text-[var(--brand-text)]">
                   <input
                     type="checkbox"
                     checked={form.online}
-                    onChange={(e) => update('online', e.target.checked)}
-                    className="rounded border-gray-300 text-[var(--brand-purple-accent)] focus:ring-[var(--brand-purple-accent)]"
+                    onChange={(e) => update("online", e.target.checked)}
+                    className="rounded-xl border-[var(--brand-lilac)] text-[var(--brand-primary)] focus:ring-[var(--brand-primary)]"
                   />
                   <span>En línea</span>
                 </label>
-                <label className="inline-flex items-center gap-2 cursor-pointer text-[var(--card-text)]">
+                <label className="inline-flex items-center gap-2 cursor-pointer text-[var(--brand-text)]">
                   <input
                     type="checkbox"
                     checked={form.inPerson}
-                    onChange={(e) => update('inPerson', e.target.checked)}
-                    className="rounded border-gray-300 text-[var(--brand-purple-accent)] focus:ring-[var(--brand-purple-accent)]"
+                    onChange={(e) => update("inPerson", e.target.checked)}
+                    className="rounded-xl border-[var(--brand-lilac)] text-[var(--brand-primary)] focus:ring-[var(--brand-primary)]"
                   />
                   <span>Presencial</span>
                 </label>
@@ -386,10 +444,10 @@ export default function SubmitResourceForm() {
                     key={opt.value}
                     type="button"
                     onClick={() => togglePopulation(opt.value)}
-                    className={`inline-flex items-center rounded-full px-3 py-1.5 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 ${
+                    className={`inline-flex items-center rounded-xl px-3 py-1.5 text-sm font-medium transition-colors ${
                       selected
-                        ? 'bg-violet-100 text-violet-800'
-                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                        ? "bg-[var(--brand-lilac)] text-[var(--brand-white)]"
+                        : "bg-[var(--brand-lavender)] text-[var(--brand-black)] hover:bg-[var(--brand-lilac)]"
                     }`}
                   >
                     {opt.label}
@@ -399,17 +457,17 @@ export default function SubmitResourceForm() {
             </div>
           </div>
 
-          <div className="pt-2">
-            <button
+          <div className="pt-2 flex justify-center">
+            <ButtonSolid
               type="submit"
-              disabled={status === 'submitting'}
-              className="min-h-[48px] rounded-xl bg-[var(--brand-purple-accent)] px-4 py-3 text-base font-semibold text-white transition-colors hover:bg-[#7030c4] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] w-fit focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed w-fit"
+              disabled={status === "submitting"}
+              className="w-fit"
             >
-              {status === 'submitting' ? 'Enviando…' : 'Enviar solicitud'}
-            </button>
+              {status === "submitting" ? "Enviando…" : "Enviar solicitud"}
+            </ButtonSolid>
           </div>
         </form>
       </div>
-    </section>
+    </Section>
   );
 }

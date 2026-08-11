@@ -1,0 +1,27 @@
+---
+import { linkClass } from './linkClasses';
+
+interface Props {
+  href: string;
+  class?: string;
+  id?: string;
+  'aria-label'?: string;
+  target?: string;
+  rel?: string;
+}
+
+const {
+  href,
+  class: className = '',
+  id,
+  'aria-label': ariaLabel,
+  target,
+  rel,
+} = Astro.props;
+
+const classes = [linkClass, className].filter(Boolean).join(' ');
+---
+
+<a href={href} class={classes} id={id} aria-label={ariaLabel} target={target} rel={rel}>
+  <slot />
+</a>

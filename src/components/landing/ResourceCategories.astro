@@ -1,4 +1,8 @@
 ---
+import SectionTitle from "../ui/SectionTitle.astro";
+import SectionSubtitle from "../ui/SectionSubtitle.astro";
+import Section from "../ui/Section.astro";
+
 // filterType = value used in DirectoryFilters (SUPPORT_TYPES). Multiple for "Organizaciones".
 const categories = [
   {
@@ -71,46 +75,40 @@ function buildDirectorioUrl(filterTypes: string[]): string {
 }
 ---
 
-<section
-  id="categorias"
-  class="py-12 sm:py-20 bg-[#f6f6fb]"
-  aria-labelledby="categories-title"
->
+<Section id="categorias" bg="lilac" aria-labelledby="categories-title">
   <div class="mx-auto max-w-6xl px-4 sm:px-6">
-    <h2
-      id="categories-title"
-      class="text-2xl font-bold text-[var(--card-text)] sm:text-3xl text-center mb-10"
-    >
-      Tipos de recursos
-    </h2>
+    <div class="home-reveal">
+      <SectionTitle id="categories-title" color="white">
+        Tipos de recursos
+      </SectionTitle>
+      <SectionSubtitle>
+        Explora los diferentes tipos de recursos disponibles en el directorio.
+      </SectionSubtitle>
+    </div>
     <ul
-      class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+      class="grid gap-4 lg:gap-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mt-8 lg:mt-16"
       role="list"
     >
       {
-        categories.map((cat) => (
-          <li class="h-full">
+        categories.map((cat, i) => (
+          <li
+            class="home-reveal category-card h-full"
+            style={`transition-delay: ${Math.min(i, 8) * 50}ms;`}
+          >
             <a
               href={buildDirectorioUrl(cat.filterTypes)}
-              class="flex flex-col rounded-xl border border-[var(--card-border)] bg-white p-6 transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 h-full"
-              style="box-shadow: var(--card-shadow-soft);"
+              class="flex flex-col rounded-2xl bg-[var(--brand-white)] p-4 lg:p-6 focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:ring-offset-2 h-full"
+              style="box-shadow: 0 6px 20px rgba(76, 74, 77, 0.06);"
             >
-              <span
-                class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#f3edff] text-2xl"
-                aria-hidden="true"
-              >
+              <span class="flex justify-start text-3xl" aria-hidden="true">
                 {cat.icon}
               </span>
-              <h3 class="mt-4 text-lg font-semibold text-[var(--card-text)]">
-                {cat.name}
-              </h3>
-              <p class="mt-2 text-base leading-[1.6] text-[var(--card-text-muted)]">
-                {cat.description}
-              </p>
+              <h3 class="mt-4 text-lg font-semibold">{cat.name}</h3>
+              <p class="mt-2 text-base">{cat.description}</p>
             </a>
           </li>
         ))
       }
     </ul>
   </div>
-</section>
+</Section>

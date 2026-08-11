@@ -1,35 +1,50 @@
-import { useMemo, useState, useEffect } from 'react';
-import Fuse from 'fuse.js';
-import type { DirectoryEntry, PopulationType } from '../../types/directory';
-import { TYPE_TAG_CONFIG } from '../../lib/tagConfig';
-import { POPULATION_OPTIONS } from '../../data/formOptions';
+import { useMemo, useState, useEffect } from "react";
+import Fuse from "fuse.js";
+import type { DirectoryEntry, PopulationType } from "../../types/directory";
+import {
+  TYPE_TAG_CONFIG,
+  TYPE_TAG_CLASS,
+  META_TAG_CLASS,
+  POPULATION_TAG_CLASS,
+  TAG_FILTER_INTERACTIVE,
+  TAG_FILTER_SELECTED,
+} from "../../lib/tagConfig";
+import { POPULATION_OPTIONS } from "../../data/formOptions";
 
 const SUPPORT_TYPES = [
-  'crisis hotline',
-  'abortion accompaniment',
-  'psychological support',
-  'legal support',
-  'community support',
-  'sexual violence support',
-  'reproductive rights',
-  'sexual health',
-  'financial support',
-  'government services',
-  'nutrition support',
-  'medical and health',
-  'associations and foundations',
+  "crisis hotline",
+  "abortion accompaniment",
+  "psychological support",
+  "legal support",
+  "community support",
+  "sexual violence support",
+  "reproductive rights",
+  "sexual health",
+  "financial support",
+  "government services",
+  "nutrition support",
+  "medical and health",
+  "associations and foundations",
 ] as const;
 
-const COST_OPTIONS: { value: 'free' | 'low cost' | 'variable' | 'consult directly'; label: string; icon: string }[] = [
-  { value: 'free', label: 'Gratuito', icon: '🆓' },
-  { value: 'low cost', label: 'Bajo costo', icon: '💵' },
-  { value: 'variable', label: 'Variable', icon: '📊' },
-  { value: 'consult directly', label: 'Consultar', icon: '💬' },
+const COST_OPTIONS: {
+  value: "free" | "low cost" | "variable" | "consult directly";
+  label: string;
+  icon: string;
+}[] = [
+  { value: "free", label: "Gratuito", icon: "🆓" },
+  { value: "low cost", label: "Bajo costo", icon: "💵" },
+  { value: "variable", label: "Variable", icon: "📊" },
+  { value: "consult directly", label: "Consultar", icon: "💬" },
 ];
 
-const ONLINE_OPTIONS: { value: 'online' | 'inperson'; label: string; icon: string }[] = [
-  { value: 'online', label: 'En línea', icon: '🌐' },
-  { value: 'inperson', label: 'Presencial', icon: '📍' },
+const ONLINE_OPTIONS: {
+  value: "online" | "inperson";
+  label: string;
+  icon: string;
+}[] = [
+  { value: "online", label: "En línea", icon: "🌐" },
+  { value: "inperson", label: "Presencial", icon: "📍" },
 ];
 
 interface Props {
@@ -40,12 +55,12 @@ interface Props {
 
 const FUSE_OPTIONS = {
   keys: [
-    { name: 'name', weight: 0.35 },
-    { name: 'city', weight: 0.2 },
-    { name: 'state', weight: 0.2 },
-    { name: 'country', weight: 0.1 },
-    { name: 'description', weight: 0.2 },
-    { name: 'type', weight: 0.15 },
+    { name: "name", weight: 0.35 },
+    { name: "city", weight: 0.2 },
+    { name: "state", weight: 0.2 },
+    { name: "country", weight: 0.1 },
+    { name: "description", weight: 0.2 },
+    { name: "type", weight: 0.15 },
   ],
   threshold: 0.4,
   includeScore: false,
@@ -55,18 +70,28 @@ type SupportType = (typeof SUPPORT_TYPES)[number];
 const VALID_TYPES = new Set<SupportType>(SUPPORT_TYPES);
 
 function getInitialTypesFromUrl(): SupportType[] {
-  if (typeof window === 'undefined') return [];
+  if (typeof window === "undefined") return [];
   const params = new URLSearchParams(window.location.search);
-  const tipos = params.getAll('tipo').map((t) => t.trim()).filter(Boolean);
-  return tipos.filter((t): t is SupportType => VALID_TYPES.has(t as SupportType));
+  const tipos = params
+    .getAll("tipo")
+    .map((t) => t.trim())
+    .filter(Boolean);
+  return tipos.filter((t): t is SupportType =>
+    VALID_TYPES.has(t as SupportType),
+  );
 }
 
-export default function DirectoryFilters({ entries, staticEntriesContainerId }: Props) {
-  const [search, setSearch] = useState('');
-  const [country, setCountry] = useState<string>('');
+export default function DirectoryFilters({
+  entries,
+  staticEntriesContainerId,
+}: Props) {
+  const [search, setSearch] = useState("");
+  const [country, setCountry] = useState<string>("");
   const [types, setTypes] = useState<SupportType[]>(getInitialTypesFromUrl);
-  const [cost, setCost] = useState<'free' | 'low cost' | 'variable' | 'consult directly' | ''>('');
-  const [online, setOnline] = useState<'online' | 'inperson' | ''>('');
+  const [cost, setCost] = useState<
+    "free" | "low cost" | "variable" | "consult directly" | ""
+  >("");
+  const [online, setOnline] = useState<"online" | "inperson" | "">("");
   const [population, setPopulation] = useState<PopulationType[]>([]);
 
   const countries = useMemo(() => {
@@ -77,12 +102,18 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
   const filtered = useMemo(() => {
     let list = entries;
     if (country) list = list.filter((e) => e.country === country);
-    if (types.length > 0) list = list.filter((e) => types.some((t) => e.type.includes(t)));
+    if (types.length > 0)
+      list = list.filter((e) => types.some((t) => e.type.includes(t)));
     if (cost) list = list.filter((e) => e.cost === cost);
-    if (online === 'online') list = list.filter((e) => e.online);
-    if (online === 'inperson') list = list.filter((e) => e.inPerson ?? !e.online);
+    if (online === "online") list = list.filter((e) => e.online);
+    if (online === "inperson")
+      list = list.filter((e) => e.inPerson ?? !e.online);
     if (population.length > 0) {
-      list = list.filter((e) => Array.isArray(e.population) && population.some((p) => e.population!.includes(p)));
+      list = list.filter(
+        (e) =>
+          Array.isArray(e.population) &&
+          population.some((p) => e.population!.includes(p)),
+      );
     }
 
     const q = search.trim();
@@ -92,51 +123,63 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
     return results.map((r) => r.item);
   }, [entries, search, country, types, cost, online, population]);
 
-  const filteredIds = useMemo(() => new Set(filtered.map((e) => e.id)), [filtered]);
+  const filteredIds = useMemo(
+    () => new Set(filtered.map((e) => e.id)),
+    [filtered],
+  );
 
   useEffect(() => {
     if (!staticEntriesContainerId) return;
     const container = document.getElementById(staticEntriesContainerId);
     if (!container) return;
-    container.querySelectorAll('[data-entry-id]').forEach((el) => {
-      const id = el.getAttribute('data-entry-id');
+    container.querySelectorAll("[data-entry-id]").forEach((el) => {
+      const id = el.getAttribute("data-entry-id");
       const visible = id ? filteredIds.has(id) : true;
-      el.toggleAttribute('hidden', !visible);
-      el.setAttribute('aria-hidden', visible ? 'false' : 'true');
+      el.toggleAttribute("hidden", !visible);
+      el.setAttribute("aria-hidden", visible ? "false" : "true");
     });
   }, [staticEntriesContainerId, filteredIds]);
 
   const toggleType = (t: SupportType) => {
-    setTypes((prev) => (prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]));
+    setTypes((prev) =>
+      prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t],
+    );
   };
 
-  const toggleCost = (value: (typeof COST_OPTIONS)[number]['value']) => {
-    setCost((prev) => (prev === value ? '' : value));
+  const toggleCost = (value: (typeof COST_OPTIONS)[number]["value"]) => {
+    setCost((prev) => (prev === value ? "" : value));
   };
 
-  const toggleOnline = (value: 'online' | 'inperson') => {
-    setOnline((prev) => (prev === value ? '' : value));
+  const toggleOnline = (value: "online" | "inperson") => {
+    setOnline((prev) => (prev === value ? "" : value));
   };
 
   const togglePopulation = (p: PopulationType) => {
-    setPopulation((prev) => (prev.includes(p) ? prev.filter((x) => x !== p) : [...prev, p]));
+    setPopulation((prev) =>
+      prev.includes(p) ? prev.filter((x) => x !== p) : [...prev, p],
+    );
   };
 
   const clearFilters = () => {
-    setSearch('');
-    setCountry('');
+    setSearch("");
+    setCountry("");
     setTypes([]);
-    setCost('');
-    setOnline('');
+    setCost("");
+    setOnline("");
     setPopulation([]);
   };
 
   const hasActiveFilters =
-    search.trim() !== '' || country !== '' || types.length > 0 || cost !== '' || online !== '' || population.length > 0;
+    search.trim() !== "" ||
+    country !== "" ||
+    types.length > 0 ||
+    cost !== "" ||
+    online !== "" ||
+    population.length > 0;
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] p-4 shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+      <div className="rounded-xl border border-[var(--brand-lilac)] bg-[var(--brand-white)] p-4 shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
         {/* Search + País en una fila */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
           <label htmlFor="directory-search" className="sr-only">
@@ -148,24 +191,27 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
             placeholder="Buscar por tipo de apoyo, ciudad o organización..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="min-h-[44px] flex-1 rounded-xl border border-[var(--card-border)] bg-white px-4 py-2.5 text-base text-[var(--card-text)] placeholder-[var(--card-text-muted)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2"
+            className="min-h-[44px] flex-1 rounded-xl border border-[var(--brand-lilac)] bg-[var(--brand-white)] px-4 py-2.5 text-base text-[var(--brand-text)] placeholder-[var(--brand-text)] focus:border-[var(--brand-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:ring-offset-2"
             aria-describedby="search-hint"
             autoComplete="off"
           />
           <div className="flex items-center gap-3">
-            <label htmlFor="filter-country" className="text-sm font-medium text-[var(--card-text-muted)] shrink-0">
+            <label
+              htmlFor="filter-country"
+              className="text-sm font-medium text-[var(--brand-text)] shrink-0"
+            >
               País
             </label>
             <select
               id="filter-country"
               value={country}
               onChange={(e) => setCountry(e.target.value)}
-              className="min-h-[44px] w-full rounded-xl border border-[var(--card-border)] bg-white px-3 py-2.5 text-base text-[var(--card-text)] focus:border-[var(--brand-purple-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] sm:w-auto sm:min-w-[140px]"
+              className="min-h-[44px] w-full rounded-xl border border-[var(--brand-lilac)] bg-[var(--brand-white)] px-3 py-2.5 text-base text-[var(--brand-text)] focus:border-[var(--brand-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] sm:w-auto sm:min-w-[140px]"
             >
               <option value="">Todos</option>
               {countries.map((c) => (
                 <option key={c} value={c}>
-                  {c === 'Mexico' ? 'México' : c}
+                  {c === "Mexico" ? "México" : c}
                 </option>
               ))}
             </select>
@@ -175,7 +221,7 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
         {/* Tipo de apoyo: tags como en las tarjetas */}
         <div className="mt-4">
           <span className="sr-only">Filtrar por tipo de apoyo</span>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {SUPPORT_TYPES.map((t) => {
               const config = TYPE_TAG_CONFIG[t];
               if (!config) return null;
@@ -188,9 +234,13 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
                     toggleType(t);
                     (e.currentTarget as HTMLButtonElement).blur();
                   }}
-                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1.5 text-xs font-medium transition-all focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 ${config.bgClass} ${config.textClass} ${selected ? 'ring-2 ring-[var(--brand-purple-accent)] ring-offset-2' : 'opacity-90 hover:opacity-100'}`}
+                  className={`${TYPE_TAG_CLASS} ${config.bgClass} ${config.textClass} ${TAG_FILTER_INTERACTIVE} ${selected ? TAG_FILTER_SELECTED : ""}`}
                   aria-pressed={selected}
-                  aria-label={selected ? `Quitar filtro ${config.label}` : `Filtrar por ${config.label}`}
+                  aria-label={
+                    selected
+                      ? `Quitar filtro ${config.label}`
+                      : `Filtrar por ${config.label}`
+                  }
                 >
                   <span aria-hidden>{config.icon}</span>
                   {config.label}
@@ -203,8 +253,10 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
         {/* Costo */}
         <div className="mt-3">
           <span className="sr-only">Filtrar por costo</span>
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-medium text-[var(--card-text-muted)] shrink-0">Costo:</span>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-xs font-medium text-[var(--brand-text)] shrink-0">
+              Costo:
+            </span>
             {COST_OPTIONS.map((opt) => {
               const selected = cost === opt.value;
               return (
@@ -215,9 +267,13 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
                     toggleCost(opt.value);
                     (e.currentTarget as HTMLButtonElement).blur();
                   }}
-                  className={`inline-flex items-center gap-1.5 rounded-full bg-[var(--tag-government-bg)] px-2.5 py-1.5 text-xs font-medium text-[var(--tag-government-text)] transition-all focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 ${selected ? 'ring-2 ring-[var(--brand-purple-accent)] ring-offset-2' : 'opacity-80 hover:opacity-100'}`}
+                  className={`${META_TAG_CLASS} ${TAG_FILTER_INTERACTIVE} ${selected ? TAG_FILTER_SELECTED : ""}`}
                   aria-pressed={selected}
-                  aria-label={selected ? `Quitar filtro ${opt.label}` : `Filtrar por ${opt.label}`}
+                  aria-label={
+                    selected
+                      ? `Quitar filtro ${opt.label}`
+                      : `Filtrar por ${opt.label}`
+                  }
                 >
                   <span aria-hidden>{opt.icon}</span>
                   {opt.label}
@@ -230,8 +286,10 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
         {/* Modalidad: En línea / Presencial */}
         <div className="mt-2">
           <span className="sr-only">Filtrar por modalidad</span>
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-medium text-[var(--card-text-muted)] shrink-0">Modalidad:</span>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-xs font-medium text-[var(--brand-text)] shrink-0">
+              Modalidad:
+            </span>
             {ONLINE_OPTIONS.map((opt) => {
               const selected = online === opt.value;
               return (
@@ -242,9 +300,13 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
                     toggleOnline(opt.value);
                     (e.currentTarget as HTMLButtonElement).blur();
                   }}
-                  className={`inline-flex items-center gap-1.5 rounded-full bg-[var(--tag-general-bg)] px-2.5 py-1.5 text-xs font-medium text-[var(--tag-general-text)] transition-all focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 ${selected ? 'ring-2 ring-[var(--brand-purple-accent)] ring-offset-2' : 'opacity-80 hover:opacity-100'}`}
+                  className={`${META_TAG_CLASS} ${TAG_FILTER_INTERACTIVE} ${selected ? TAG_FILTER_SELECTED : ""}`}
                   aria-pressed={selected}
-                  aria-label={selected ? `Quitar filtro ${opt.label}` : `Filtrar por ${opt.label}`}
+                  aria-label={
+                    selected
+                      ? `Quitar filtro ${opt.label}`
+                      : `Filtrar por ${opt.label}`
+                  }
                 >
                   <span aria-hidden>{opt.icon}</span>
                   {opt.label}
@@ -256,9 +318,13 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
 
         {/* Población */}
         <div className="mt-2">
-          <span className="sr-only">Filtrar por población a la que se dirige el recurso</span>
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-medium text-[var(--card-text-muted)] shrink-0">Población:</span>
+          <span className="sr-only">
+            Filtrar por población a la que se dirige el recurso
+          </span>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-xs font-medium text-[var(--brand-text)] shrink-0">
+              Población:
+            </span>
             {POPULATION_OPTIONS.map((opt) => {
               const selected = population.includes(opt.value);
               return (
@@ -269,9 +335,13 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
                     togglePopulation(opt.value);
                     (e.currentTarget as HTMLButtonElement).blur();
                   }}
-                  className={`inline-flex items-center gap-1.5 rounded-full bg-[var(--tag-population-bg)] px-2.5 py-1.5 text-xs font-medium text-[var(--tag-population-text)] transition-all focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 ${selected ? 'ring-2 ring-[var(--brand-purple-accent)] ring-offset-2' : 'opacity-80 hover:opacity-100'}`}
+                  className={`${POPULATION_TAG_CLASS} ${TAG_FILTER_INTERACTIVE} ${selected ? TAG_FILTER_SELECTED : ""}`}
                   aria-pressed={selected}
-                  aria-label={selected ? `Quitar filtro ${opt.label}` : `Filtrar por ${opt.label}`}
+                  aria-label={
+                    selected
+                      ? `Quitar filtro ${opt.label}`
+                      : `Filtrar por ${opt.label}`
+                  }
                 >
                   <span aria-hidden>{opt.icon}</span>
                   {opt.label}
@@ -283,14 +353,18 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
 
         {/* Contador + Limpiar */}
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-          <p id="search-hint" className="text-sm text-[var(--card-text-muted)]" role="status">
-            {filtered.length} resultado{filtered.length !== 1 ? 's' : ''}.
+          <p
+            id="search-hint"
+            className="text-sm text-[var(--brand-text)]"
+            role="status"
+          >
+            {filtered.length} resultado{filtered.length !== 1 ? "s" : ""}.
           </p>
           {hasActiveFilters && (
             <button
               type="button"
               onClick={clearFilters}
-              className="text-sm font-medium text-[var(--brand-purple-accent)] hover:underline focus:outline-none focus:ring-2 focus:ring-[var(--brand-purple-accent)] focus:ring-offset-2 rounded"
+              className="text-sm font-medium text-[var(--brand-primary)] hover:underline focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:ring-offset-2 rounded-xl"
             >
               Limpiar filtros
             </button>
@@ -301,10 +375,11 @@ export default function DirectoryFilters({ entries, staticEntriesContainerId }: 
       <section className="space-y-4" aria-label="Resultados del directorio">
         {filtered.length === 0 && (
           <p
-            className="rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] p-8 text-center text-base text-[var(--card-text-muted)]"
+            className="rounded-xl border border-[var(--brand-lilac)] bg-[var(--brand-white)] p-8 text-center text-base text-[var(--brand-text)]"
             role="status"
           >
-            No encontramos resultados. Prueba otro tipo de apoyo o quita filtros.
+            No encontramos resultados. Prueba otro tipo de apoyo o quita
+            filtros.
           </p>
         )}
       </section>

@@ -1,0 +1,28 @@
+---
+import {
+  brandColorVar,
+  sectionTitleBaseClass,
+  type BrandColor,
+} from './sectionHeadingClasses';
+
+interface Props {
+  /** Brand palette key. Default: primary */
+  color?: BrandColor;
+  id?: string;
+  as?: 'h1' | 'h2';
+  class?: string;
+}
+
+const {
+  color = 'primary',
+  id,
+  as: Tag = 'h2',
+  class: className = '',
+} = Astro.props;
+
+const classes = [sectionTitleBaseClass, className].filter(Boolean).join(' ');
+---
+
+<Tag id={id} class={classes} style={`color: ${brandColorVar(color)};`}>
+  <slot />
+</Tag>

@@ -1,0 +1,14 @@
+---
+import { sectionSubtitleBaseClass } from "./sectionHeadingClasses";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+const classes = [sectionSubtitleBaseClass, className].filter(Boolean).join(" ");
+---
+
+<p class={classes}>
+  <slot />
+</p>

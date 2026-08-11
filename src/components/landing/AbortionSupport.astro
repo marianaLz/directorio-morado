@@ -1,4 +1,8 @@
 ---
+import SectionTitle from "../ui/SectionTitle.astro";
+import SectionSubtitle from "../ui/SectionSubtitle.astro";
+import Section from "../ui/Section.astro";
+
 const features = [
   { icon: "📘", text: "Información" },
   { icon: "🤝", text: "Acompañamiento" },
@@ -8,39 +12,52 @@ const features = [
 ];
 ---
 
-<section
-  id="aborto-seguro"
-  class="py-12 sm:py-20"
-  style="background: var(--green-gradient);"
-  aria-labelledby="abortion-title"
->
-  <div class="mx-auto max-w-4xl px-4 sm:px-6">
-    <h2
-      id="abortion-title"
-      class="text-2xl font-bold text-white sm:text-3xl text-center"
-    >
-      Tu decisión, tu derecho.
-    </h2>
-    <p class="mt-6 text-center text-base leading-[1.6] text-white/95">
-      Red de acompañamiento para la interrupción del embarazo en México y
-      Latinoamérica.
-    </p>
-    <div
-      class="mt-10 flex flex-wrap justify-center items-center gap-4 lg:gap-6"
-    >
-      {
-        features.map((f) => (
-          <div class="flex items-center gap-3">
-            <span
-              class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10 text-base"
-              aria-hidden="true"
+<Section id="aborto-seguro" bg="sage" aria-labelledby="abortion-title">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <div class="home-reveal">
+      <SectionTitle id="abortion-title" color="green"
+        >Tu decisión, tu derecho.</SectionTitle
+      >
+      <SectionSubtitle>
+        Red de acompañamiento para la interrupción del embarazo en México y
+        Latinoamérica.
+      </SectionSubtitle>
+    </div>
+
+    <div class="relative mt-14 home-reveal" style="transition-delay: 100ms;">
+      <div
+        class="pointer-events-none absolute top-8 z-0 hidden h-[2px] bg-[var(--brand-green)] sm:block"
+        style="left: calc((100% - 2rem) / 10); right: calc((100% - 2rem) / 10);"
+        aria-hidden="true"
+      >
+      </div>
+
+      <ol
+        class="relative z-[1] flex gap-4 overflow-x-auto overflow-y-hidden snap-x snap-mandatory py-1 -mx-4 px-4 scroll-pl-4 scroll-pr-4 sm:mx-0 sm:grid sm:grid-cols-5 sm:gap-x-2 sm:overflow-visible sm:snap-none sm:px-0 sm:py-0 sm:scroll-pl-0 sm:scroll-pr-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        style="-webkit-overflow-scrolling: touch;"
+      >
+        {
+          features.map((f, i) => (
+            <li
+              class="home-reveal relative flex w-[calc(50%-0.5rem)] shrink-0 snap-start flex-col items-center text-center sm:w-full sm:shrink"
+              style={`transition-delay: ${120 + i * 70}ms;`}
             >
-              {f.icon}
-            </span>
-            <span class="text-base text-white/90">{f.text}</span>
-          </div>
-        ))
-      }
+              {i < features.length - 1 && (
+                <span
+                  class="pointer-events-none absolute left-1/2 top-8 z-0 h-[2px] w-[calc(100%+1rem)] bg-[var(--brand-green)] sm:hidden"
+                  aria-hidden="true"
+                />
+              )}
+              <span class="relative z-[1] flex h-16 w-16 items-center justify-center rounded-full bg-[var(--brand-sage)] text-3xl ring-2 ring-[var(--brand-green)]">
+                {f.icon}
+              </span>
+              <span class="relative z-[1] mt-3 font-semibold leading-snug px-1">
+                {f.text}
+              </span>
+            </li>
+          ))
+        }
+      </ol>
     </div>
   </div>
-</section>
+</Section>
