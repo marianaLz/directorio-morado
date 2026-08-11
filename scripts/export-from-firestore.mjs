@@ -7,7 +7,7 @@
  * - FIREBASE_SERVICE_ACCOUNT_JSON='{"type":"service_account",...}'  (CI)
  * - node scripts/export-from-firestore.mjs [ruta-al-key.json]
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import admin from 'firebase-admin';
@@ -19,6 +19,19 @@ const DEFAULT_KEY_PATH = join(ROOT, 'scripts', 'firebase-service-account.json');
 const DEST_PUBLIC = join(ROOT, 'public', 'directory.json');
 const DEST_API = join(ROOT, 'public', 'api', 'resources.json');
 const DEST_BY_CATEGORY = join(ROOT, 'scripts', 'directory-by-category.json');
+
+/** Local service-account key: scripts/firebase-service-account.json or *-firebase-adminsdk-*.json in root. */
+function resolveLocalKeyPath(keyPathArg) {
+  if (keyPathArg) return resolve(process.cwd(), keyPathArg);
+  if (existsSync(DEFAULT_KEY_PATH)) return DEFAULT_KEY_PATH;
+  try {
+    const match = readdirSync(ROOT).find(
+      (f) => f.includes('firebase-adminsdk') && f.endsWith('.json'),
+    );
+    if (match) return join(ROOT, match);
+  } catch (_) {}
+  return null;
+}
 
 /** @returns {boolean} true si se inicializó Firebase, false si no hay credenciales (fallback). */
 function initFirebase() {
@@ -39,8 +52,8 @@ function initFirebase() {
     admin.initializeApp({ credential: admin.credential.applicationDefault() });
     return true;
   }
-  const keyPath = keyPathArg ? resolve(process.cwd(), keyPathArg) : DEFAULT_KEY_PATH;
-  if (!existsSync(keyPath)) {
+  const keyPath = resolveLocalKeyPath(keyPathArg);
+  if (!keyPath || !existsSync(keyPath)) {
     return false;
   }
   const key = JSON.parse(readFileSync(keyPath, 'utf8'));
@@ -87,8 +100,8 @@ async function main() {
   if (!hasCreds) {
     console.warn('');
     console.warn('⚠️  Sin credenciales de Firebase. Usando public/directory.json existente.');
-    console.warn('   Para exportar desde Firestore en Netlify/CI, configura la variable de entorno:');
-    console.warn('   FIREBASE_SERVICE_ACCOUNT_JSON = contenido completo del JSON de la cuenta de servicio.');
+    console.warn('   Coloca la clave en scripts/firebase-service-account.json');
+    console.warn('   o define FIREBASE_SERVICE_ACCOUNT_JSON (CI / Firebase Hosting builds).');
     console.warn('');
     let list = [];
     if (existsSync(DEST_PUBLIC)) {
