@@ -12,12 +12,12 @@ export default function Dimo({
 }: Props) {
   return (
     <svg
-      width="100%"
-      height="auto"
+      width="328"
+      height="97"
       viewBox="0 0 328 97"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={className}
+      className={`h-auto w-full ${className}`.trim()}
       role="img"
       aria-label={title}
     >
